@@ -24,8 +24,7 @@ public class Servicios {
 	@ManyToOne
 	private Usuarios usuarios;
 	
-	@OneToOne(mappedBy = "servicio")
-    private Citas_reservas citas_reservas;
+
 
 
 	// constructor vacio

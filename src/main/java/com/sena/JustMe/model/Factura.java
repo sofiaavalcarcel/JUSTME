@@ -23,8 +23,7 @@ public class Factura {
 	@ManyToOne
 	private Usuarios usuarios;
 	
-	@OneToOne(mappedBy = "factura")
-    private Citas_reservas citas_reservas;
+
 
 	// constructor vacio
 	public Factura() {

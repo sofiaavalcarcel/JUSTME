@@ -19,8 +19,7 @@ public class Modopago {
 	private String metodo_pago;
 	
 	
-	@OneToMany(mappedBy = "modoPago")
-    private List<Factura> facturas;
+
 
 	// constructor sin campos
 	public Modopago() {
