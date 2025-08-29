@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Just Me - Belleza a Domicilio</title>
+    <link rel="stylesheet" href="styles/principal.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="card">
+                <div class="loader">
+                    <p>Just</p>
+                    <div class="words">
+                        <span class="word">Me</span>
+                        <span class="word">Beauty</span>
+                        <span class="word">Me</span>
+                        <span class="word">Stylish</span>
+                        <span class="word">Me</span>
+                    </div>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Inicio</a></li>
+                <li><a href="#services">Servicios</a></li>
+                <li><a href="#about">Nosotros</a></li>
+                <li><a href="#contact" id="contactLink">Contacto</a></li>
+
+            </ul>
+            <div class="auth-buttons">
+                <button class="login">Iniciar Sesión</button>
+                <button class="signup">Registrarse</button>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Descubre Tu Belleza Única</h1>
+            <p>
+                Servicios de belleza profesional a domicilio en cualquier lugar, para
+                hombres y mujeres
+            </p>
+            <div class="cta-buttons">
+                <button class="primary-cta">Reservar Ahora</button>
+                <button class="secondary-cta">Ver Servicios</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="search-section">
+        <div class="search-container">
+            <form>
+                <div class="form-group">
+                    <label for="location">Ubicación</label>
+                    <select id="location" name="location">
+                        <option value="bogota">Bogotá</option>
+                        <option value="medellin">Medellín</option>
+                        <option value="cali">Cali</option>
+                        <option value="barranquilla">Barranquilla</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="service">Servicio</label>
+                    <select id="service" name="service">
+                        <option value="haircut">Corte de Cabello</option>
+                        <option value="makeup">Maquillaje</option>
+                        <option value="manicure">Manicure/Pedicure</option>
+                        <option value="facial">Tratamiento Facial</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="price">Rango de Precio</label>
+                    <select id="price" name="price">
+                        <option value="50-100">$50,000-$100,000</option>
+                        <option value="100-200">$100,000-$200,000</option>
+                        <option value="200-500">$200,000-$500,000</option>
+                    </select>
+                </div>
+                <button type="submit" class="search-button">Buscar</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="stats-section">
+        <div class="stats-container">
+            <div class="stat-item">
+                <h3>10M+</h3>
+                <p>Clientes satisfechos</p>
+            </div>
+            <div class="stat-item">
+                <h3>12k+</h3>
+                <p>Servicios realizados</p>
+            </div>
+            <div class="stat-item">
+                <h3>8+</h3>
+                <p>Años de experiencia</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="services" id="services">
+        <h2>Lo que ofrecemos</h2>
+        <div class="services-grid">
+        </div>
+    </section>
+    <div class="modal-overlay" id="modalOverlay"></div>
+
+    <div class="modal glass" id="loginModal">
+        <button class="close-modal">&times;</button>
+        <div class="modal-content">
+            <h2>Iniciar Sesión</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Correo Electrónico</label>
+                    <input type="email" id="loginEmail" required />
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Contraseña</label>
+                    <input type="password" id="loginPassword" required />
+                </div>
+                <button type="submit" class="modal-btn">Ingresar</button>
+                <p class="modal-text">
+                    ¿No tienes cuenta? <a href="#" id="goToRegister">Regístrate</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal glass" id="registerModal">
+        <button class="close-modal">&times;</button>
+        <div class="modal-content">
+            <h2>Crear Cuenta</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="registerName">Nombre Completo</label>
+                    <input type="text" id="registerName" required />
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Correo Electrónico</label>
+                    <input type="email" id="registerEmail" required />
+                </div>
+                <div class="form-group">
+                    <label for="registerPhone">Teléfono</label>
+                    <input type="tel" id="registerPhone" required />
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Contraseña</label>
+                    <input type="password" id="registerPassword" required />
+                </div>
+                <div class="form-group">
+                    <label for="registerConfirm">Confirmar Contraseña</label>
+                    <input type="password" id="registerConfirm" required />
+                </div>
+                <button type="submit" class="modal-btn">Registrarse</button>
+                <p class="modal-text">
+                    ¿Ya tienes cuenta? <a href="#" id="goToLogin">Inicia Sesión</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <section >
+        <div id="about" class="quesomos-titulo">Sobre nosotros</div>
+<div class="quesomos-container">
+    <div class="quesomos-imagen"></div>
+    <div class="quesomos-contenido">
+        <p class="quesomos-descripcion">Somos tu aliado digital de belleza y bienestar. Nuestra innovadora plataforma conecta a los mejores enprendedores de estética directamente con tu hogar, ofreciendo servicios de uñas, maquillaje, tratamientos faciales, depilación y más.</p>
+    </div>
+</div>
+    </section>
+
+     <!-- Modal de Contacto -->
+<div id="contactModal" >
+    <div id="modalContent">
+        <span id="closeModal">&times;</span>
+        
+        <div id="modalHeader">
+            <h2>Contáctanos</h2>
+        </div>
+        
+        <form id="contactForm">
+            <div class="formGroup">
+                <label for="userName">Nombre</label>
+                <input type="text" id="userName">
+            </div>
+            
+            <div class="formGroup">
+                <label for="userEmail">Email</label>
+                <input type="email" id="userEmail">
+            </div>
+            
+            <div class="formGroup">
+                <label for="userMessage">Mensaje</label>
+                <textarea id="userMessage"></textarea>
+            </div>
+            
+            <button type="submit" id="submitBtn">ENVIAR</button>
+        </form>
+        
+        
+    </div>
+</div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h4>Just Me</h4>
+            <p>
+              Servicios de belleza a domicilio para hombres y mujeres en
+              cualquier lugar.
+            </p>
+            <div class="social-icons">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-tiktok"></i></a>
+              <a href="#"><i class="fab fa-whatsapp"></i></a>
+            </div>
+          </div>
+
+          <div class="footer-section">
+            <h4>Enlaces</h4>
+            <ul>
+              <li><a href="#">Inicio</a></li>
+              <li><a href="#">Servicios</a></li>
+              <li><a href="#">Sobre Nosotros</a></li>
+              <li><a href="#">Contacto</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-section">
+            <h4>Servicios</h4>
+            <ul>
+              <li><a href="#">Corte de Cabello</a></li>
+              <li><a href="#">Maquillaje</a></li>
+              <li><a href="#">Uñas</a></li>
+              <li><a href="#">Tratamientos Faciales</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-section">
+            <h4>Contacto</h4>
+            <ul>
+              <li><i class="fas fa-map-marker-alt"></i> Bogotá, Colombia</li>
+              <li><i class="fas fa-phone"></i> +57 123 456 7890</li>
+              <li><i class="fas fa-envelope"></i> hola@justme.com</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>&copy; 2025 Just Me. Todos los derechos reservados.</p>
+          <div class="legal-links">
+            <a href="#">Términos y Condiciones</a>
+            <a href="#">Política de Privacidad</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="scripts/principal.js"></script>
+</body>
+
+</html>

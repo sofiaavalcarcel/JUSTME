@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Just Me - Panel de Usuario</title>
+    <link rel="stylesheet" href="styles/inicio.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <div class="container">
+        <div class="logo">
+          <h1>Just Me</h1>
+        </div>
+
+        <nav class="nav">
+          <ul>
+            <li>
+              <a href="#" class="active"><i class="fas fa-home"></i> Inicio</a>
+            </li>
+            <li>
+              <a href="#servicios"><i class="fas fa-search"></i> Buscar Servicios</a>
+            </li>
+            <li>
+              <a href="#citas"><i class="fas fa-calendar-alt"></i> Mis Citas</a>
+            </li>
+            <li>
+              <a href="#comentarios"><i class="fas fa-comments"></i> Comentarios</a>
+            </li>
+          </ul>
+        </nav>
+
+        <div class="user-menu">
+          <div class="user-profile" id="userProfile">
+            <img
+              src="https://randomuser.me/api/portraits/women/44.jpg"
+              alt="Usuario"
+            />
+            <span>María González</span>
+            <i class="fas fa-chevron-down"></i>
+
+            <div class="dropdown-menu" id="dropdownMenu">
+              <ul>
+                <li>
+                  <a href="perfil_usuario.html"><i class="fas fa-user"></i> Mi Perfil</a>
+                </li>
+                <li>
+                  <a href="#"><i class="fas fa-cog"></i> Configuración</a>
+                </li>
+                
+                <li>
+  <a href="#" id="switchToProBtn"><i class="fas fa-sync-alt"></i> Cambiar a Profesional</a>
+</li>
+                <li>
+                  <a href="principal.html" id="logoutBtn"
+                    ><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+      <section class="welcome-section">
+        <div class="container">
+          <h2>¡Bienvenida de nuevo, María!</h2>
+          <p>¿Qué servicio de belleza necesitas hoy?</p>
+
+          <div class="quick-stats">
+            <div class="stat-card">
+              <i class="fas fa-calendar-check"></i>
+              <h3>15</h3>
+              <p>Servicios tomados</p>
+            </div>
+            <div class="stat-card">
+              <i class="fas fa-star"></i>
+              <h3>4.8</h3>
+              <p>Tu puntuación</p>
+            </div>
+            <div class="stat-card">
+              <i class="fas fa-heart"></i>
+              <h3>3</h3>
+              <p>Favoritos</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="search-section" id="servicios">
+        <div class="container">
+          <h3>Buscar servicios</h3>
+
+          <form class="search-form">
+            <div class="form-group">
+              <label for="service-type"
+                ><i class="fas fa-spa"></i> Tipo de Servicio</label
+              >
+              <select id="service-type">
+                <option value="">Todos los servicios</option>
+                <option value="hair">Corte de Cabello</option>
+                <option value="makeup">Maquillaje</option>
+                <option value="nails">Uñas</option>
+                <option value="facial">Facial</option>
+                <option value="waxing">Depilación</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="location"
+                ><i class="fas fa-map-marker-alt"></i> Ubicación</label
+              >
+              <input
+                type="text"
+                id="location"
+                placeholder="¿Dónde necesitas el servicio?"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="date"
+                ><i class="fas fa-calendar-day"></i> Fecha</label
+              >
+              <input type="date" id="date" />
+            </div>
+            <div class="form-group">
+              <label for="time"
+                ><i class="fa-solid fa-clock" aria-hidden="true"></i>
+                Hora</label
+              >
+              <input type="time" id="time" />
+            </div>
+
+            <button type="button" class="search-btn" id="openModalBtn">
+              <i class="fas fa-search"></i> Buscar
+            </button>
+
+            <!-- SERVICOSSSSSSSSSSSSSS -->
+
+      <div id="myModal" class="modal oculto">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2 class="oculto">Profesionales disponibles</h2>
+    <div id="profesionalesContainer" class="profesionales-grid"></div>
+  </div>
+</div>
+
+
+            <!-- SERVICOSSSSSSSSSSSSSS -->
+
+            <!--PASARELA DE PAGOS-->
+
+    <div class="payment-modal-overlay" id="paymentModalOverlay">
+        <div class="payment-modal-container">
+            <!-- Header del modal -->
+            <div class="payment-modal-header">
+                <h2 class="payment-modal-title">Reserva de Servicio</h2>
+                <p class="payment-modal-subtitle">Complete los pasos para confirmar su reserva</p>
+                <button class="payment-modal-close-btn" id="paymentModalCloseBtn">&times;</button>
+            </div>
+            
+            <!-- Contenido del modal -->
+            <div class="payment-modal-content">
+                <!-- Barra de progreso -->
+                <div class="payment-progress-bar">
+                    <div class="payment-progress-line" id="paymentProgressLine" style="width: 0%;"></div>
+                    
+                    <div class="payment-step completed" id="paymentStep1">
+                        <div class="payment-step-circle">1</div>
+                        <div class="payment-step-text">Reservar Servicio</div>
+                    </div>
+                    
+                    <div class="payment-step active" id="paymentStep2">
+                        <div class="payment-step-circle">2</div>
+                        <div class="payment-step-text">Método de Pago</div>
+                    </div>
+                    
+                    <div class="payment-step" id="paymentStep3">
+                        <div class="payment-step-circle">3</div>
+                        <div class="payment-step-text">Confirmación</div>
+                    </div>
+                </div>
+                
+                <!-- Paso 1 - Reserva de servicio -->
+                <div class="payment-step-content" id="paymentStep1Content">
+                    <div class="payment-service-info">
+                        <h3>¡Reserva completada!</h3>
+                        <div class="payment-service-detail">
+                            <span>Servicio:</span>
+                            <span id="reservationServiceName">Corte y coloración profesional</span>
+                        </div>
+                        <div class="payment-service-detail">
+                            <span>Profesional:</span>
+                            <span id="reservationProfessionalName">María Rodríguez</span>
+                        </div>
+                        <div class="payment-service-detail">
+                            <span>Fecha:</span>
+                            <span id="reservationDateTime">15 de Julio, 2023 - 2:00 PM</span>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-btn-container">
+                        <button class="payment-btn" id="paymentNextToStep2Btn">Continuar al Pago</button>
+                    </div>
+                </div>
+                
+                <!-- Paso 2 - Método de pago -->
+                <div class="payment-step-content active" id="paymentStep2Content">
+                    <div class="payment-methods-container">
+                        <div class="payment-service-info">
+                            <h3>Detalle del Servicio</h3>
+                            <div class="payment-service-detail">
+                                <span>Servicio:</span>
+                                <span id="paymentServiceName">Corte y coloración profesional</span>
+                            </div>
+                            <div class="payment-service-detail">
+                                <span>Profesional:</span>
+                                <span id="paymentProfessionalName">María Rodríguez</span>
+                            </div>
+                            <div class="payment-service-detail">
+                                <span>Fecha:</span>
+                                <span id="paymentDateTime">15 de Julio, 2023 - 2:00 PM</span>
+                            </div>
+                            <div class="payment-service-detail">
+                                <span>Total a pagar:</span>
+                                <span style="color: #e16bff; font-weight: bold;" id="paymentTotalAmount">$120.000 COP</span>
+                            </div>
+                        </div>
+                        
+                        <h3>Método de Pago</h3>
+                        
+                        <div class="payment-method-tabs">
+                            <div class="payment-method-tab active" data-target="pseMethod">PSE</div>
+                            <div class="payment-method-tab" data-target="cardMethod">Tarjeta</div>
+                            <div class="payment-method-tab" data-target="cashMethod">Efectivo</div>
+                        </div>
+                        
+                        <!-- Método PSE -->
+                        <div id="pseMethod" class="payment-method-content active">
+                            <div class="payment-form-group">
+                                <label for="pseBankSelect">Banco</label>
+                                <select id="pseBankSelect" class="payment-form-control">
+                                    <option value="">Seleccione su banco</option>
+                                    <option value="bancolombia">Bancolombia</option>
+                                    <option value="davivienda">Davivienda</option>
+                                    <option value="bbva">BBVA</option>
+                                    <option value="bogota">Banco de Bogotá</option>
+                                    <option value="popular">Banco Popular</option>
+                                </select>
+                            </div>
+                            
+                            <div class="payment-form-group">
+                                <label for="pseAccountTypeSelect">Tipo de cuenta</label>
+                                <select id="pseAccountTypeSelect" class="payment-form-control">
+                                    <option value="">Seleccione tipo de cuenta</option>
+                                    <option value="ahorros">Ahorros</option>
+                                    <option value="corriente">Corriente</option>
+                                </select>
+                            </div>
+                            
+                            <div class="payment-form-group">
+                                <label for="pseEmailInput">Correo electrónico</label>
+                                <input type="email" id="pseEmailInput" class="payment-form-control" placeholder="correo@ejemplo.com">
+                            </div>
+                            
+                            <div class="payment-info-section">
+                                <h4>Información importante</h4>
+                                <p>Al continuar será redirigido al portal de su banco para completar la transacción de forma segura.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Método Tarjeta -->
+                        <div id="cardMethod" class="payment-method-content">
+                            <div class="payment-form-group">
+                                <label for="cardNumberInput">Número de tarjeta</label>
+                                <input type="text" id="cardNumberInput" class="payment-form-control" placeholder="1234 5678 9012 3456">
+                            </div>
+                            
+                            <div class="payment-form-row">
+                                <div class="payment-form-group">
+                                    <label for="cardExpiryInput">Fecha de expiración</label>
+                                    <input type="text" id="cardExpiryInput" class="payment-form-control" placeholder="MM/AA">
+                                </div>
+                                
+                                <div class="payment-form-group">
+                                    <label for="cardCvvInput">CVV</label>
+                                    <input type="text" id="cardCvvInput" class="payment-form-control" placeholder="123">
+                                </div>
+                            </div>
+                            
+                            <div class="payment-form-group">
+                                <label for="cardNameInput">Nombre en la tarjeta</label>
+                                <input type="text" id="cardNameInput" class="payment-form-control" placeholder="Como aparece en la tarjeta">
+                            </div>
+                            
+                            <div class="payment-form-group">
+                                <label for="cardInstallmentsSelect">Cuotas</label>
+                                <select id="cardInstallmentsSelect" class="payment-form-control">
+                                    <option value="1">1 cuota - $120.000 COP</option>
+                                    <option value="3">3 cuotas - $40.000 COP</option>
+                                    <option value="6">6 cuotas - $20.000 COP</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Método Efectivo -->
+                        <div id="cashMethod" class="payment-method-content">
+                            <div class="payment-info-section">
+                                <h4>Instrucciones para pago en efectivo</h4>
+                                <p>Por favor realiza el pago directamente en nuestro salón de belleza al momento de recibir el servicio.</p>
+                                <p>Asegúrate de solicitar tu recibo de pago al finalizar.</p>
+                            </div>
+                            
+                            <div class="payment-form-group">
+                                <label for="cashPaymentMethodSelect">Forma de pago</label>
+                                <select id="cashPaymentMethodSelect" class="payment-form-control">
+                                    <option value="efectivo">Efectivo</option>
+                                    <option value="transferencia">Transferencia bancaria</option>
+                                </select>
+                            </div>
+                            
+                            <div id="transferInfoSection" style="display: none;">
+                                <div class="payment-info-section">
+                                    <h4>Datos para transferencia</h4>
+                                    <p><strong>Banco:</strong> Bancolombia</p>
+                                    <p><strong>Tipo de cuenta:</strong> Ahorros</p>
+                                    <p><strong>Número de cuenta:</strong> 123-456789-00</p>
+                                    <p><strong>A nombre de:</strong> Belleza Express SAS</p>
+                                    <p><strong>Nit:</strong> 900.123.456-7</p>
+                                    <p>Envía el comprobante a info@bellezaexpress.com</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-btn-container">
+                        <button class="payment-btn payment-btn-outline" id="paymentBackToStep1Btn">Anterior</button>
+                        <button class="payment-btn" id="paymentNextToStep3Btn">Realizar Pago</button>
+                    </div>
+                </div>
+                
+                <!-- Paso 3 - Confirmación -->
+                <div class="payment-step-content" id="paymentStep3Content">
+                    <div class="payment-confirmation-message">
+                        <div class="payment-confirmation-icon">✓</div>
+                        <h2>¡Reserva Confirmada!</h2>
+                        <p>Tu servicio de belleza ha sido reservado y confirmado exitosamente.</p>
+                        
+                        <div class="payment-confirmation-details">
+                            <h3>Detalles de tu reserva</h3>
+                            <div class="payment-service-detail">
+                                <span>Servicio:</span>
+                                <span id="confirmationServiceName">Corte y coloración profesional</span>
+                            </div>
+                            <div class="payment-service-detail">
+                                <span>Profesional:</span>
+                                <span id="confirmationProfessionalName">María Rodríguez</span>
+                            </div>
+                            <div class="payment-service-detail">
+                                <span>Fecha:</span>
+                                <span id="confirmationDateTime">15 de Julio, 2023 - 2:00 PM</span>
+                            </div>
+                            <div class="payment-service-detail">
+                                <span>Código de reserva:</span>
+                                <span style="font-weight: bold;" id="confirmationCode">BELLEZA-2023-78945</span>
+                            </div>
+                            <div class="payment-service-detail">
+                                <span>Método de pago:</span>
+                                <span style="font-weight: bold;" id="confirmationPaymentMethod">PSE - Bancolombia</span>
+                            </div>
+                        </div>
+                        
+                        <p style="margin-top: 20px;">Hemos enviado los detalles a tu correo electrónico.</p>
+                    </div>
+                    
+                    <div class="payment-btn-container">
+                        <button class="payment-btn payment-btn-outline" id="paymentBackToStep2Btn">Anterior</button>
+                        <button class="payment-btn" id="paymentFinishProcessBtn">Finalizar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+            <!--PASARELA DE PAGOS-->
+
+
+            
+          </form>
+        </div>
+      </section>
+
+      <section class="appointments-section" id="citas">
+        <div class="container">
+          <div class="section-header">
+            <h3>Mis próximas citas</h3>
+            <a href="#" class="view-all">Ver todas</a>
+          </div>
+
+          <div class="appointments-list">
+            <!-- Dinámico desde JS -->
+          </div>
+        </div>
+      </section>
+
+      <section class="reviews-section" id="comentarios">
+        <div class="container">
+          <div class="section-header">
+            <h3>Comentarios sobre ti</h3>
+          </div>
+
+          <div class="reviews-summary">
+            <div class="overall-rating">
+              <div class="rating-number">4.8</div>
+              <div class="stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+              </div>
+              <p>12 valoraciones</p>
+            </div>
+
+            <div class="rating-bars">
+              <div class="rating-bar">
+                <span>5 estrellas</span>
+                <div class="bar-container">
+                  <div class="bar5" style="width: 75%"></div>
+                </div>
+                <span>9</span>
+              </div>
+              <div class="rating-bar">
+                <span>4 estrellas</span>
+                <div class="bar-container">
+                  <div class="bar4" style="width: 16.67%"></div>
+                </div>
+                <span>2</span>
+              </div>
+              <div class="rating-bar">
+                <span>3 estrellas</span>
+                <div class="bar-container">
+                  <div class="bar3" style="width: 8.33%"></div>
+                </div>
+                <span>1</span>
+              </div>
+              <div class="rating-bar">
+                <span>2 estrellas</span>
+                <div class="bar-container">
+                  <div class="bar2" style="width: 0%"></div>
+                </div>
+                <span>0</span>
+              </div>
+              <div class="rating-bar">
+                <span>1 estrella</span>
+                <div class="bar-container">
+                  <div class="bar1" style="width: 0%"></div>
+                </div>
+                <span>0</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="reviews-list">
+            <!-- Dinámico desde JS -->
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h4>Just Me</h4>
+            <p>
+              Servicios de belleza a domicilio para hombres y mujeres en
+              cualquier lugar.
+            </p>
+            <div class="social-icons">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-tiktok"></i></a>
+              <a href="#"><i class="fab fa-whatsapp"></i></a>
+            </div>
+          </div>
+
+          <div class="footer-section">
+            <h4>Enlaces</h4>
+            <ul>
+              <li><a href="#">Inicio</a></li>
+              <li><a href="#">Servicios</a></li>
+              <li><a href="#">Sobre Nosotros</a></li>
+              <li><a href="#">Contacto</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-section">
+            <h4>Servicios</h4>
+            <ul>
+              <li><a href="#">Corte de Cabello</a></li>
+              <li><a href="#">Maquillaje</a></li>
+              <li><a href="#">Uñas</a></li>
+              <li><a href="#">Tratamientos Faciales</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-section">
+            <h4>Contacto</h4>
+            <ul>
+              <li><i class="fas fa-map-marker-alt"></i> Bogotá, Colombia</li>
+              <li><i class="fas fa-phone"></i> +57 123 456 7890</li>
+              <li><i class="fas fa-envelope"></i> hola@justme.com</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>&copy; 2023 Just Me. Todos los derechos reservados.</p>
+          <div class="legal-links">
+            <a href="#">Términos y Condiciones</a>
+            <a href="#">Política de Privacidad</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="scripts/inicio.js"></script>
+
+
+
+    
+  </body>
+</html>
+
