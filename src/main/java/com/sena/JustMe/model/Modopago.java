@@ -1,9 +1,12 @@
 package com.sena.JustMe.model;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -14,6 +17,10 @@ public class Modopago {
 
 	private Integer idmodopago;
 	private String metodo_pago;
+	
+	
+	@OneToMany(mappedBy = "modoPago")
+    private List<Factura> facturas;
 
 	// constructor sin campos
 	public Modopago() {

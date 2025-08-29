@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JustMe — Clientes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/style.css" />
+  <link rel="stylesheet" href="styles/clientes.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="app">
+    <!-- SIDEBAR IZQUIERDA -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">JM</div>
+        <div class="brand-text">
+          <span class="brand-title">Just<span class="accent">Me</span></span>
+          <span class="brand-sub">Panel Admin</span>
+        </div>
+        <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Opciones</div>
+        <nav class="menu">
+          <a class="menu-item" href="index.html">
+            <span class="dot"></span> Estadisticas
+          </a>
+          
+          <a class="menu-item active" href="clientes.html"><span class="dot"></span> Clientes</a>
+        </nav>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Ajustes</div>
+        <nav class="menu">
+          <a class="menu-item" href="#"><span class="dot"></span> Mensajes</a>
+          <a class="menu-item" href="#"><span class="dot"></span> Configuración</a>
+        </nav>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="mini-logo">⟡</div>
+        <div class="footer-text">JustMe ©</div>
+      </div>
+    </aside>
+
+    <!-- OVERLAY PARA MÓVIL -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- CONTENIDO -->
+    <main class="main">
+      <!-- TOPBAR -->
+      <header class="topbar">
+        <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+        <div class="crumbs">Opciones / <span>Clientes</span></div>
+        <div class="top-actions">
+          <div class="search">
+            <input id="search" type="text" placeholder="Buscar cliente…" />
+          </div>
+          <button class="icon-btn" title="Notificaciones">🔔</button>
+          <button class="icon-btn" id="themeToggle" title="Cambiar tema">🌓</button>
+          <div class="avatar" title="Admin">A</div>
+        </div>
+      </header>
+
+      <!-- GRID PRINCIPAL -->
+      <section class="grid">
+        <!-- FILTROS Y ACCIONES -->
+        <div class="card">
+          <div class="filtros-container">
+            <div class="filtros-group">
+              <select id="filtroEstado" class="filtro-select">
+                <option value="">Todos los estados</option>
+                <option value="activo">Activo</option>
+                <option value="inactivo">Inactivo</option>
+              </select>
+              
+              <select id="filtroRol" class="filtro-select">
+                <option value="">Todos los roles</option>
+                <option value="1">Toma servicios</option>
+                <option value="2">Ofrece servicios</option>
+                <option value="3">Administrador</option>
+              </select>
+              
+              <button class="btn btn-secondary" id="btnLimpiarFiltros">Limpiar</button>
+            </div>
+            
+            <div class="acciones-group">
+              <button class="btn btn-primary" id="btnNuevoCliente">
+                <span class="btn-icon">+</span> Nuevo cliente
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TABLA CLIENTES -->
+        <div class="card col-2">
+          <div class="card-header">
+            <h3>Lista de clientes</h3>
+            <div class="table-actions">
+              <button class="icon-btn" title="Exportar">📊</button>
+              <button class="icon-btn" title="Opciones">⋯</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table id="tablaClientes">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Email</th>
+                  <th>Estado</th>
+                  <th>Rol</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="clientesBody">
+                <!-- Rellenado por JS -->
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <button class="pagination-btn" id="prevPage" disabled>← Anterior</button>
+            <span class="pagination-info" id="paginationInfo">Página 1 de 1</span>
+            <button class="pagination-btn" id="nextPage" disabled>Siguiente →</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- SIDEBAR DERECHA -->
+    <aside class="rightbar">
+      <!-- CARD DE RESUMEN DE CLIENTES MOVIDA AQUÍ -->
+      <div class="card kpi-unificado">
+        <div class="kpi-header">
+          <h3>Resumen de clientes</h3>
+        </div>
+        <div class="kpi-content">
+          <div class="kpi-item">
+            <div class="kpi-data">
+              <div class="kpi-title">Total clientes</div>
+              <div class="kpi-value" id="totalClientes">0</div>
+            </div>
+            <div class="kpi-icon">👥</div>
+          </div>
+          
+          <div class="kpi-divider"></div>
+          
+          <div class="kpi-item">
+            <div class="kpi-data">
+              <div class="kpi-title">Clientes activos</div>
+              <div class="kpi-value" id="clientesActivos">0</div>
+              <div class="kpi-sub"><span class="trend up" id="porcentajeActivos">0%</span> del total</div>
+            </div>
+            <div class="kpi-icon">✅</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Resumen de roles</h3>
+        <div class="resumen-stats">
+          <div class="stat-item">
+            <span class="stat-label">Toman servicios</span>
+            <span class="stat-value" id="statTomanServicios">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Ofrecen servicios</span>
+            <span class="stat-value" id="statOfrecenServicios">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Administradores</span>
+            <span class="stat-value" id="statAdministradores">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Actividad reciente</h3>
+        <ul class="activity" id="actividadClientes">
+          <!-- Rellenado por JS -->
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <!-- MODAL EDITAR CLIENTE -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="clienteModal">
+      <div class="modal-header">
+        <h3 id="modalTitulo">Nuevo cliente</h3>
+        <button class="modal-close" id="modalClose">×</button>
+      </div>
+      <div class="modal-body">
+        <form id="clienteForm">
+          <input type="hidden" id="clienteId">
+          <div class="form-group">
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" required>
+          </div>
+          <div class="form-group">
+            <label for="apellido">Apellido</label>
+            <input type="text" id="apellido" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" required>
+          </div>
+          <div class="form-group">
+            <label for="estado">Estado</label>
+            <select id="estado" required>
+              <option value="activo">Activo</option>
+              <option value="inactivo">Inactivo</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="rol">Rol</label>
+            <select id="rol" required>
+              <option value="1">Toma servicios</option>
+              <option value="2">Ofrece servicios</option>
+              <option value="3">Administrador</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btnCancelar">Cancelar</button>
+        <button class="btn btn-primary" id="btnGuardar">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="scripts/script.js"></script>
+  <script src="scripts/clientes.js"></script>
+</body>
+</html>
