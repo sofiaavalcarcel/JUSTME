@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "citas_reservas")
-public class citas_reservas {
+public class Citas_reservas {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	
@@ -24,11 +24,11 @@ public class citas_reservas {
 	private String observacionesLB;
 	private String fechaEdicion;
 	
-	public citas_reservas() {
+	public Citas_reservas() {
 	}
 
 	
-	public citas_reservas(Integer id, Date fecha_hora, String direccion_servicio, String estado_cita, String precio,
+	public Citas_reservas(Integer id, Date fecha_hora, String direccion_servicio, String estado_cita, String precio,
 			String observacionesCL, String observacionesLB, String fechaEdicion) {
 		super();
 		this.id = id;
