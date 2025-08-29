@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JustMe — Panel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="app">
+    <!-- SIDEBAR IZQUIERDA -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">JM</div>
+        <div class="brand-text">
+          <span class="brand-title">Just<span class="accent">Me</span></span>
+          <span class="brand-sub">Panel Admin</span>
+        </div>
+        <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Opciones</div>
+        <nav class="menu">
+          <a class="menu-item active" href="#">
+            <span class="dot"></span> Estadisticas
+          </a>
+          
+          <a class="menu-item" href="clientes.html"><span class="dot"></span> Clientes</a>
+        </nav>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Ajustes</div>
+        <nav class="menu">
+          <a class="menu-item" href="#"><span class="dot"></span> Mensajes</a>
+          <a class="menu-item" href="#"><span class="dot"></span> Configuración</a>
+        </nav>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="mini-logo">⟡</div>
+        <div class="footer-text">JustMe ©</div>
+      </div>
+    </aside>
+
+    <!-- OVERLAY PARA MÓVIL -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- CONTENIDO -->
+    <main class="main">
+      <!-- TOPBAR -->
+      <header class="topbar">
+        <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+        <div class="crumbs">Opciones / <span>Estadisticas</span></div>
+        <div class="top-actions">
+          <div class="search">
+            <input id="search" type="text" placeholder="Buscar…" />
+          </div>
+          <button class="icon-btn" title="Notificaciones">🔔</button>
+          <button class="icon-btn" id="themeToggle" title="Cambiar tema">🌓</button>
+          <div class="avatar" title="Admin">A</div>
+        </div>
+      </header>
+
+      <!-- GRID PRINCIPAL -->
+      <section class="grid">
+        <!-- MÉTRICAS -->
+        <div class="card kpi">
+          <div class="kpi-title">Ingresos netos</div>
+          <div class="kpi-value">$3,131,021</div>
+          <div class="kpi-sub"><span class="trend up">+0.4%</span> vs mes pasado</div>
+        </div>
+
+        <div class="card kpi">
+          <div class="kpi-title">ARR</div>
+          <div class="kpi-value">$1,511,121</div>
+          <div class="kpi-sub"><span class="trend up">+32%</span> vs último trimestre</div>
+        </div>
+
+        <div class="card kpi">
+          <div class="kpi-title">Meta de ingresos trimestral</div>
+          <div class="kpi-value">71%</div>
+          <div class="progress">
+            <div class="bar" style="width:71%"></div>
+          </div>
+          <div class="kpi-sub">Meta: $1.1M</div>
+        </div>
+
+        <div class="card kpi">
+          <div class="kpi-title">Nuevas citas</div>
+          <div class="kpi-value">18,221</div>
+          <div class="kpi-sub"><span class="trend up">+11%</span> vs último trimestre</div>
+        </div>
+
+        <!-- OVERVIEW DE VENTAS -->
+        <div class="card col-2">
+          <div class="card-header">
+            <h3>Resumen de Servicios</h3>
+            <button class="icon-btn">⋯</button>
+          </div>
+          <div class="sales">
+            <div class="sales-chart">
+              <canvas id="donutChart" height="180"></canvas>
+              <div class="chart-center">
+                <div class="big">102k</div>
+                <div class="muted">Visitas semanales</div>
+              </div>
+            </div>
+            <div class="sales-meta">
+              <div class="stat">
+                <div class="stat-title">Número de ventas</div>
+                <div class="stat-value">$71,020</div>
+              </div>
+              <ul class="legend">
+                <li><span class="swatch s1"></span> Cabello <b>$55,640</b></li>
+                <li><span class="swatch s2"></span> Uñas <b>$11,420</b></li>
+                <li><span class="swatch s3"></span> Maquillaje <b>$1,840</b></li>
+                <li><span class="swatch s4"></span> Spa <b>$2,120</b></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- TARJETAS CHICAS - UNA DEBAJO DE LA OTRA -->
+        <div class="cards-stack">
+          <div class="card">
+            <div class="mini-title">Nuevos clientes</div>
+            <div class="mini-value">862</div>
+            <div class="mini-sub trend down">-8% Semana pasada</div>
+          </div>
+
+          <div class="card">
+            <div class="mini-title">Beneficio semanal</div>
+            <div class="mini-value">$25.6k</div>
+            <div class="mini-sub trend up">+42%</div>
+          </div>
+        </div>
+
+        <!-- LÍNEA DE GANANCIAS -->
+        <div class="card col-2">
+          <div class="card-header">
+            <h3>Beneficio total</h3>
+          </div>
+          <div class="chart-container">
+            <canvas id="lineChart"></canvas>
+          </div>
+        </div>
+
+        <!-- TABLA CLIENTES -->
+        <div class="card col-2">
+          <div class="card-header">
+            <h3>Lista de clientes</h3>
+            <button class="icon-btn">⋯</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Citas</th>
+                  <th>Valor total</th>
+                </tr>
+              </thead>
+              <tbody id="clientsBody">
+                <!-- Rellenado por JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- SIDEBAR DERECHA -->
+    <aside class="rightbar">
+      <div class="card">
+        <h3>Notificaciones</h3>
+        <ul class="notif">
+          <li><span class="bullet"></span> 56 nuevos usuarios registrados — ahora</li>
+          <li><span class="bullet"></span> 132 citas agendadas — hace 59 min</li>
+          <li><span class="bullet"></span> Se realizaron retiros — hace 12 h</li>
+          <li><span class="bullet"></span> 5 mensajes sin leer — 11:59 PM</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Actividades</h3>
+        <ul class="activity">
+          <li><span class="avatar sm">S</span> Cambió el estilo — ahora</li>
+          <li><span class="avatar sm">B</span> 177 nuevos productos añadidos — hace 47 min</li>
+          <li><span class="avatar sm">D</span> 11 productos archivados — hace 1 día</li>
+          <li><span class="avatar sm">P</span> Página "Toys" removida — 2 Feb, 2024</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Managers</h3>
+        <ul class="contacts">
+          <li><span class="avatar">S</span>Sofia Valcarcel</li>
+          <li><span class="avatar">S</span> Santiago Eslava</li>
+          <li><span class="avatar">Y</span> Yarith Pinto</li>
+          <li><span class="avatar">S</span> Santiago Trujillo</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <script src="scripts/script.js"></script>
+</body>
+</html>
