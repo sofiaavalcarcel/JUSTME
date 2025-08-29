@@ -19,8 +19,6 @@ import jakarta.persistence.Table;
 	private String categoria;
 	private String estado;
 
-
-	
 	
 	//constructor vacio
 	public Servicios() {
