@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -18,6 +20,13 @@ public class Servicios {
 	private String precio_base;
 	private String categoria;
 	private String estado;
+	
+	@ManyToOne
+	private Usuarios usuarios;
+	
+	@OneToOne(mappedBy = "servicio")
+    private Citas_reservas citas_reservas;
+
 
 	// constructor vacio
 	public Servicios() {

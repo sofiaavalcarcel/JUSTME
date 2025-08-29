@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -16,6 +17,12 @@ public class Reseña {
 	private String calificacion;
 	private String comentario;
 	private String fecha_reseña;
+	
+	@ManyToOne
+	private Usuarios usuarios;
+	
+	@ManyToOne
+	private Citas_reservas citas_reservas;
 
 	// contructor sin campos
 
