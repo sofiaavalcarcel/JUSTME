@@ -11,6 +11,133 @@
     --black: #000;
 }
 
+/* Preloader Styles */
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #f8f9fa 0%, #f8f9fa 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease-out, visibility 0.5s;
+}
+
+.preloader.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.preloader-content {
+    text-align: center;
+}
+
+.preloader-card {
+    background-color: #ffffff;
+    padding: 2rem 3rem;
+    border-radius: 1.25rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.preloader-loader {
+    color: rgb(0, 0, 0);
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-size: 35px;
+    height: 50px;
+    padding: 15px 15px;
+    display: flex;
+    border-radius: 8px;
+    justify-content: center;
+}
+
+.preloader-words {
+    overflow: hidden;
+    position: relative;
+    height: 50px;
+}
+
+.preloader-words::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(#ffffff 10%,
+            transparent 30%,
+            transparent 70%,
+            #ffffff 90%);
+    z-index: 20;
+}
+
+.preloader-word {
+    display: block;
+    height: 100%;
+    padding-left: 6px;
+    color: #6a1e80;
+    animation: spin_4991 3s infinite;
+}
+
+@keyframes spin_4991 {
+    10% {
+        transform: translateY(-102%);
+    }
+
+    25% {
+        transform: translateY(-100%);
+    }
+
+    35% {
+        transform: translateY(-202%);
+    }
+
+    50% {
+        transform: translateY(-200%);
+    }
+
+    60% {
+        transform: translateY(-302%);
+    }
+
+    75% {
+        transform: translateY(-300%);
+    }
+
+    85% {
+        transform: translateY(-402%);
+    }
+
+    100% {
+        transform: translateY(-400%);
+    }
+}
+
+.preloader-text {
+    color: #531463;
+    font-size: 1.2rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    margin-top: 20px;
+}
+
+.loading-bar {
+    width: 300px;
+    height: 6px;
+    background-color: #f1f1f1;
+    border-radius: 10px;
+    margin: 20px auto 0;
+    overflow: hidden;
+}
+
+.loading-progress {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #e16bff, #9033a7);
+    border-radius: 10px;
+    transition: width 0.3s ease;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -24,6 +151,7 @@ html {
     background-color: var(--bg-color);
     padding: 0rem 0rem;
     border-radius: 1.25rem;
+	
 }
 
 .loader {

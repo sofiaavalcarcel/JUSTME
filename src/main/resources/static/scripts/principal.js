@@ -242,4 +242,52 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('modalNav').style.display = 'none';
         this.reset();
     });
+	
+	// Preloader functionality
+	document.addEventListener('DOMContentLoaded', function() {
+	    const preloader = document.getElementById('preloader');
+	    const loadingProgress = document.querySelector('.loading-progress');
+	    
+	    // Simular progreso de carga
+	    let progress = 0;
+	    const progressInterval = setInterval(function() {
+	        progress += Math.random() * 15;
+	        if (progress >= 100) {
+	            progress = 100;
+	            clearInterval(progressInterval);
+	        }
+	        loadingProgress.style.width = progress + '%';
+	    }, 300);
+		
+		
+	    
+	    // Ocultar preloader cuando la página esté completamente cargada
+	    window.addEventListener('load', function() {
+	        setTimeout(function() {
+	            loadingProgress.style.width = '100%';
+	            
+	            setTimeout(function() {
+	                preloader.classList.add('hidden');
+	                
+	                // Eliminar completamente el preloader después de la animación
+	                setTimeout(function() {
+	                    preloader.style.display = 'none';
+	                }, 500);
+	            }, 300);
+	        }, 1500); // Tiempo mínimo que se mostrará el preloader (1.5 segundos)
+	    });
+	    
+	    // En caso de error, también ocultar el preloader
+	    window.addEventListener('error', function() {
+	        clearInterval(progressInterval);
+	        loadingProgress.style.width = '100%';
+	        
+	        setTimeout(function() {
+	            preloader.classList.add('hidden');
+	            setTimeout(function() {
+	                preloader.style.display = 'none';
+	            }, 500);
+	        }, 500);
+	    });
+	});
     
