@@ -11,30 +11,32 @@ import jakarta.persistence.Table;
 public class Notificaciones {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Integer idnotificaciones;
 	private String tipo_notificiaciones;
 	private String mensaje;
-	
-	//Constructo vacio
+
+	// Constructo vacio
 	public Notificaciones() {
-		
+
 	}
 
-	//constructor con campos
-	public Notificaciones(Integer id, String tipo_notificiaciones, String mensaje) {
+	// constructor con campos
+
+	public Notificaciones(Integer idnotificaciones, String tipo_notificiaciones, String mensaje) {
 		super();
-		this.id = id;
+		this.idnotificaciones = idnotificaciones;
 		this.tipo_notificiaciones = tipo_notificiaciones;
 		this.mensaje = mensaje;
 	}
 
-	//getters and setters
-	public Integer getId() {
-		return id;
+	// getters and setters
+
+	public Integer getIdnotificaciones() {
+		return idnotificaciones;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setIdnotificaciones(Integer idnotificaciones) {
+		this.idnotificaciones = idnotificaciones;
 	}
 
 	public String getTipo_notificiaciones() {
@@ -53,16 +55,12 @@ public class Notificaciones {
 		this.mensaje = mensaje;
 	}
 
-	//metodo to string
+	// metodo to string
+
 	@Override
 	public String toString() {
-		return "Notificaciones [id=" + id + ", tipo_notificiaciones=" + tipo_notificiaciones + ", mensaje=" + mensaje
-				+ "]";
+		return "Notificaciones [idnotificaciones=" + idnotificaciones + ", tipo_notificiaciones=" + tipo_notificiaciones
+				+ ", mensaje=" + mensaje + "]";
 	}
-	
-	
-	
-	
-	
-	
+
 }

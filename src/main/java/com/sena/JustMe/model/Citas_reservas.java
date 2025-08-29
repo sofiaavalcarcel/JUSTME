@@ -8,130 +8,114 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-
 @Entity
 @Table(name = "citas_reservas")
 public class Citas_reservas {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
-	private Integer id;
+
+	private Integer idcitas_reservas;
 	private Date fecha_hora;
 	private String direccion_servicio;
 	private String estado_cita;
 	private String precio;
-	private String observacionesCL;
-	private String observacionesLB;
+	private String observacionesCl;
+	private String observacionesLb;
 	private String fechaEdicion;
-	
+
+	// constructor vacio
 	public Citas_reservas() {
 	}
 
-	
-	public Citas_reservas(Integer id, Date fecha_hora, String direccion_servicio, String estado_cita, String precio,
-			String observacionesCL, String observacionesLB, String fechaEdicion) {
+	// constructor con espacios
+	public Citas_reservas(Integer idcitas_reservas, Date fecha_hora, String direccion_servicio, String estado_cita,
+			String precio, String observacionesCl, String observacionesLb, String fechaEdicion) {
 		super();
-		this.id = id;
+		this.idcitas_reservas = idcitas_reservas;
 		this.fecha_hora = fecha_hora;
 		this.direccion_servicio = direccion_servicio;
 		this.estado_cita = estado_cita;
 		this.precio = precio;
-		this.observacionesCL = observacionesCL;
-		this.observacionesLB = observacionesLB;
+		this.observacionesCl = observacionesCl;
+		this.observacionesLb = observacionesLb;
 		this.fechaEdicion = fechaEdicion;
 	}
 
-
-	public Integer getId() {
-		return id;
+//Getter and setters
+	public Integer getIdcitas_reservas() {
+		return idcitas_reservas;
 	}
 
-
-	public void setId(Integer id) {
-		this.id = id;
+	public void setIdcitas_reservas(Integer idcitas_reservas) {
+		this.idcitas_reservas = idcitas_reservas;
 	}
-
 
 	public Date getFecha_hora() {
 		return fecha_hora;
 	}
 
-
 	public void setFecha_hora(Date fecha_hora) {
 		this.fecha_hora = fecha_hora;
 	}
-
 
 	public String getDireccion_servicio() {
 		return direccion_servicio;
 	}
 
-
 	public void setDireccion_servicio(String direccion_servicio) {
 		this.direccion_servicio = direccion_servicio;
 	}
-
 
 	public String getEstado_cita() {
 		return estado_cita;
 	}
 
-
 	public void setEstado_cita(String estado_cita) {
 		this.estado_cita = estado_cita;
 	}
-
 
 	public String getPrecio() {
 		return precio;
 	}
 
-
 	public void setPrecio(String precio) {
 		this.precio = precio;
 	}
 
-
-	public String getObservacionesCL() {
-		return observacionesCL;
+	public String getObservacionesCl() {
+		return observacionesCl;
 	}
 
-
-	public void setObservacionesCL(String observacionesCL) {
-		this.observacionesCL = observacionesCL;
+	public void setObservacionesCl(String observacionesCl) {
+		this.observacionesCl = observacionesCl;
 	}
 
-
-	public String getObservacionesLB() {
-		return observacionesLB;
+	public String getObservacionesLb() {
+		return observacionesLb;
 	}
 
-
-	public void setObservacionesLB(String observacionesLB) {
-		this.observacionesLB = observacionesLB;
+	public void setObservacionesLb(String observacionesLb) {
+		this.observacionesLb = observacionesLb;
 	}
-
 
 	public String getFechaEdicion() {
 		return fechaEdicion;
 	}
 
-
 	public void setFechaEdicion(String fechaEdicion) {
 		this.fechaEdicion = fechaEdicion;
 	}
 
-
 	@Override
 	public String toString() {
-		return "citas_reservas [id=" + id + ", fecha_hora=" + fecha_hora + ", direccion_servicio=" + direccion_servicio
-				+ ", estado_cita=" + estado_cita + ", precio=" + precio + ", observacionesCL=" + observacionesCL
-				+ ", observacionesLB=" + observacionesLB + ", fechaEdicion=" + fechaEdicion + "]";
+		return "Citas_reservas [idcitas_reservas=" + idcitas_reservas + ", fecha_hora=" + fecha_hora
+				+ ", direccion_servicio=" + direccion_servicio + ", estado_cita=" + estado_cita + ", precio=" + precio
+				+ ", observacionesCl=" + observacionesCl + ", observacionesLb=" + observacionesLb + ", fechaEdicion="
+				+ fechaEdicion + "]";
 	}
 	
 	
-	
-	
 
+	
 
 }

@@ -13,20 +13,21 @@ public class Rol {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String idrol;
-	private String nombres;
-	//Constructor vacio
+	private String nombre;
+
+	// Constructor vacio
 	public Rol() {
-		
-	}
-	
-	//Constructor con campos
-	public Rol(String idrol, String nombres) {
-		super();
-		this.idrol = idrol;
-		this.nombres = nombres;
+
 	}
 
-	//GETTERS Y SETTERS
+	// Constructor con campos
+	public Rol(String idrol, String nombre) {
+		super();
+		this.idrol = idrol;
+		this.nombre = nombre;
+	}
+
+	// GETTERS Y SETTERS
 	public String getIdrol() {
 		return idrol;
 	}
@@ -36,23 +37,17 @@ public class Rol {
 	}
 
 	public String getNombres() {
-		return nombres;
+		return nombre;
 	}
 
-	public void setNombres(String nombres) {
-		this.nombres = nombres;
+	public void setNombres(String nombre) {
+		this.nombre = nombre;
 	}
 
-	//Metodo to string
+	// Metodo to string
 	@Override
 	public String toString() {
-		return "Rol [idrol=" + idrol + ", nombres=" + nombres + "]";
+		return "Rol [idrol=" + idrol + ", nombre=" + nombre + "]";
 	}
-	
-	
-	
-	
-	
-	
-	
+
 }

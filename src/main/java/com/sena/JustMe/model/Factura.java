@@ -11,30 +11,31 @@ import jakarta.persistence.Table;
 public class Factura {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Integer idfactura;
 	private String num_pago;
 	private String otros_detalles;
-	
-	//constructor vacio
+
+	// constructor vacio
 	public Factura() {
-	
+
 	}
 
-	//cosntructor con campos
-	public Factura(Integer id, String num_pago, String otros_detalles) {
+	// constructor con campos
+
+	public Factura(Integer idfactura, String num_pago, String otros_detalles) {
 		super();
-		this.id = id;
+		this.idfactura = idfactura;
 		this.num_pago = num_pago;
 		this.otros_detalles = otros_detalles;
 	}
+	// getters and setters
 
-	//getters and setters
-	public Integer getId() {
-		return id;
+	public Integer getIdfactura() {
+		return idfactura;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setIdfactura(Integer idfactura) {
+		this.idfactura = idfactura;
 	}
 
 	public String getNum_pago() {
@@ -53,17 +54,12 @@ public class Factura {
 		this.otros_detalles = otros_detalles;
 	}
 
-	//Metodo to string 
+	// Metodo to string
+
 	@Override
 	public String toString() {
-		return "Factura [id=" + id + ", num_pago=" + num_pago + ", otros_detalles=" + otros_detalles + "]";
+		return "Factura [idfactura=" + idfactura + ", num_pago=" + num_pago + ", otros_detalles=" + otros_detalles
+				+ "]";
 	}
-	
-	
-	
-	
-	
-	
 
-	
 }
