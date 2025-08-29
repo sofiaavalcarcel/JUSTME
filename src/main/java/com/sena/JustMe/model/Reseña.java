@@ -12,7 +12,7 @@ public class Reseña {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 
-	private Integer id;
+	private Integer idreseña;
 	private String calificacion;
 	private String comentario;
 	private String fecha_reseña;
@@ -20,26 +20,26 @@ public class Reseña {
 	// contructor sin campos
 
 	public Reseña() {
-		super();
-		// TODO Auto-generated constructor stub
+
 	}
 
 	// contructor con campos
-	public Reseña(Integer id, String calificacion, String comentario, String fecha_reseña) {
+	public Reseña(Integer idreseña, String calificacion, String comentario, String fecha_reseña) {
 		super();
-		this.id = id;
+		this.idreseña = idreseña;
 		this.calificacion = calificacion;
 		this.comentario = comentario;
 		this.fecha_reseña = fecha_reseña;
 	}
 
 	// getters and setters
-	public Integer getId() {
-		return id;
+
+	public Integer getIdreseña() {
+		return idreseña;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setIdreseña(Integer idreseña) {
+		this.idreseña = idreseña;
 	}
 
 	public String getCalificacion() {
@@ -66,11 +66,10 @@ public class Reseña {
 		this.fecha_reseña = fecha_reseña;
 	}
 
-	
-	//metodo to string
+	// metodo to string
 	@Override
 	public String toString() {
-		return "Reseña [id=" + id + ", calificacion=" + calificacion + ", comentario=" + comentario + ", fecha_reseña="
-				+ fecha_reseña + "]";
+		return "Reseña [idreseña=" + idreseña + ", calificacion=" + calificacion + ", comentario=" + comentario
+				+ ", fecha_reseña=" + fecha_reseña + "]";
 	}
 }

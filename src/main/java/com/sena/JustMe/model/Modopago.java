@@ -12,7 +12,7 @@ public class Modopago {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 
-	private Integer id;
+	private Integer idmodopago;
 	private String metodo_pago;
 
 	// constructor sin campos
@@ -20,20 +20,21 @@ public class Modopago {
 
 	}
 
-	//construcot con campos
-	public Modopago(Integer id, String metodo_pago) {
+	// construcor con campos
+
+	public Modopago(Integer idmodopago, String metodo_pago) {
 		super();
-		this.id = id;
+		this.idmodopago = idmodopago;
 		this.metodo_pago = metodo_pago;
 	}
 
-	//getters and setters
-	public Integer getId() {
-		return id;
+	// getters and setters
+	public Integer getIdmodopago() {
+		return idmodopago;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setIdmodopago(Integer idmodopago) {
+		this.idmodopago = idmodopago;
 	}
 
 	public String getMetodo_pago() {
@@ -45,11 +46,10 @@ public class Modopago {
 	}
 
 	// metodo toString
+
 	@Override
 	public String toString() {
-		return "Modopago [id=" + id + ", metodo_pago=" + metodo_pago + "]";
+		return "Modopago [idmodopago=" + idmodopago + ", metodo_pago=" + metodo_pago + "]";
 	}
-	
-	
 
 }

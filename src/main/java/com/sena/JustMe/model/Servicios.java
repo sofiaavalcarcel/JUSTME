@@ -7,45 +7,43 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-	@Table(name = "servicios")
-	public class Servicios {
-		@Id
-		@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
-	private Integer id;
+@Table(name = "servicios")
+public class Servicios {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+
+	private Integer idservicios;
 	private String nombre_servicios;
 	private String descripcion;
 	private String precio_base;
 	private String categoria;
 	private String estado;
 
-
-	//constructor vacio
+	// constructor vacio
 	public Servicios() {
-		
+
 	}
 
-	//contructor con campos
+	// contructor con campos
 	public Servicios(Integer id, String nombre_servicios, String descripcion, String precio_base, String categoria,
 			String estado) {
 		super();
-		this.id = id;
+		this.idservicios = id;
 		this.nombre_servicios = nombre_servicios;
 		this.descripcion = descripcion;
 		this.precio_base = precio_base;
 		this.categoria = categoria;
 		this.estado = estado;
 	}
-	
-	
-	//getters and setters
+
+	// getters and setters
 
 	public Integer getId() {
-		return id;
+		return idservicios;
 	}
 
 	public void setId(Integer id) {
-		this.id = id;
+		this.idservicios = id;
 	}
 
 	public String getNombre_servicios() {
@@ -88,16 +86,12 @@ import jakarta.persistence.Table;
 		this.estado = estado;
 	}
 
-	
-	//to string
+	// to string
 	@Override
 	public String toString() {
-		return "Servicios [id=" + id + ", nombre_servicios=" + nombre_servicios + ", descripcion=" + descripcion
-				+ ", precio_base=" + precio_base + ", categoria=" + categoria + ", estado=" + estado + "]";
+		return "Servicios [id=" + idservicios + ", nombre_servicios=" + nombre_servicios + ", descripcion="
+				+ descripcion + ", precio_base=" + precio_base + ", categoria=" + categoria + ", estado=" + estado
+				+ "]";
 	}
-	
 
-	
-	
-	
 }

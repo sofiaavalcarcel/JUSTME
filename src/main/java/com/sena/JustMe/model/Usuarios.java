@@ -12,7 +12,7 @@ public class Usuarios {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 
-	private Integer id;
+	private Integer idusuarios;
 	private String nombre;
 	private String apellido;
 	private String email;
@@ -34,7 +34,7 @@ public class Usuarios {
 			String biografia, String documentos, String portafolio, String estado, String disponibilidad,
 			Integer idrol) {
 		super();
-		this.id = id;
+		this.idusuarios= id;
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.email = email;
@@ -50,11 +50,11 @@ public class Usuarios {
 
 	// GETTERS AND SETTERS
 	public Integer getId() {
-		return id;
+		return idusuarios;
 	}
 
 	public void setId(Integer id) {
-		this.id = id;
+		this.idusuarios = id;
 	}
 
 	public String getNombre() {
@@ -140,7 +140,7 @@ public class Usuarios {
 	// metodo TOSTRING
 	@Override
 	public String toString() {
-		return "Usuario [id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", email=" + email
+		return "Usuario [id=" + idusuarios + ", nombre=" + nombre + ", apellido=" + apellido + ", email=" + email
 				+ ", contraseña=" + contraseña + ", direccion=" + direccion + ", biografia=" + biografia
 				+ ", documentos=" + documentos + ", portafolio=" + portafolio + ", estado=" + estado
 				+ ", disponibilidad=" + disponibilidad + "]";
