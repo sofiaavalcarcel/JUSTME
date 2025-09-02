@@ -1,4 +1,4 @@
-package com.sena.repository;
+package com.sena.JustMe.repository;
 
 public interface IReseñaRepository {
 
