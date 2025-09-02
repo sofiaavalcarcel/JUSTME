@@ -1,174 +1,186 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>JustMe — Panel</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>JustMe — Panel</title>
 
-  <!-- Fuentes -->
-  <link rel="preconnect" th:href="@{https://fonts.googleapis.com}">
-  <link rel="preconnect" th:href="@{https://fonts.gstatic.com}" crossorigin>
-  <link th:href="@{https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap}" rel="stylesheet">
+	<!-- Fuentes -->
+	<link rel="preconnect" th:href="@{https://fonts.googleapis.com}">
+	<link rel="preconnect" th:href="@{https://fonts.gstatic.com}" crossorigin>
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap}"
+		rel="stylesheet">
 
-  <!-- Estilos -->
-  <link rel="stylesheet" th:href="@{/assetsADMIN/styles/style.css}"/>
+	<!-- Estilos -->
+	<link rel="stylesheet" th:href="@{/assetsADMIN/styles/style.css}" />
 
-  <!-- Librerías -->
-  <script th:src="@{https://cdn.jsdelivr.net/npm/chart.js}"></script>
+	<!-- Librerías -->
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
-  <div class="app">
-    <!-- SIDEBAR IZQUIERDA -->
-    <aside class="sidebar">
-      <div class="brand">
-        <div class="logo">JM</div>
-        <div class="brand-text">
-          <span class="brand-title">Just<span class="accent">Me</span></span>
-          <span class="brand-sub">Panel Admin</span>
-        </div>
-        <button class="sidebar-toggle" id="sidebarToggle">☰</button>
-      </div>
+	<div class="app">
+		<!-- SIDEBAR IZQUIERDA -->
+		<aside class="sidebar">
+			<div class="brand">
+				<div class="logo">JM</div>
+				<div class="brand-text">
+					<span class="brand-title">Just<span class="accent">Me</span></span>
+					<span class="brand-sub">Panel Admin</span>
+				</div>
+				<button class="sidebar-toggle" id="sidebarToggle">☰</button>
+			</div>
 
-      <div class="sidebar-section">
-        <div class="sidebar-title">Opciones</div>
-        <nav class="menu">
-          <a class="menu-item active" th:href="@{/estadisticas}">
-            <span class="dot"></span> Estadísticas
-          </a>
-          
-          <a class="menu-item" th:href="@{/clientes}">
-            <span class="dot"></span> Clientes
-          </a>
-        </nav>
-      </div>
+			<div class="sidebar-section">
+				<div class="sidebar-title">Opciones</div>
+				<nav class="menu">
+					<a class="menu-item active" th:href="@{/estadisticas}">
+						<span class="dot"></span> Estadísticas
+					</a>
 
-      <div class="sidebar-section">
-        <div class="sidebar-title">Ajustes</div>
-        <nav class="menu">
-          <a class="menu-item" th:href="@{/mensajes}">
-            <span class="dot"></span> Mensajes
-          </a>
-          <a class="menu-item" th:href="@{/configuracion}">
-            <span class="dot"></span> Configuración
-          </a>
-        </nav>
-      </div>
+					<a class="menu-item" th:href="@{/assetsADMIN/clientes.html}">
+						<span class="dot"></span> Clientes
+					</a>
+				</nav>
+			</div>
 
-      <div class="sidebar-footer">
-        <div class="mini-logo">⟡</div>
-        <div class="footer-text">JustMe ©</div>
-      </div>
-    </aside>
+			<div class="sidebar-section">
+				<div class="sidebar-title">Ajustes</div>
+				<nav class="menu">
+					<a class="menu-item" th:href="@{/mensajes}">
+						<span class="dot"></span> Mensajes
+					</a>
+					<a class="menu-item" th:href="@{/configuracion}">
+						<span class="dot"></span> Configuración
+					</a>
+				</nav>
+			</div>
 
-    <!-- OVERLAY PARA MÓVIL -->
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+			<div class="sidebar-footer">
+				<div class="mini-logo">⟡</div>
+				<div class="footer-text">JustMe ©</div>
+			</div>
+		</aside>
 
-    <!-- CONTENIDO -->
-    <main class="main">
-      <!-- TOPBAR -->
-      <header class="topbar">
-        <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
-        <div class="crumbs">Opciones / <span>Estadísticas</span></div>
-        <div class="top-actions">
-          <div class="search">
-            <input id="search" type="text" placeholder="Buscar…" />
-          </div>
-          <button class="icon-btn" title="Notificaciones">🔔</button>
-          <button class="icon-btn" id="themeToggle" title="Cambiar tema">🌓</button>
-          <div class="avatar" title="Admin">A</div>
-        </div>
-      </header>
+		<!-- OVERLAY PARA MÓVIL -->
+		<div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-      <!-- TABLA CLIENTES -->
-      <div class="card col-2">
-        <div class="wrap">
-          <section class="hero">
-            <h1>REGISTRO DE SERVICIOS</h1>
-          </section>
+		<!-- CONTENIDO -->
+		<main class="main">
+			<!-- TOPBAR -->
+			<header class="topbar">
+				<button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+				<div class="crumbs">Opciones / <span>Estadísticas</span></div>
+				<div class="top-actions">
+					<div class="search">
+						<input id="search" type="text" placeholder="Buscar…" />
+					</div>
+					<button class="icon-btn" title="Notificaciones">🔔</button>
+					<button class="icon-btn" id="themeToggle" title="Cambiar tema">🌓</button>
+					<div class="avatar" title="Admin">A</div>
+				</div>
+			</header>
 
-          <!-- Tabla con servicios -->
-          <section class="panel" th:if="${!#lists.isEmpty(servicios)}">
-            <div class="toolbar">
-              <span class="badge" th:text="${'Total: ' + servicios.size() + ' servicios'}">Total: 0 servicios</span>
-            </div>
+			<!-- TABLA CLIENTES -->
+			<div class="card col-2">
+				<div class="wrap">
+					<section class="hero">
+						<h1>REGISTRO DE SERVICIOS</h1>
+					</section>
 
-            <div style="overflow:auto">
-              <table>
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Descripción</th>
-                    <th>Precio Base</th>
-                    <th>Categoría</th>
-                    <th>Estado</th>
-                    <th>Acciones</th> <!-- 👈 Nueva columna -->
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr th:each="servicio : ${servicios}">
-                    <td data-label="ID" th:text="${servicio.idservicios}">1</td>
-                    <td data-label="Nombre">
-                      <span class="chip" th:text="${servicio.nombre_servicios}">Servicio</span>
-                    </td>
-                    <td data-label="Descripción" th:text="${servicio.descripcion}">Descripción</td>
-                    <td data-label="Precio Base" class="price" th:text="${#strings.concat('$', #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 0, 'POINT'))}">0</td>
-                    <td data-label="Categoría" th:text="${servicio.categoria}">Categoría</td>
-                    <td data-label="Estado">
-                      <span class="state" th:text="${servicio.estado}">Activo</span>
-                    </td>
-					<td data-label="Acciones">
-					  <a th:href="@{/servicios/editar/{id}(id=${servicio.idservicios})}" 
-					     class="btn-edit" title="Editar">✏️</a>
+					<!-- Tabla con servicios -->
+					<section class="panel" th:if="${!#lists.isEmpty(servicios)}">
+						<div class="toolbar">
+							<span class="badge" th:text="${'Total: ' + servicios.size() + ' servicios'}">Total: 0
+								servicios</span>
+						</div>
 
-					  <a th:href="@{/servicios/eliminar/{id}(id=${servicio.idservicios})}" 
-					     onclick="return confirm('¿Seguro que deseas eliminar este servicio?');" 
-					     class="btn-delete" title="Eliminar">🗑️</a>
-					</td>
+						<div style="overflow:auto">
+							<table>
+								<thead>
+									<tr>
+										<th>ID</th>
+										<th>Nombre</th>
+										<th>Descripción</th>
+										<th>Precio Base</th>
+										<th>Categoría</th>
+										<th>Estado</th>
+										<th>Idusuario</th>
+										<th>Acciones</th> <!-- 👈 Nueva columna -->
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="servicio : ${servicios}">
+										<td data-label="ID" th:text="${servicio.idservicios}">1</td>
+										<td data-label="Nombre">
+											<span class="chip" th:text="${servicio.nombre_servicios}">Servicio</span>
+										</td>
+										<td data-label="Descripción" th:text="${servicio.descripcion}">Descripción</td>
+										<td data-label="Precio Base" class="price"
+											th:text="${#strings.concat('$', #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 0, 'POINT'))}">
+											</td>
+										<td data-label="Categoría" th:text="${servicio.categoria}">Categoría</td>
+										<td data-label="Estado">
+											<span class="state" th:text="${servicio.estado}">Activo</span>
+										</td>	
+										
+										<td data-label="Idusuario" th:text="${servicio.idusuarios}">101</td>
 
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
-        </div>
-      </div>
-    </main>
 
-    <!-- SIDEBAR DERECHA -->
-    <aside class="rightbar">
-      <div class="card">
-        <h3>Notificaciones</h3>
-        <ul class="notif">
-          <li th:each="n : ${notificaciones}">
-            <span class="bullet"></span> <span th:text="${n}">Texto notif</span>
-          </li>
-        </ul>
-      </div>
+																	
+										<td data-label="Acciones">
+											<a th:href="@{/servicios/editar/{id}(id=${servicio.idservicios})}"
+												class="btn-edit" title="Editar">✏️</a>
+											<a th:href="@{/servicios/eliminar/{id}(id=${servicio.idservicios})}"
+												class="btn-delete" title="Eliminar">🗑️</a>
+										</td>
+										
 
-      <div class="card">
-        <h3>Actividades</h3>
-        <ul class="activity">
-          <li th:each="a : ${actividades}">
-            <span class="avatar sm" th:text="${a.inicial}">X</span>
-            <span th:text="${a.descripcion}">Acción</span>
-          </li>
-        </ul>
-      </div>
 
-      <div class="card">
-        <h3>Managers</h3>
-        <ul class="contacts">
-          <li th:each="m : ${managers}">
-            <span class="avatar" th:text="${m.inicial}">S</span>
-            <span th:text="${m.nombre}">Nombre</span>
-          </li>
-        </ul>
-      </div>
-    </aside>
-  </div>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</section>
+				</div>
+			</div>
+		</main>
 
-  <script th:src="@{/assetsADMIN/scripts/script.js}"></script>
+		<!-- SIDEBAR DERECHA -->
+		<aside class="rightbar">
+			<div class="card">
+				<h3>Notificaciones</h3>
+				<ul class="notif">
+					<li th:each="n : ${notificaciones}">
+						<span class="bullet"></span> <span th:text="${n}">Texto notif</span>
+					</li>
+				</ul>
+			</div>
+
+			<div class="card">
+				<h3>Actividades</h3>
+				<ul class="activity">
+					<li th:each="a : ${actividades}">
+						<span class="avatar sm" th:text="${a.inicial}">X</span>
+						<span th:text="${a.descripcion}">Acción</span>
+					</li>
+				</ul>
+			</div>
+
+			<div class="card">
+				<h3>Managers</h3>
+				<ul class="contacts">
+					<li th:each="m : ${managers}">
+						<span class="avatar" th:text="${m.inicial}">S</span>
+						<span th:text="${m.nombre}">Nombre</span>
+					</li>
+				</ul>
+			</div>
+		</aside>
+	</div>
+
+	<script th:src="@{/assetsADMIN/scripts/script.js}"></script>
 </body>
+
 </html>
