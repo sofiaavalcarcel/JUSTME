@@ -1,5 +1,8 @@
 package com.sena.JustMe.service;
 
-public interface IServiciosService {
+import com.sena.JustMe.model.Servicios;
+import java.util.List;
 
+public interface IServiciosService {
+    List<Servicios> listarServicios();
 }

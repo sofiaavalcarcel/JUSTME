@@ -1,105 +1,66 @@
 package com.sena.JustMe.model;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "servicios")
 public class Servicios {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 
-	private Integer idservicios;
-	private String nombre_servicios;
-	private String descripcion;
-	private String precio_base;
-	private String categoria;
-	private String estado;
-	
-	@ManyToOne
-	private Usuarios usuarios;
-	
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer idservicios;
 
+    private String nombre_servicios;
+    private String descripcion;
+    private Double precio_base;
+    private String categoria;
+    private String estado;
 
+    // Relación con Usuarios (opcional si ya existe la tabla usuarios)
+    @ManyToOne
+    @JoinColumn(name = "usuarios_idusuarios", referencedColumnName = "idusuarios")
+    private Usuarios usuarios;
 
-	// constructor vacio
-	public Servicios() {
-
-	}
-
-	// contructor con campos
-	public Servicios(Integer id, String nombre_servicios, String descripcion, String precio_base, String categoria,
-			String estado) {
-		super();
-		this.idservicios = id;
-		this.nombre_servicios = nombre_servicios;
-		this.descripcion = descripcion;
-		this.precio_base = precio_base;
-		this.categoria = categoria;
-		this.estado = estado;
-	}
-
-	// getters and setters
-
-	public Integer getId() {
-		return idservicios;
-	}
-
-	public void setId(Integer id) {
-		this.idservicios = id;
-	}
-
-	public String getNombre_servicios() {
-		return nombre_servicios;
-	}
-
-	public void setNombre_servicios(String nombre_servicios) {
-		this.nombre_servicios = nombre_servicios;
-	}
-
-	public String getDescripcion() {
-		return descripcion;
-	}
-
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
-
-	public String getPrecio_base() {
-		return precio_base;
-	}
-
-	public void setPrecio_base(String precio_base) {
-		this.precio_base = precio_base;
-	}
-
-	public String getCategoria() {
-		return categoria;
-	}
-
-	public void setCategoria(String categoria) {
-		this.categoria = categoria;
-	}
-
-	public String getEstado() {
-		return estado;
-	}
-
-	public void setEstado(String estado) {
-		this.estado = estado;
-	}
-
-	// to string
-	@Override
-	public String toString() {
-		return "Servicios [id=" + idservicios + ", nombre_servicios=" + nombre_servicios + ", descripcion="
-				+ descripcion + ", precio_base=" + precio_base + ", categoria=" + categoria + ", estado=" + estado
-				+ "]";
-	}
-
+    // Getters y Setters
+    public Integer getIdservicios() {
+        return idservicios;
+    }
+    public void setIdservicios(Integer idservicios) {
+        this.idservicios = idservicios;
+    }
+    public String getNombre_servicios() {
+        return nombre_servicios;
+    }
+    public void setNombre_servicios(String nombre_servicios) {
+        this.nombre_servicios = nombre_servicios;
+    }
+    public String getDescripcion() {
+        return descripcion;
+    }
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+    public Double getPrecio_base() {
+        return precio_base;
+    }
+    public void setPrecio_base(Double precio_base) {
+        this.precio_base = precio_base;
+    }
+    public String getCategoria() {
+        return categoria;
+    }
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+    public String getEstado() {
+        return estado;
+    }
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+    public Usuarios getUsuarios() {
+        return usuarios;
+    }
+    public void setUsuarios(Usuarios usuarios) {
+        this.usuarios = usuarios;
+    }
 }
