@@ -7,13 +7,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 import com.sena.JustMe.model.Servicios;
 import com.sena.JustMe.service.IServiciosService;
 
 @Controller
-@RequestMapping("/administrador")
-public class AdministradorController {
-	
+@RequestMapping("/profesional")
+public class ProfesionalController {
+
 	@Autowired
 	private IServiciosService productoservice;
 
@@ -21,6 +22,6 @@ public class AdministradorController {
 	public String home(Model model) {
 		List<Servicios> servicios = productoservice.listarServicios();
 		model.addAttribute("servicios", servicios);
-		return "administrador/home";
+		return "profesional/home";
 	}
 }

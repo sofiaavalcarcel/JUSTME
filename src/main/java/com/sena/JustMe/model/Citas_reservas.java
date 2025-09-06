@@ -6,7 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -23,14 +22,6 @@ public class Citas_reservas {
 	private String observacionesCl;
 	private String observacionesLb;
 	private String fechaEdicion;
-	
-	@ManyToOne
-	private Usuarios usuarios;
-	
-	@ManyToOne
-	private Servicios servicios;
-	
-
 
 	// constructor vacio
 	public Citas_reservas() {
@@ -122,9 +113,5 @@ public class Citas_reservas {
 				+ ", observacionesCl=" + observacionesCl + ", observacionesLb=" + observacionesLb + ", fechaEdicion="
 				+ fechaEdicion + "]";
 	}
-	
-	
-
-	
 
 }
