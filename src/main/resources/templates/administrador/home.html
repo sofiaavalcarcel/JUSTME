@@ -82,69 +82,71 @@
 				</div>
 			</header>
 
-			<!-- TABLA CLIENTES -->
-			<div class="card col-2">
-				<div class="wrap">
-					<section class="hero">
-						<h1>REGISTRO DE SERVICIOS</h1>
-					</section>
+			<section class="services-section">
+				<div class="container">
+					<!-- 🔹 Encabezado con título y botón -->
+					<div class="section-header">
+						<h3>Mis servicios ofrecidos</h3>
+						<button class="btn-primary" id="addServiceBtn">
+							<i class="fas fa-plus"></i> Agregar servicio
+						</button>
+					</div>
 
-					<!-- Tabla con servicios -->
-					<section class="panel" th:if="${!#lists.isEmpty(servicios)}">
-						<div class="toolbar">
-							<span class="badge" th:text="${'Total: ' + servicios.size() + ' servicios'}">Total: 0
-								servicios</span>
+					<!-- 🔹 Aquí va la tabla, ya debajo -->
+					<div class="card col-2">
+						<div class="wrap">
+
+							<!-- Tabla con servicios -->
+							<section class="panel">
+								<div class="toolbar">
+									<span class="badge" th:if="${!#lists.isEmpty(servicios)}">
+										Total: 0 servicios
+									</span>
+								</div>
+
+								<div style="overflow:auto">
+									<table>
+										<thead>
+											<tr>
+												<th>ID</th>
+												<th>Nombre</th>
+												<th>Descripción</th>
+												<th>Precio Base</th>
+												<th>Categoría</th>
+												<th>Estado</th>
+												<th>Idusuario</th>
+												<th>Acciones</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="servicio : ${servicios}">
+												<td th:text="${servicio.idservicios}">1</td>
+												<td><span class="chip"
+														th:text="${servicio.nombre_servicios}">Servicio</span></td>
+												<td th:text="${servicio.descripcion}">Descripción</td>
+												<td class="price"
+													th:text="${#strings.concat('$', #numbers.formatDecimal(servicio.precio_base,0,'POINT',0,'POINT'))}">
+												</td>
+												<td th:text="${servicio.categoria}">Categoría</td>
+												<td><span class="state" th:text="${servicio.estado}">Activo</span></td>
+												<td th:text="${servicio.idusuarios}">101</td>
+												<td>
+													<a th:href="@{/servicios/editar/{id}(id=${servicio.idservicios})}"
+														class="btn-edit">✏️</a>
+													<a th:href="@{/servicios/eliminar/{id}(id=${servicio.idservicios})}"
+														class="btn-delete">🗑️</a>
+												</td>
+											</tr>
+
+
+										</tbody>
+									</table>
+								</div>
+							</section>
 						</div>
-
-						<div style="overflow:auto">
-							<table>
-								<thead>
-									<tr>
-										<th>ID</th>
-										<th>Nombre</th>
-										<th>Descripción</th>
-										<th>Precio Base</th>
-										<th>Categoría</th>
-										<th>Estado</th>
-										<th>Idusuario</th>
-										<th>Acciones</th> <!-- 👈 Nueva columna -->
-									</tr>
-								</thead>
-								<tbody>
-									<tr th:each="servicio : ${servicios}">
-										<td data-label="ID" th:text="${servicio.idservicios}">1</td>
-										<td data-label="Nombre">
-											<span class="chip" th:text="${servicio.nombre_servicios}">Servicio</span>
-										</td>
-										<td data-label="Descripción" th:text="${servicio.descripcion}">Descripción</td>
-										<td data-label="Precio Base" class="price"
-											th:text="${#strings.concat('$', #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 0, 'POINT'))}">
-											</td>
-										<td data-label="Categoría" th:text="${servicio.categoria}">Categoría</td>
-										<td data-label="Estado">
-											<span class="state" th:text="${servicio.estado}">Activo</span>
-										</td>	
-										
-										<td data-label="Idusuario" th:text="${servicio.idusuarios}">101</td>
-
-
-																	
-										<td data-label="Acciones">
-											<a th:href="@{/servicios/editar/{id}(id=${servicio.idservicios})}"
-												class="btn-edit" title="Editar">✏️</a>
-											<a th:href="@{/servicios/eliminar/{id}(id=${servicio.idservicios})}"
-												class="btn-delete" title="Eliminar">🗑️</a>
-										</td>
-										
-
-
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</section>
+					</div>
 				</div>
-			</div>
+			</section>
 		</main>
 
 		<!-- SIDEBAR DERECHA -->
