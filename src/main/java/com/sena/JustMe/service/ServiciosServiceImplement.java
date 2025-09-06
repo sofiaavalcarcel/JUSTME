@@ -1,6 +1,8 @@
 package com.sena.JustMe.service;
 
 import com.sena.JustMe.model.Servicios;
+import com.sena.JustMe.repository.IServiciosRepository;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -8,7 +10,7 @@ import java.util.List;
 @Service
 public class ServiciosServiceImplement implements IServiciosService {
 
-    private final com.sena.JustMe.repository.IServiciosRepository serviciosRepository;
+    private final IServiciosRepository serviciosRepository;
 
     public ServiciosServiceImplement(com.sena.JustMe.repository.IServiciosRepository serviciosRepository) {
         this.serviciosRepository = serviciosRepository;
