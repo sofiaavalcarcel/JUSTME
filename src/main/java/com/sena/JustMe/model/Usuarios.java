@@ -4,7 +4,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -25,8 +24,6 @@ public class Usuarios {
 	private String estado;
 	private String disponibilidad;
 	
-	@ManyToOne
-	private Rol rol;
 
 	// constructor vacio
 	public Usuarios() {

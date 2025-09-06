@@ -751,3 +751,142 @@ ul {
         flex-direction: column;
     }
 }
+
+/* ===== TABLA MODERNA ===== */
+.table-container {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff; /* fondo limpio */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  
+}
+
+.panel table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  color: var(--dark-color);
+}
+
+/* ===== ENCABEZADO ===== */
+.panel thead {
+  background: linear-gradient(to right, #ffffff, var(--secondary-color));
+}
+
+.panel th {
+  padding: 14px 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  color: var(--gray-color);
+  border-bottom: 2px solid var(--light-gray);
+}
+
+/* ===== FILAS ===== */
+.panel td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.panel tbody tr:hover {
+  background: rgba(225, 107, 255, 0.05); /* hover suave en morado */
+  transition: 0.3s;
+}
+
+/* ===== ESTADOS (Badges) ===== */
+.state {
+  display: inline-block;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 20px;
+  text-align: center;
+}
+
+.state[data-status="Activo"] {
+  background: rgba(40, 167, 69, 0.15);
+  color: var(--success-color);
+}
+
+.state[data-status="Inactivo"] {
+  background: rgba(220, 53, 69, 0.15);
+  color: var(--danger-color);
+}
+
+.state[data-status="Pendiente"] {
+  background: rgba(255, 193, 7, 0.15);
+  color: var(--warning-color);
+}
+
+.state[data-status="Oferta"] {
+  background: rgba(225, 107, 255, 0.15);
+  color: var(--primary-dark);
+}
+
+/* ===== BOTONES DE ACCIÓN ===== */
+.btn-edit, .btn-delete {
+  padding: 6px 5px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-edit {
+  background: rgba(225, 107, 255, 0.1);
+  color: var(--primary-dark);
+  margin-bottom: 15px;
+}
+
+.btn-edit:hover {
+  background: var(--primary-color);
+  color: #fff;
+}
+
+.btn-delete {
+  background: rgba(220, 53, 69, 0.1);
+  color: var(--danger-color);
+}
+
+.btn-delete:hover {
+  background: var(--danger-color);
+  color: #fff;
+}
+
+
+/* ===== PAGINACIÓN ===== */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  gap: 8px;
+}
+
+.pagination button {
+  background: rgba(111, 8, 106, 0.2);
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: #6f086a;
+  transition: all 0.3s ease;
+}
+
+.pagination button:hover {
+  background: rgba(111, 8, 106, 0.6);
+  color: #fff;
+  transform: scale(1.05);
+}
+
+.pagination .active {
+  background: #6f086a;
+  color: #fff;
+
+}
