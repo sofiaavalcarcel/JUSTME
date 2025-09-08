@@ -97,9 +97,6 @@ public class Servicios {
 				+ ", idusuarios=" + idusuarios + "]";
 	}
     
-
-    
-    
 }
 
 
