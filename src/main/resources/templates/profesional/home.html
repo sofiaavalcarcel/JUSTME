@@ -111,7 +111,10 @@
 						               <td th:text="${servicio.idusuarios}"></td>
 						               <td>
 						                   <a th:href="@{/servicios/editar/{id}(id=${servicio.idservicios})}" class="btn-edit">✏️</a>
-						                   <a th:href="@{/servicios/eliminar/{id}(id=${servicio.idservicios})}" class="btn-delete">🗑️</a>
+										   <form th:action="@{/profesional/servicios/eliminar/{id}(id=${servicio.idservicios})}" method="post" style="display:inline">
+										       <button type="submit" class="btn-delete">🗑️</button>
+										   </form>
+
 						               </td>
 						           </tr>
 						       </tbody>
@@ -148,9 +151,6 @@
 							</select> </div>
 					</div>
 					<div class="form-row">
-						<div class="form-group"> <label for="service-duration"><i class="fas fa-clock"></i> Duración
-								(minutos)</label> <input type="number" id="service-duration" placeholder="Ej: 60"
-								required> </div>
 						<div class="form-group"> <label for="service-price"><i class="fas fa-dollar-sign"></i>
 								Precio</label> <input type="number" id="service-price" placeholder="Ej: 50000" required>
 						</div>

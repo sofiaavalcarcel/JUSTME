@@ -20,4 +20,21 @@ public class ServiciosServiceImplement implements IServiciosService {
     public List<Servicios> listarServicios() {
         return serviciosRepository.findAll();
     }
+
+	@Override
+	public Servicios obtenerPorId(Long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Servicios guardar(Servicios servicio) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+    @Override
+    public void eliminar(Integer id) {
+        serviciosRepository.deleteById(id);
+	}
 }
