@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Just Me - Perfil de Profesional</title>
+    <link th:href="@{/styles/perfil_profesional.css}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+
+    <div th:replace="fragments/fragments :: header"></div>
+
+   
+    <main class="main">
+        <section class="profile-section">
+            <div class="container">
+                <div class="profile-header">
+                    <div class="profile-image-container">
+                        <img th:src="${usuario.fotoUrl}" alt="Foto de perfil" class="profile-image"/>
+                    </div>
+                    <div class="profile-info">
+                        <h2 th:text="${usuario.nombre}">Nombre Usuario</h2>
+                        <p th:text="'Profesional desde: ' + ${usuario.fechaRegistro}">Enero 2015</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+    <div th:replace="fragments/fragments :: footer"></div>
+
+</body>
+</html>
