@@ -66,115 +66,76 @@
 			</div>
 		</section>
 		<section class="services-section">
-		    <div class="container">
-		        <!-- Encabezado con título y botón -->
-		        <div class="section-header">
-		            <h3>Mis servicios ofrecidos</h3>
-		            <button class="btn-primary" id="addServiceBtn">
-		                <i class="fas fa-plus"></i> Agregar servicio
-		            </button>
-		        </div>
+			<div class="container">
+				<!-- Encabezado con título y botón -->
+				<div class="section-header">
+					<h3>Mis servicios ofrecidos</h3>
+					<button class="btn-primary" id="addServiceBtn">
+						<i class="fas fa-plus"></i> Agregar servicio
+					</button>
+				</div>
 
-		        <!-- Tabla servicios -->
-		        <section class="panel" th:if="${!#lists.isEmpty(servicios)}">
-		            <div class="toolbar">
-		                <span class="badge"
-		                      th:text="${'Total: ' + servicios.size() + ' servicios'}">
-		                      Total: 0 servicios
-		                </span>
-		            </div>
+				<!-- Tabla servicios -->
+				<section class="panel" th:if="${!#lists.isEmpty(servicios)}">
+					<div class="toolbar">
+						<span class="badge" th:text="${'Total: ' + servicios.size() + ' servicios'}">
+							Total: 0 servicios
+						</span>
+					</div>
 
-		            <!-- Contenedor de tabla -->
-		            <div class="table-container">
+					<!-- Contenedor de tabla -->
+					<div class="table-container">
 						<table id="servicesTable">
-						       <thead>
-						           <tr>
-						               <th>ID</th>
-						               <th>Nombre</th>
-						               <th>Descripción</th>
-						               <th>Precio</th>
-						               <th>Categoría</th>
-						               <th>Estado</th>
-						               <th>Usuario</th>
-						               <th>Acciones</th>
-						           </tr>
-						       </thead>
-						       <tbody id="servicesBody">
-						           <!-- Aquí Thymeleaf inyecta todos los registros -->
-						           <tr th:each="servicio : ${servicios}">
-						               <td th:text="${servicio.idservicios}"></td>
-						               <td th:text="${servicio.nombre_servicios}"></td>
-						               <td th:text="${servicio.descripcion}"></td>
-						               <td th:text="${#strings.concat('$', #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 0, 'POINT'))}"></td>
-						               <td th:text="${servicio.categoria}"></td>
-						               <td th:text="${servicio.estado}"></td>
-						               <td th:text="${servicio.idusuarios}"></td>
-									   <td>
-									       <button class="btn-edit" th:onclick="'openEditModal(' + ${servicio.idservicios} + ')'">✏️</button>
-									       <form th:action="@{/profesional/servicios/eliminar/{id}(id=${servicio.idservicios})}" method="post" style="display:inline">
-									           <button type="submit" class="btn-delete">🗑️</button>
-									       </form>
-									   </td>
-						           </tr>
-						       </tbody>
-						   </table>
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>Nombre</th>
+									<th>Descripción</th>
+									<th>Precio</th>
+									<th>Categoría</th>
+									<th>Estado</th>
+									<th>Usuario</th>
+									<th>Acciones</th>
+								</tr>
+							</thead>
+							<tbody id="servicesBody">
+								<!-- Aquí Thymeleaf inyecta todos los registros -->
+								<tr th:each="servicio : ${servicios}">
+									<td th:text="${servicio.idservicios}"></td>
+									<td th:text="${servicio.nombre_servicios}"></td>
+									<td th:text="${servicio.descripcion}"></td>
+									<td
+										th:text="${#strings.concat('$', #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 0, 'POINT'))}">
+									</td>
+									<td th:text="${servicio.categoria}"></td>
+									<td th:text="${servicio.estado}"></td>
+									<td th:text="${servicio.idusuarios}"></td>
+									<td>
+										<a th:href="@{/servicios/editar/{id}(id=${servicio.idservicios})}"
+											class="btn-edit">
+											✏️
+										</a>
 
-						   <!-- 🔹 Controles de paginación -->
-						   <div class="pagination">
-						       <button id="prevBtn">←  Anterior</button>
-						       <span id="pageInfo"></span>
-						       <button id="nextBtn">Siguiente  →</button>
-						   </div>
-		            </div>
-		        </section>
-		    </div>
+										<form th:action="@{/servicios/eliminar/{id}(id=${servicio.idservicios})}"
+											method="post" style="display:inline">
+											<button type="submit" class="btn-delete">🗑️</button>
+										</form>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<!-- 🔹 Controles de paginación -->
+						<div class="pagination">
+							<button id="prevBtn">← Anterior</button>
+							<span id="pageInfo"></span>
+							<button id="nextBtn">Siguiente →</button>
+						</div>
+					</div>
+				</section>
+			</div>
 		</section>
-		<!-- Modal para editar servicio -->
-		<div id="editServiceModal" class="modal">
-		    <div class="modal-content">
-		        <div class="modal-header">
-		            <h3>Editar servicio</h3>
-		            <span class="close">&times;</span>
-		        </div>
-		        <div class="modal-body">
-		            <form id="editServiceForm">
-		                <input type="hidden" id="edit-service-id">
-		                <div class="form-row">
-		                    <div class="form-group">
-		                        <label for="edit-service-name"><i class="fas fa-spa"></i> Nombre del servicio</label>
-		                        <input type="text" id="edit-service-name" placeholder="Ej: Corte de cabello" required>
-		                    </div>
-		                    <div class="form-group">
-		                        <label for="edit-service-category"><i class="fas fa-tag"></i> Categoría</label>
-		                        <select id="edit-service-category" required>
-		                            <option value="">Seleccionar categoría</option>
-		                            <option value="hair">Cabello</option>
-		                            <option value="makeup">Maquillaje</option>
-		                            <option value="nails">Uñas</option>
-		                            <option value="facial">Facial</option>
-		                            <option value="waxing">Depilación</option>
-		                            <option value="other">Otro</option>
-		                        </select>
-		                    </div>
-		                </div>
-		                <div class="form-row">
-		                    <div class="form-group">
-		                        <label for="edit-service-price"><i class="fas fa-dollar-sign"></i> Precio</label>
-		                        <input type="number" id="edit-service-price" placeholder="Ej: 50000" required>
-		                    </div>
-		                </div>
-		                <div class="form-group">
-		                    <label for="edit-service-description"><i class="fas fa-align-left"></i> Descripción</label>
-		                    <textarea id="edit-service-description" rows="3" placeholder="Describe tu servicio en detalle..." required></textarea>
-		                </div>
-		                <div class="form-actions">
-		                    <button type="button" class="btn-secondary" id="cancelEditBtn">Cancelar</button>
-		                    <button type="submit" class="btn-primary">Actualizar servicio</button>
-		                </div>
-		            </form>
-		        </div>
-		    </div>
-		</div>
+
 
 		<section class="add-service-section" id="addServiceSection" style="display: none;">
 			<div class="container">
@@ -209,14 +170,7 @@
 				</form>
 			</div>
 		</section>
-		<section class="appointments-section">
-			<div class="container">
-				<div class="section-header">
-					<h3>Próximas citas con clientes</h3> <a href="#" class="view-all">Ver todas</a>
-				</div>
-				<div class="appointments-list"> <!-- Dinámico desde JS --> </div>
-			</div>
-		</section>
+		
 		<section class="reviews-section">
 			<div class="container">
 				<div class="section-header">

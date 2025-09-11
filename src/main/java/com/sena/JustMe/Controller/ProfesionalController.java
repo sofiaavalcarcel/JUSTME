@@ -6,8 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sena.JustMe.model.Servicios;
@@ -27,11 +26,6 @@ public class ProfesionalController {
 		return "profesional/home";
 	}
 	
-	@PostMapping("/servicios/eliminar/{id}")
-	public String eliminarServicio(@PathVariable Integer id) {
-	    productoservice.eliminar(id);
-	    return "redirect:/profesional";  
-	}
 
 
 	
