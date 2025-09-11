@@ -14,30 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Datos de ejemplo
     const sampleServices = [
-        {
-            id: 1,
-            name: "Corte de cabello",
-            category: "hair",
-            duration: 45,
-            price: 45000,
-            description: "Corte de cabello personalizado según tu estilo y preferencias."
-        },
-        {
-            id: 2,
-            name: "Manicure básico",
-            category: "nails",
-            duration: 60,
-            price: 35000,
-            description: "Manicure completo con limpieza, corte y esmaltado básico."
-        },
-        {
-            id: 3,
-            name: "Maquillaje social",
-            category: "makeup",
-            duration: 90,
-            price: 80000,
-            description: "Maquillaje profesional para eventos sociales o especiales."
-        }
+       
     ];
 
     const sampleAppointments = [
@@ -341,3 +318,43 @@ document.addEventListener('DOMContentLoaded', function() {
     renderAppointments();
     renderReviews();
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+    const rows = document.querySelectorAll("#servicesBody tr");
+    const rowsPerPage = 5;
+    let currentPage = 0;
+
+    const totalPages = Math.ceil(rows.length / rowsPerPage);
+    const pageInfo = document.getElementById("pageInfo");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    function showPage(page) {
+        rows.forEach((row, index) => {
+            row.style.display = (index >= page * rowsPerPage && index < (page + 1) * rowsPerPage) 
+                                ? "" 
+                                : "none";
+        });
+
+        pageInfo.textContent = `Página ${page + 1} de ${totalPages}`;
+        prevBtn.disabled = page === 0;
+        nextBtn.disabled = page === totalPages - 1;
+    }
+
+    prevBtn.addEventListener("click", () => {
+        if (currentPage > 0) {
+            currentPage--;
+            showPage(currentPage);
+        }
+    });
+
+    nextBtn.addEventListener("click", () => {
+        if (currentPage < totalPages - 1) {
+            currentPage++;
+            showPage(currentPage);
+        }
+    });
+
+    showPage(currentPage); // Mostrar la primera página al cargar
+});
+
