@@ -17,6 +17,8 @@ public class IServiciosController {
     public IServiciosController(ServiciosServiceImplement serviciosService) {
         this.serviciosService = serviciosService;
     }
+    
+    
 
     // 1. Listar servicios
     @GetMapping
@@ -25,6 +27,21 @@ public class IServiciosController {
         model.addAttribute("servicios", listaServicios);
         return "servicios/lista"; // <-- tu vista para listar servicios
     }
+    
+ // Mostrar formulario para crear un nuevo servicio
+    @GetMapping("/profesional/servicios")
+    public String mostrarFormularioNuevo(Model model) {
+        model.addAttribute("servicio", new Servicios()); // objeto vacío
+        return "profesional/servicios"; // <-- tu nueva plantilla nuevo.html
+    }
+
+    // Guardar el servicio creado
+    @PostMapping("/guardar")
+    public String guardarServicio(@ModelAttribute Servicios servicio) {
+        serviciosService.guardar(servicio);
+        return "redirect:/profesional"; // vuelve a tu panel
+    }
+
 
     // Mostrar formulario de edición
     @GetMapping("/editar/{id}")
