@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Just Me - Editar Servicio</title>
+    <link rel="stylesheet" th:href="@{/styles/profesional.css}">
+    <link rel="stylesheet" th:href="@{/styles/editar.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>Just Me</h1>
+            </div>
+
+            <nav class="nav">
+                <ul>
+                    <li><a th:href="@{/profesional}"><i class="fas fa-home"></i> Inicio</a></li>
+                    <li><a href="#"><i class="fas fa-calendar-alt"></i> Agenda</a></li>
+                    <li><a href="#"><i class="fas fa-comments"></i> Comentarios</a></li>
+                    <li><a href="#"><i class="fas fa-chart-line"></i> Estadísticas</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <div class="back-button-container">
+                <a th:href="@{/profesional}" class="back-button">
+                    <i class="fas fa-arrow-left"></i> Volver al panel
+                </a>
+            </div>
+
+            <div class="edit-service-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-edit"></i> Editar servicio</h2>
+                    <p>Actualiza la información de tu servicio</p>
+                </div>
+
+                <!-- Formulario de edición -->
+                <form th:action="@{/servicios/editar/{id}(id=${servicio.idservicios})}"
+                      th:object="${servicio}"
+                      method="post"
+                      class="edit-service-form">
+
+                    <!-- ID oculto -->
+                    <input type="hidden" th:field="*{idservicios}"/>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nombre_servicios"><i class="fas fa-spa"></i> Nombre del servicio</label>
+                            <input type="text" th:field="*{nombre_servicios}" id="nombre_servicios" required>
+                        </div>
+
+						<div class="form-group">
+						    <label for="categoria"><i class="fas fa-tag"></i> Categoría</label>
+						    <input type="text" th:field="*{categoria}" id="categoria" required>
+						</div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="precio_base"><i class="fas fa-dollar-sign"></i> Precio</label>
+                            <input type="number" step="0.01" th:field="*{precio_base}" id="precio_base" required>
+                        </div>
+
+						<div class="form-group">
+						    <label for="estado"><i class="fas fa-toggle-on"></i> Estado</label>
+						    <input type="text" th:field="*{estado}" id="estado" required>
+						</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="descripcion"><i class="fas fa-align-left"></i> Descripción</label>
+                        <textarea th:field="*{descripcion}" id="descripcion" rows="4" required></textarea>
+                    </div>
+
+
+
+                    <div class="form-actions">
+                        <a th:href="@{/profesional}" class="btn-secondary">Cancelar</a>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-save"></i> Actualizar servicio
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
