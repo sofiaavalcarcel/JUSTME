@@ -16,6 +16,10 @@ public class ServiciosServiceImplement implements IServiciosService {
     public ServiciosServiceImplement(IServiciosRepository serviciosRepository) {
         this.serviciosRepository = serviciosRepository;
     }
+    
+    public Servicios guardar(Servicios servicio) {
+        return serviciosRepository.save(servicio);
+    }
 
     @Override
     public List<Servicios> listarServicios() {

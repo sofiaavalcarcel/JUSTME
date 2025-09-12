@@ -11,12 +11,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const reviewsList = document.querySelector('.reviews-list');
     const switchToClientBtn = document.getElementById('switchToClient');
     const logoutBtn = document.getElementById('logoutBtn');
-
+    
+    // Elementos del modal de edición
+    const editServiceModal = document.getElementById('editServiceModal');
+    const editServiceForm = document.getElementById('editServiceForm');
+    const cancelEditBtn = document.getElementById('cancelEditBtn');
+    const closeModalBtn = document.querySelector('.close');
+    
     // Datos de ejemplo
-    const sampleServices = [
-       
-    ];
-
+    const sampleServices = [];
     const sampleAppointments = [
         {
             id: 1,
@@ -68,151 +71,72 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     ];
 
-    // Funciones para renderizar datos
-    function renderServices() {
-        servicesList.innerHTML = '';
-        sampleServices.forEach(service => {
-            const serviceCard = document.createElement('div');
-            serviceCard.className = 'service-card';
-            serviceCard.innerHTML = `
-                <h4>${service.name}</h4>
-                <p><i class="fas fa-tag"></i> ${getCategoryName(service.category)}</p>
-                <p><i class="fas fa-clock"></i> ${service.duration} minutos</p>
-                <p class="service-price"><i class="fas fa-dollar-sign"></i> $${service.price.toLocaleString()}</p>
-                <p><i class="fas fa-align-left"></i> ${service.description}</p>
-                <div class="service-actions">
-                    <button class="btn-icon edit" data-id="${service.id}"><i class="fas fa-edit"></i></button>
-                    <button class="btn-icon delete" data-id="${service.id}"><i class="fas fa-trash"></i></button>
-                </div>
-            `;
-            servicesList.appendChild(serviceCard);
-        });
-
-        // Agregar event listeners a los botones
-        document.querySelectorAll('.service-actions .edit').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const serviceId = parseInt(this.getAttribute('data-id'));
-                editService(serviceId);
-            });
-        });
-
-        document.querySelectorAll('.service-actions .delete').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const serviceId = parseInt(this.getAttribute('data-id'));
-                deleteService(serviceId);
-            });
-        });
-    }
-
-    function renderAppointments() {
-        appointmentsList.innerHTML = '';
-        sampleAppointments.forEach(appointment => {
-            const appointmentCard = document.createElement('div');
-            appointmentCard.className = 'appointment-card';
-            appointmentCard.innerHTML = `
-                <h4>${appointment.clientName}</h4>
-                <p><i class="fas fa-spa"></i> ${appointment.service}</p>
-                <p><i class="fas fa-calendar-day"></i> ${formatDate(appointment.date)}</p>
-                <p><i class="fas fa-clock"></i> ${appointment.time}</p>
-                <span class="status ${appointment.status}">
-                    ${appointment.status === 'upcoming' ? 'Próxima' : 'Completada'}
-                </span>
-            `;
-            appointmentsList.appendChild(appointmentCard);
-        });
-    }
-
-    function renderReviews() {
-        reviewsList.innerHTML = '';
-        sampleReviews.forEach(review => {
-            const reviewCard = document.createElement('div');
-            reviewCard.className = 'review-card';
-            reviewCard.innerHTML = `
-                <div class="review-header">
-                    <span class="reviewer">${review.clientName}</span>
-                    <span class="review-date">${formatDate(review.date)}</span>
-                </div>
-                <div class="review-stars">
-                    ${renderStars(review.rating)}
-                </div>
-                <div class="review-content">
-                    ${review.comment}
-                </div>
-            `;
-            reviewsList.appendChild(reviewCard);
-        });
-    }
-
-    // Funciones auxiliares
-    function getCategoryName(category) {
-        const categories = {
-            'hair': 'Cabello',
-            'makeup': 'Maquillaje',
-            'nails': 'Uñas',
-            'facial': 'Facial',
-            'waxing': 'Depilación',
-            'other': 'Otro'
+    // Función para abrir el modal de edición
+    window.openEditModal = function(serviceId) {
+        // Aquí deberías hacer una petición al servidor para obtener los datos del servicio
+        // Por ahora usaremos datos de ejemplo
+        const service = {
+            id: serviceId,
+            name: "Servicio " + serviceId,
+            category: "hair",
+            price: 50000,
+            description: "Descripción del servicio " + serviceId
         };
-        return categories[category] || category;
+        
+        // Llenar el formulario con los datos del servicio
+        document.getElementById('edit-service-id').value = service.id;
+        document.getElementById('edit-service-name').value = service.name;
+        document.getElementById('edit-service-category').value = service.category;
+        document.getElementById('edit-service-price').value = service.price;
+        document.getElementById('edit-service-description').value = service.description;
+        
+        // Mostrar el modal
+        editServiceModal.style.display = 'block';
+    };
+
+    // Cerrar el modal
+    function closeEditModal() {
+        editServiceModal.style.display = 'none';
     }
 
-    function formatDate(dateString) {
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        return new Date(dateString).toLocaleDateString('es-ES', options);
-    }
-
-    function renderStars(rating) {
-        let stars = '';
-        for (let i = 1; i <= 5; i++) {
-            if (i <= rating) {
-                stars += '<i class="fas fa-star"></i>';
-            } else if (i - 0.5 <= rating) {
-                stars += '<i class="fas fa-star-half-alt"></i>';
-            } else {
-                stars += '<i class="far fa-star"></i>';
-            }
+    // Event listeners para cerrar el modal
+    closeModalBtn.addEventListener('click', closeEditModal);
+    cancelEditBtn.addEventListener('click', closeEditModal);
+    
+    // Cerrar el modal al hacer clic fuera de él
+    window.addEventListener('click', function(event) {
+        if (event.target === editServiceModal) {
+            closeEditModal();
         }
-        return stars;
-    }
+    });
 
-    // Funciones para manejar servicios
-    function editService(serviceId) {
-        const service = sampleServices.find(s => s.id === serviceId);
-        if (!service) return;
+    // Enviar formulario de edición
+    editServiceForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Obtener los valores del formulario
+        const serviceId = document.getElementById('edit-service-id').value;
+        const name = document.getElementById('edit-service-name').value;
+        const category = document.getElementById('edit-service-category').value;
+        const price = parseInt(document.getElementById('edit-service-price').value);
+        const description = document.getElementById('edit-service-description').value;
+        
+        // Aquí deberías hacer una petición AJAX para actualizar el servicio en el servidor
+        console.log('Actualizando servicio:', { serviceId, name, category, price, description });
+        
+        // Mostrar mensaje de éxito
+        showNotification('Servicio actualizado correctamente', 'success');
+        
+        // Cerrar el modal
+        closeEditModal();
+        
+        // Recargar la página o actualizar la tabla (dependiendo de tu implementación)
+        setTimeout(() => {
+            location.reload();
+        }, 1000);
+    });
 
-        // Mostrar el formulario con los datos del servicio
-        document.getElementById('service-name').value = service.name;
-        document.getElementById('service-category').value = service.category;
-        document.getElementById('service-duration').value = service.duration;
-        document.getElementById('service-price').value = service.price;
-        document.getElementById('service-description').value = service.description;
-
-        // Mostrar la sección de agregar servicio (que también usaremos para editar)
-        addServiceSection.style.display = 'block';
-        window.scrollTo({
-            top: addServiceSection.offsetTop - 100,
-            behavior: 'smooth'
-        });
-
-        // Cambiar el título del formulario
-        addServiceSection.querySelector('h3').textContent = 'Editar servicio';
-
-        // Agregar un atributo para saber que estamos editando
-        addServiceForm.setAttribute('data-edit-id', serviceId);
-    }
-
-    function deleteService(serviceId) {
-        if (confirm('¿Estás seguro de que deseas eliminar este servicio?')) {
-            // En una aplicación real, aquí haríamos una petición al servidor
-            const index = sampleServices.findIndex(s => s.id === serviceId);
-            if (index !== -1) {
-                sampleServices.splice(index, 1);
-                renderServices();
-                showNotification('Servicio eliminado correctamente', 'success');
-            }
-        }
-    }
-
+    // Resto del código existente (sin cambios)...
     function showNotification(message, type = 'success') {
         // Crear y mostrar una notificación (podrías implementar esto con un toast)
         alert(message); // Simplificado para este ejemplo
@@ -247,7 +171,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // Obtener los valores del formulario
         const name = document.getElementById('service-name').value;
         const category = document.getElementById('service-category').value;
-        const duration = parseInt(document.getElementById('service-duration').value);
         const price = parseInt(document.getElementById('service-price').value);
         const description = document.getElementById('service-description').value;
         
@@ -264,7 +187,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     ...sampleServices[serviceIndex],
                     name,
                     category,
-                    duration,
                     price,
                     description
                 };
@@ -277,7 +199,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 id: sampleServices.length > 0 ? Math.max(...sampleServices.map(s => s.id)) + 1 : 1,
                 name,
                 category,
-                duration,
                 price,
                 description
             };
@@ -319,6 +240,7 @@ document.addEventListener('DOMContentLoaded', function() {
     renderReviews();
 });
 
+// Código de paginación (sin cambios)
 document.addEventListener("DOMContentLoaded", function() {
     const rows = document.querySelectorAll("#servicesBody tr");
     const rowsPerPage = 5;
@@ -357,4 +279,3 @@ document.addEventListener("DOMContentLoaded", function() {
 
     showPage(currentPage); // Mostrar la primera página al cargar
 });
-

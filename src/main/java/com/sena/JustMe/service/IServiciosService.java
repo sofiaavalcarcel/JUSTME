@@ -9,4 +9,5 @@ public interface IServiciosService {
     void eliminar(Integer id);
     Optional<Servicios> buscarPorId(Integer id);
     Servicios editarServicio(Integer id, Servicios servicioActualizado);
+    Servicios guardar(Servicios servicio);
 }
