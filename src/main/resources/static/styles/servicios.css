@@ -37,12 +37,14 @@ ul {
     list-style: none;
 }
 
+/* Container full width con max-width */
 .container {
-    width: 90%;
+    width: 100%;
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 15px;
 }
+
 
 /* Header */
 .header {
@@ -215,13 +217,14 @@ ul {
 
 .add-service-section .container {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Evita desbordamiento */
     gap: 40px;
 }
 
+/* Ajuste del form-container */
 .form-container {
-    padding-right: 20px;
-    border-right: 1px solid var(--light-gray);
+    padding-right: 0; /* quitar padding que empuja el contenido */
+    border-right: none; /* opcional si no quieres la línea */
 }
 
 .preview-section h3 {
