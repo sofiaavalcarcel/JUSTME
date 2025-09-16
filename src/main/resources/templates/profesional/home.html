@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
 	<meta charset="UTF-8">
@@ -94,7 +94,7 @@
 									<th>Precio</th>
 									<th>Categoría</th>
 									<th>Estado</th>
-									<th>Usuario</th>
+							
 									<th>Acciones</th>
 								</tr>
 							</thead>
@@ -109,7 +109,6 @@
 									</td>
 									<td th:text="${servicio.categoria}"></td>
 									<td th:text="${servicio.estado}"></td>
-									<td th:text="${servicio.idusuarios}"></td>
 									<td>
 										<a th:href="@{/servicios/editar/{id}(id=${servicio.idservicios})}"
 											class="btn-edit">
@@ -260,7 +259,7 @@
 			</div>
 		</div>
 	</footer>
-	<script src="scripts/profesional.js"></script>
+		<script th:src="@{/scripts/profesional.js}"></script>
 </body>
 
 </html>

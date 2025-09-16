@@ -14,10 +14,7 @@ public class Servicios {
     private String categoria;
     private String estado;
 
-    // 👇 ahora solo guardas el id del usuario
-    @Column(name = "idusuarios")
-    private Integer idusuarios;
-    
+
     public Servicios() {
 
 	}
@@ -31,7 +28,7 @@ public class Servicios {
 		this.precio_base = precio_base;
 		this.categoria = categoria;
 		this.estado = estado;
-		this.idusuarios = idusuarios;
+	
 	}
 
 	public Integer getIdservicios() {
@@ -82,19 +79,13 @@ public class Servicios {
 		this.estado = estado;
 	}
 
-	public Integer getIdusuarios() {
-		return idusuarios;
-	}
 
-	public void setIdusuarios(Integer idusuarios) {
-		this.idusuarios = idusuarios;
-	}
 
 	@Override
 	public String toString() {
 		return "Servicios [idservicios=" + idservicios + ", nombre_servicios=" + nombre_servicios + ", descripcion="
 				+ descripcion + ", precio_base=" + precio_base + ", categoria=" + categoria + ", estado=" + estado
-				+ ", idusuarios=" + idusuarios + "]";
+				+ ", idusuarios=" + "]";
 	}
     
 }
