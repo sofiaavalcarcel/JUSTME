@@ -145,18 +145,6 @@
               <i class="fas fa-search"></i> Buscar
             </button>
 
-            <!-- SERVICOSSSSSSSSSSSSSS -->
-
-      <div id="myModal" class="modal oculto">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <h2 class="oculto">Profesionales disponibles</h2>
-    <div id="profesionalesContainer" class="profesionales-grid"></div>
-  </div>
-</div>
-
-
-            <!-- SERVICOSSSSSSSSSSSSSS -->
 
             <!--PASARELA DE PAGOS-->
 
@@ -399,6 +387,38 @@
           </form>
         </div>
       </section>
+	  
+	  <section class="servicios-section">
+	      <h2>Servicios disponibles</h2>
+	      <div class="servicios-grid">
+
+	          <!-- Thymeleaf: recorrer servicios -->
+	          <div th:each="servicio : ${servicios}" class="card">
+
+	              <!-- Imagen del servicio -->
+	              <img th:src="@{'/uploads/' + ${servicio.imagen}}" 
+	                   th:alt="${servicio.nombre_servicios}" 
+	                   class="card-img-top">
+
+	              <div class="card-body">
+	                  <h3 th:text="${servicio.nombre_servicios}" class="card-title">Nombre Servicio</h3>
+	                  <p th:text="${servicio.descripcion}" class="card-text">Descripción</p>
+	                  <p><strong>Precio:</strong>
+	                      <span th:text="${#strings.concat('$', #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 0, 'POINT'))}">
+	                  </p>
+	                  <p><strong>Categoría:</strong>
+	                      <span th:text="${servicio.categoria}">Belleza</span>
+	                  </p>
+	              </div>
+
+	              <div class="card-footer">
+	                  <button class="btn-interesa">Me interesa</button>
+	              </div>
+	          </div>
+
+	      </div>
+	  </section>
+
 
       <section class="appointments-section" id="citas">
         <div class="container">
@@ -476,6 +496,11 @@
           </div>
         </div>
       </section>
+
+
+
+
+	  
     </main>
 
     <!-- Footer -->
@@ -535,6 +560,8 @@
         </div>
       </div>
     </footer>
+	
+	
 
     <script src="scripts/inicio.js"></script>
 
@@ -543,4 +570,3 @@
     
   </body>
 </html>
-

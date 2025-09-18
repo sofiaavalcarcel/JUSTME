@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
 	<meta charset="UTF-8">
@@ -94,36 +94,33 @@
 									<th>Precio</th>
 									<th>Categoría</th>
 									<th>Estado</th>
-									<th>Usuario</th>
+									<th>Imagen</th> <!-- ✅ Nueva columna para el nombre -->
 									<th>Acciones</th>
 								</tr>
 							</thead>
 							<tbody id="servicesBody">
-								<!-- Aquí Thymeleaf inyecta todos los registros -->
 								<tr th:each="servicio : ${servicios}">
 									<td th:text="${servicio.idservicios}"></td>
 									<td th:text="${servicio.nombre_servicios}"></td>
 									<td th:text="${servicio.descripcion}"></td>
-									<td
-										th:text="${#strings.concat('$', #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 0, 'POINT'))}">
-									</td>
+									<td th:text="${#strings.concat('$', #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 0, 'POINT'))}"></td>
 									<td th:text="${servicio.categoria}"></td>
 									<td th:text="${servicio.estado}"></td>
-									<td th:text="${servicio.idusuarios}"></td>
-									<td>
-										<a th:href="@{/servicios/editar/{id}(id=${servicio.idservicios})}"
-											class="btn-edit">
-											✏️
-										</a>
+									<!-- ✅ Mostrar solo el nombre de la imagen -->
+									<td th:text="${servicio.imagen}"></td>
 
-										<form th:action="@{/servicios/eliminar/{id}(id=${servicio.idservicios})}"
-											method="post" style="display:inline">
+									<td>
+										<a th:href="@{/servicios/editar/{id}(id=${servicio.idservicios})}" class="btn-edit">✏️</a>
+
+										<form th:action="@{/servicios/eliminar/{id}(id=${servicio.idservicios})}" method="post" style="display:inline">
 											<button type="submit" class="btn-delete">🗑️</button>
 										</form>
 									</td>
 								</tr>
 							</tbody>
 						</table>
+					</div>
+
 
 						<!-- 🔹 Controles de paginación -->
 						<div class="pagination">
@@ -260,7 +257,7 @@
 			</div>
 		</div>
 	</footer>
-	<script src="scripts/profesional.js"></script>
+		<script th:src="@{/scripts/profesional.js}"></script>
 </body>
 
 </html>
