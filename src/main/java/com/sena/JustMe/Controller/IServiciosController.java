@@ -47,7 +47,8 @@ public class IServiciosController {
 		try {
 			if (!file.isEmpty()) {
 				// Carpeta de destino real (la que sirve Spring en tiempo de ejecución)
-				File uploadFolder = new File("target/classes/static/uploads");
+				File uploadFolder = new File("uploads"); // carpeta en la raíz del proyecto
+
 				if (!uploadFolder.exists()) {
 					uploadFolder.mkdirs();
 				}
@@ -102,9 +103,9 @@ public class IServiciosController {
 			existente.setEstado(servicio.getEstado());
 			existente.setDescripcion(servicio.getDescripcion());
 
-			// Si viene una nueva imagen, guardarla y reemplazar la anterior
 			if (!file.isEmpty()) {
-				File uploadFolder = new File("target/classes/static/uploads");
+				// Subió una nueva imagen → guardar y reemplazar la anterior
+				File uploadFolder = new File("uploads");
 				if (!uploadFolder.exists()) {
 					uploadFolder.mkdirs();
 				}
@@ -117,8 +118,9 @@ public class IServiciosController {
 
 				existente.setImagen(fileName);
 			}
+			// Si NO sube nueva imagen → no tocamos existente.setImagen(...)
 
-			serviciosService.guardar(existente); // o editarServicio(id, existente)
+			serviciosService.guardar(existente);
 
 		} catch (IOException e) {
 			e.printStackTrace();
