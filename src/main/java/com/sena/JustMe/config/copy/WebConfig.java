@@ -9,8 +9,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // Indica que cualquier URL que empiece con /uploads/
-        // buscará archivos en la carpeta física "uploads" del proyecto
         registry.addResourceHandler("/uploads/**")
                 .addResourceLocations("file:uploads/");
     }
