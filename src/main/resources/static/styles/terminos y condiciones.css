@@ -1,0 +1,71 @@
+.modal {
+  display: none; 
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(255, 255, 255, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 12px;
+  width: 400px;
+  max-width: 90%;
+  padding: 20px;
+  box-shadow: 0 6px 15px rgba(223, 137, 245, 0.548);
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  font-size: 18px;
+  text-align: center;
+}
+
+.terms-text {
+  max-height: 200px;
+  overflow-y: auto;
+  margin: 15px 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #000000;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 8px;
+  background: #fafafa;
+  font-size: smaller;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.btn {
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.print-btn {
+  background: #fff;
+  border: 1px solid #ccc;
+}
+
+.accept-btn {
+  background: #e16bff;
+  color: white;
+}
+
+.decline-btn {
+  background: #f3e3f1;
+  color: #080000;
+}
