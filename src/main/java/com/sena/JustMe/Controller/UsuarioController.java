@@ -1,13 +1,8 @@
 package com.sena.JustMe.Controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
 
 public class UsuarioController {
 	
-    @GetMapping("/inicio")
-    public String mostrarInicio() {
-        // Coincide con src/main/resources/templates/servicios/inicio.html
-        return "servicios/inicio";
-    }
+
 
 }

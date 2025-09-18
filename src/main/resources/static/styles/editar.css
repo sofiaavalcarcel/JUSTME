@@ -138,3 +138,28 @@
         gap: 0;
     }
 }
+
+
+
+
+/* Contenedor imagen actual + input */
+.form-group.image-edit {
+    display: flex;
+    justify-content: center; /* centra en horizontal */
+    align-items: center;     /* centra en vertical */
+    gap: 40px; /* espacio entre los dos */
+    margin-top: 15px;
+}
+
+/* Imagen pequeña y centrada */
+/* Imagen en el formulario de edición */
+.form-group.image-edit img {
+    width: 300px;   /* mismo ancho que en las cards */
+    height: 200px;  /* mismo alto que en las cards */
+    object-fit: cover; /* recorta sin deformar */
+    border-radius: 12px; /* mismo borde redondeado que la card */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    display: block;
+}
+
+

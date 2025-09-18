@@ -1223,3 +1223,98 @@ ul {
                 padding: 20px 15px;
             }
         }
+		
+		/* ============================= */
+		/* 🔥 CARDS DE SERVICIOS */
+		/* ============================= */
+
+		.servicios-section {
+		    padding: 50px 40px; /* arriba/abajo 50px, lados 40px */
+		    background-color: var(--light-color);
+		}
+		.servicios-section h2 {
+		    text-align: center;
+		    font-size: 32px;
+		    margin-bottom: 30px;
+		    color: var(--dark-color);
+		}
+
+		.servicios-grid {
+		    display: grid;
+		    grid-template-columns: repeat(4, 1fr); /* exactamente 4 columnas */
+		    gap: 25px;
+		}
+
+		/* Card de cada servicio */
+		.card {
+		    background-color: var(--white);
+		    border-radius: 15px;
+		    padding: 25px 20px;
+		    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+		    transition: all 0.3s ease;
+		    text-align: center;
+		    position: relative;
+		    overflow: hidden;
+		}
+
+		.card:hover {
+		    transform: translateY(-5px);
+		    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+		}
+
+		/* Título del servicio */
+		.card h3 {
+		    font-size: 20px;
+		    color: var(--primary-dark);
+		    margin-bottom: 10px;
+		    font-weight: 600;
+		}
+
+		/* Descripción */
+		.card p {
+		    font-size: 15px;
+		    color: var(--gray-color);
+		    margin-bottom: 8px;
+		}
+
+		/* Precio */
+		.card p strong {
+		    color: var(--dark-color);
+		    font-weight: 600;
+		}
+
+		/* Botón "Me interesa" */
+		.btn-interesa {
+		    display: inline-block;
+		    margin-top: 15px;
+		    padding: 10px 18px;
+		    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+		    color: var(--white);
+		    border: none;
+		    border-radius: 8px;
+		    cursor: pointer;
+		    font-weight: 600;
+		    font-size: 14px;
+		    transition: all 0.3s ease;
+		    box-shadow: 0 3px 10px rgba(225, 107, 255, 0.25);
+		}
+
+		.btn-interesa:hover {
+		    transform: translateY(-2px);
+		    background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+		    box-shadow: 0 6px 15px rgba(225, 107, 255, 0.35);
+		}
+		
+		.card-img-top {
+		    width: 100%;          /* Ocupa todo el ancho de la card */
+		    height: 200px;        /* Altura uniforme para todas las imágenes */
+		    object-fit: cover;    /* Ajusta y recorta la imagen sin deformar */
+		    border-radius: 15px; /* Esquinas superiores redondeadas */
+		    display: block;       /* Evita espacios indeseados */
+		}
+
+
+		
+
+		
+		

@@ -43,10 +43,10 @@
 					<h2><i class="fas fa-edit"></i> Editar servicio</h2>
 					<p>Actualiza la información de tu servicio</p>
 				</div>
-
+				<!-- Formulario de edición -->
 				<!-- Formulario de edición -->
 				<form th:action="@{/servicios/editar/{id}(id=${servicio.idservicios})}" th:object="${servicio}"
-					method="post" class="edit-service-form">
+					method="post" enctype="multipart/form-data" class="edit-service-form">
 
 					<!-- ID oculto -->
 					<input type="hidden" th:field="*{idservicios}" />
@@ -70,11 +70,9 @@
 						</div>
 
 						<div class="form-group">
-							<label for="estado">
-								<i class="fas fa-toggle-on"></i> Estado
-							</label>
+							<label for="estado"><i class="fas fa-toggle-on"></i> Estado</label>
 							<select th:field="*{estado}" id="estado" required>
-								<option value="" disabled selected>Seleccione un estado</option>
+								<option value="" disabled>Seleccione un estado</option>
 								<option value="Activo">Activo</option>
 								<option value="Inactivo">Inactivo</option>
 							</select>
@@ -86,6 +84,23 @@
 						<textarea th:field="*{descripcion}" id="descripcion" rows="4" required></textarea>
 					</div>
 
+					<!-- Contenedor centrado para imagen actual + input -->
+					<div class="form-group image-edit">
+					    
+					    <!-- Imagen actual -->
+					    <div class="current-image">
+					        <label><i class="fas fa-image"></i> Imagen actual:</label>
+					        <img th:src="@{/uploads/{nombre}(nombre=${servicio.imagen})}" 
+					             alt="Imagen actual">
+					    </div>
+
+					    <!-- Subir nueva imagen -->
+					    <div class="new-image">
+					        <label for="imagenFile"><i class="fas fa-upload"></i> Cambiar imagen (opcional)</label>
+					        <input type="file" name="imagenFile" id="imagenFile" accept="image/*">
+					    </div>
+
+					</div>
 
 
 					<div class="form-actions">
@@ -95,6 +110,9 @@
 						</button>
 					</div>
 				</form>
+
+
+
 			</div>
 		</div>
 	</main>
