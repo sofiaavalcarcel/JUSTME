@@ -87,16 +87,10 @@
 					<!-- Contenedor centrado para imagen actual + input -->
 					<div class="form-group image-edit">
 					    
-					    <!-- Imagen actual -->
-					    <div class="current-image">
-					        <label><i class="fas fa-image"></i> Imagen actual:</label>
-					        <img th:src="@{/uploads/{nombre}(nombre=${servicio.imagen})}" 
-					             alt="Imagen actual">
-					    </div>
-
+					    
 					    <!-- Subir nueva imagen -->
 					    <div class="new-image">
-					        <label for="imagenFile"><i class="fas fa-upload"></i> Cambiar imagen (opcional)</label>
+					        <label for="imagenFile"><i class="fas fa-upload"></i> Cambiar imagen</label>
 					        <input type="file" name="imagenFile" id="imagenFile" accept="image/*">
 					    </div>
 
