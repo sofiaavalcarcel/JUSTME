@@ -67,3 +67,46 @@ document.addEventListener("DOMContentLoaded", function () {
 
     showPage(currentPage); // Mostrar la primera página al cargar
 });
+
+
+// =======================
+// PAGINACIÓN DE TABLA CITAS
+// =======================
+const citasRows = document.querySelectorAll("#citasTableBody tr");
+const citasRowsPerPage = 5;
+let citasCurrentPage = 0;
+
+const citasTotalPages = Math.ceil(citasRows.length / citasRowsPerPage);
+const citasPageInfo = document.getElementById("citasPageInfo");
+const citasPrevBtn = document.getElementById("citasPrevBtn");
+const citasNextBtn = document.getElementById("citasNextBtn");
+
+function showCitasPage(page) {
+    citasRows.forEach((row, index) => {
+        row.style.display =
+            index >= page * citasRowsPerPage && index < (page + 1) * citasRowsPerPage
+                ? ""
+                : "none";
+    });
+
+    citasPageInfo.textContent = `Página ${page + 1} de ${citasTotalPages}`;
+    citasPrevBtn.disabled = page === 0;
+    citasNextBtn.disabled = page === citasTotalPages - 1;
+}
+
+citasPrevBtn.addEventListener("click", () => {
+    if (citasCurrentPage > 0) {
+        citasCurrentPage--;
+        showCitasPage(citasCurrentPage);
+    }
+});
+
+citasNextBtn.addEventListener("click", () => {
+    if (citasCurrentPage < citasTotalPages - 1) {
+        citasCurrentPage++;
+        showCitasPage(citasCurrentPage);
+    }
+});
+
+showCitasPage(citasCurrentPage); // Mostrar la primera página al cargar
+
