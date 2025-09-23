@@ -1,5 +1,9 @@
 package com.sena.JustMe.repository;
 
-public interface ICitas_reservasRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.sena.JustMe.model.Citas_reservas;
+
+public interface ICitas_reservasRepository extends JpaRepository<Citas_reservas, Integer>{
 
 }
