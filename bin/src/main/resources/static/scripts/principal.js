@@ -290,4 +290,43 @@ document.addEventListener('DOMContentLoaded', function() {
 	        }, 500);
 	    });
 	});
+	
+	document.addEventListener('DOMContentLoaded', () => {
+	  const form = document.getElementById('loginForm');
+	  const btn = document.getElementById('loginBtn');
+	  const terms = document.getElementById('terms');
+	  const errorMessage = document.getElementById('errorMessage');
+
+	  function showError(msg) {
+	    errorMessage.textContent = msg;
+	    errorMessage.style.display = 'block';
+	  }
+
+	  function hideError() {
+	    errorMessage.textContent = '';
+	    errorMessage.style.display = 'none';
+	  }
+
+	  btn.addEventListener('click', async (e) => {
+	    e.preventDefault();
+
+	    
+	    if (!form.checkValidity()) {
+	      showError('Completa todos los campos correctamente.');
+	      return;
+	    }
+
+	    
+	    if (!terms.checked) {
+	      showError('Debes aceptar los Términos y Condiciones para continuar.');
+	      return;
+	    }
+
+	    hideError();
+	    form.submit();
+	    
+	  });
+	});
+
+
     
