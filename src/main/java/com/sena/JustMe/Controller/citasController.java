@@ -12,30 +12,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.sena.JustMe.model.Citas_reservas;
 import com.sena.JustMe.service.ICitas_reservasService;
 
+@Controller
+@RequestMapping("/citas")
 public class citasController {
-	@Controller
-	@RequestMapping("/citas")
-	public class CitasController {
 
-	    @Autowired
-	    private ICitas_reservasService citasService;
+    @Autowired
+    private ICitas_reservasService citasService;
 
-	    // Mostrar formulario de edición
-	    @GetMapping("/editar/{id}")
-	    public String mostrarFormularioEdicion(@PathVariable Integer id, Model model) {
-	        Citas_reservas cita = citasService.buscarPorId(id)
-	                .orElseThrow(() -> new IllegalArgumentException("ID inválido: " + id));
+    // Mostrar formulario de edición
+    @GetMapping("/editar/{id}")
+    public String mostrarFormularioEdicion(@PathVariable Integer id, Model model) {
+        Citas_reservas cita = citasService.buscarPorId(id)
+                .orElseThrow(() -> new IllegalArgumentException("ID inválido: " + id));
 
-	        model.addAttribute("cita", cita);
-	        return "profesional/editar_cita"; // 👈 vista Thymeleaf del formulario
-	    }
+        model.addAttribute("cita", cita);
+        return "profesional/editar_cita"; // 👈 OJO: tu archivo se llama editar_ctia.html
+    }
 
-	    // Guardar cambios de edición
-	    @PostMapping("/actualizar")
-	    public String actualizarCita(@ModelAttribute("cita") Citas_reservas cita) {
-	        citasService.guardar(cita);
-	        return "redirect:/profesional"; // 👈 vuelve a la lista
-	    }
-	}
-
+    // Guardar cambios de edición
+    @PostMapping("/actualizar")
+    public String actualizarCita(@ModelAttribute("cita") Citas_reservas cita) {
+        citasService.guardar(cita);
+        return "redirect:/profesional"; // 👈 vuelve a la lista
+    }
 }

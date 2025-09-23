@@ -2,6 +2,8 @@ package com.sena.JustMe.model;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,6 +17,8 @@ public class Citas_reservas {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 
 	private Integer idcitas_reservas;
+	
+	 @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
 	private Date fecha_hora;
 	private String direccion_servicio;
 	private String estado_cita;
