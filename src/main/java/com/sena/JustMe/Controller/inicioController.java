@@ -12,16 +12,23 @@ import com.sena.JustMe.service.IServiciosService;
 
 @Controller
 public class inicioController {
-	
-	 @Autowired
-	    private IServiciosService serviciosService; // 👈 interfaz, no la clase directamente
 
-	    @GetMapping("/inicio")
-	    public String mostrarServiciosInicio(Model model) {
-	        List<Servicios> lista = serviciosService.listarServicios();
-	        model.addAttribute("servicios", lista);
-	        return "servicios/inicio"; // -> templates/servicios/inicio.html
-	    }
-    
+	@Autowired
+	private IServiciosService serviciosService; // 👈 interfaz, no la clase directamente
+
+	@GetMapping("/inicio")
+	public String mostrarServiciosInicio(Model model) {
+		List<Servicios> lista = serviciosService.listarServicios();
+		model.addAttribute("servicios", lista);
+		return "servicios/inicio"; // -> templates/servicios/inicio.html
+	}
+
+	
+	
+	@GetMapping("/pasareladepagos")
+	public String pasareladepagos() {
+		// Busca src/main/resources/templates/terminosycondiciones.html
+		return "servicios/pasareladepagos";
+	}
 
 }

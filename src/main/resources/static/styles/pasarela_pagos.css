@@ -1,0 +1,537 @@
+/* ================================
+   VARIABLES
+================================ */
+:root {
+	--primary-color:#e16bff ;
+	 --primary-dark: #9033a7;
+	 --secondary-color: #e16bff;
+	 --dark-color: #333;
+	 --light-color: #f8f9fa;
+	 --gray-color: #6c757d;
+	 --light-gray: #e9ecef;
+	 --white: #fff;
+	 --black: #000;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --radius: 14px;
+    --shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    font-family: "Poppins", sans-serif;
+}
+
+/* ================================
+   LAYOUT GENERAL
+================================ */
+body {
+    margin: 0;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+	border-color: #c493c3;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    /* centra horizontal */
+    align-items: flex-start;
+    padding: 40px 20px;
+    box-sizing: border-box;
+	border-color: #c493c3;
+}
+
+/* Contenedor principal centrado */
+.checkout-container {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    /* Izquierda (form) más ancha, derecha (resumen) más angosta */
+    gap: 30px;
+    background: transparent;
+    max-width: 1200px;
+    /* no ocupa toda la pantalla */
+    overflow: hidden;
+    margin: 0 auto;
+    height: calc(100vh - 100px);
+	border-color: #c493c3;
+}
+
+.checkout-wrapper {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    /* izquierda más ancha, derecha más angosta */
+    gap: 25px;
+    width: 100%;
+    max-width: 1100px;
+    /* ancho máximo del bloque */
+    margin: 0 auto;
+    /* centra horizontal */
+	border-block-style: #c493c3;
+}
+
+
+/* Columna izquierda (scroll propio) */
+.checkout-main {
+    background: var(--panel);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 25px;
+    padding-bottom: 80px;
+    /* espacio para no chocar con el footer */
+    box-sizing: border-box;
+
+    /* Scroll interno */
+    overflow-y: auto;
+    max-height: calc(100vh - 100px);
+    /* ajusta según header/footer */
+}
+
+
+
+/* ================================
+   ENCABEZADO
+================================ */
+.checkout-header {
+    text-align: center;
+    margin-bottom: 20px;
+    color: rgb(128, 0, 128);
+	border-color: #996998;
+
+}
+
+.checkout-header h1 {
+    font-size: 2rem;
+    color: var(--primary);
+}
+
+.checkout-header p {
+    font-size: 1rem;
+    color: var(--muted);
+}
+
+/* ================================
+   INFORMACIÓN DEL COMPRADOR
+================================ */
+.buyer-info {
+    margin-bottom: 25px;
+}
+
+.buyer-info h2 {
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    color: var(--secondary);
+}
+
+.buyer-info label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.buyer-info input,
+.buyer-info select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: var(--radius);
+    border: 1px solid #ddd;
+    font-size: 0.95rem;
+}
+
+.buyer-info input:focus,
+.buyer-info select:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 1px rgb(192, 192, 192);
+}
+
+/* ================================
+   MÉTODOS DE PAGO
+================================ */
+.payment-methods h2 {
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    color: rgb(128, 0, 128);
+}
+
+.payment-option {
+    margin-bottom: 18px;
+    border: 1px solid #d0a3cf;
+    border-radius: var(--radius);
+    padding: 15px;
+    background: #fafafa;
+    transition: all 0.3s;
+}
+
+.payment-option:hover {
+    border-color: #a473a3;
+    background: #f9fafb;
+}
+
+.payment-option>input[type="radio"] {
+    accent-color: var(--primary);
+    margin-right: 8px;
+}
+
+/* ================================
+   Billeteras Digitales
+================================ */
+.wallets label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.wallets input[type="radio"] {
+    margin: 0;
+    accent-color: var(--primary);
+}
+
+.wallets input[type="text"] {
+    width: 100%;
+    max-width: 350px;
+    padding: 10px;
+    border-radius: var(--radius);
+    border: 1px solid #ccc;
+    margin-top: 10px;
+    font-size: 0.95rem;
+}
+
+/* ================================
+   Campos de tarjetas
+================================ */
+.payment-fields {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.payment-fields input,
+.payment-fields select {
+    width: 100%;
+    max-width: 350px;
+    padding: 10px;
+    border-radius: var(--radius);
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+}
+
+.card-row {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 350px;
+}
+
+/* ================================
+   RESUMEN DEL PEDIDO
+================================ */
+.order-summary h2 {
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    color: var(--primary);
+}
+
+.order-summary ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.order-summary li {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 0.95rem;
+}
+
+.order-summary .total {
+    font-weight: bold;
+    border-top: 2px dashed rgb(128, 0, 128);
+    margin-top: 10px;
+    padding-top: 12px;
+    font-size: 1rem;
+    color: var(--accent);
+}
+
+.order-summary {
+    background: var(--panel);
+    border-left: 5px solid var(--primary);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    height: fit-content;
+    /* ocupa lo necesario */
+    align-self: start;
+    /* se alinea arriba */
+    top: 20px;
+}
+
+/* ================================
+   BOTÓN FINAL
+================================ */
+.checkout-footer {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.btn-pagar {
+	  cursor: pointer;
+	  color: rgb(0, 0, 0);
+	  align-content: center;
+	  font-weight: 700;
+	  transition: all 0.2s;
+	  padding: 10px 20px;
+	  border-radius: 100px;
+	  background: #dcbadb;
+	  border: 1px solid transparent;
+	  display: flex;
+	  align-items: center;
+	  font-size: 15px;
+	  margin-left: 35%;
+	 
+	}
+
+	button:hover {
+	  background: #d0a3cf;
+	}
+
+	button > svg {
+		color: #ffffff;
+	  width: 34px;
+	  margin-left: 10px;
+	  transition: transform 0.3s ease-in-out;
+	}
+
+	button:hover svg {
+		color: #ffffff;
+	  transform: translateX(5px);
+	}
+
+	button:active {
+		color: #ffffff;
+	  transform: scale(0.95);
+	}
+
+   
+
+
+
+
+/* ================================
+   RESPONSIVIDAD
+================================ */
+@media (max-width: 1024px) {
+    .checkout-container {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+
+    .order-summary {
+        position: relative;
+        top: unset;
+        border-left: none;
+        border-top: 5px solid var(--primary);
+        margin-top: 20px;
+    }
+
+    .checkout-wrapper {
+        grid-template-columns: 1fr;
+        /* se apilan */
+        max-width: 700px;
+    }
+}
+
+@media (max-width: 768px) {
+    .checkout-header h1 {
+        font-size: 1.6rem;
+    }
+
+    .checkout-header p {
+        font-size: 0.9rem;
+    }
+
+    .buyer-info input,
+    .buyer-info select,
+    .payment-fields input,
+    .payment-fields select,
+    .wallets input[type="text"] {
+        max-width: 100%;
+    }
+
+    .card-row {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .btn-pagar {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .checkout-header h1 {
+        font-size: 1.4rem;
+    }
+
+    .checkout-header p {
+        font-size: 0.85rem;
+    }
+
+    .order-summary li {
+        font-size: 0.85rem;
+    }
+
+    .btn-pagar {
+        font-size: 0.9rem;
+        padding: 12px 18px;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-section {
+        margin: 20px 0;
+    }
+
+    .social-icons a {
+        margin: 0 10px;
+    }
+}
+
+/* ================================
+   FOOTER
+================================ */
+.footer {
+    background-color: #333;
+    color: white;
+    padding: 40px 20px 20px;
+    margin-top: auto;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto 30px auto;
+}
+
+.footer-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-section {
+    flex: 1 1 200px;
+    /* flexible y mínimo de 200px */
+    margin: 10px;
+}
+
+.footer-section h4 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: var(--white);
+}
+
+.footer-section p {
+    color: #adb5bd;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+
+}
+
+.social-icons a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background-color: #646164;
+    border-radius: 50%;
+    color: white;
+    transition: all 0.3s;
+    text-decoration: none;
+}
+
+.social-icons a:hover {
+    background-color: #8310b9;
+    transform: translateY(-3px);
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 10px;
+}
+
+.footer-section ul li a {
+    color: #adb5bd;
+    font-size: 14px;
+    transition: color 0.3s;
+    text-decoration: none;
+}
+
+.footer-section ul li a:hover {
+    color: var(--primary-color);
+}
+
+.footer-section ul li i {
+    margin-right: 8px;
+    width: 16px;
+    color: var(--primary-color);
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 20px 0;
+    text-align: center;
+}
+
+.footer-bottom p {
+    color: #adb5bd;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.legal-links {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.legal-links a {
+    color: #adb5bd;
+    font-size: 12px;
+    transition: color 0.3s;
+    text-decoration: none;
+}
+
+.legal-links a:hover {
+    color: var(--primary-color);
+}
