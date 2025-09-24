@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Pasarela de Pagos</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<link rel="stylesheet" href="styles/pasarela_pagos.css" />
+</head>
+
+<body>
+	<div class="layout">
+		<!-- CONTENIDO PRINCIPAL -->
+		<main class="checkout-wrapper">
+			<!-- COLUMNA IZQUIERDA -->
+			<section class="checkout-main">
+				<!-- ENCABEZADO -->
+				<header class="checkout-header">
+					<h1>Pasarela de Pagos</h1>
+					<p>Finaliza tu compra de forma segura</p>
+				</header>
+
+				<!-- INFORMACIÓN DEL COMPRADOR -->
+				<section class="buyer-info">
+					<h2>Información de Contacto</h2>
+					<form>
+						<label>Nombre completo
+							<input type="text" name="nombre" placeholder="Nombre completo" required>
+						</label>
+						<label>Correo electrónico
+							<input type="email" name="correo" placeholder="correo@ejemplo.com" required>
+						</label>
+						<label>Teléfono
+							<input type="tel" name="telefono" placeholder="+57 300 000 0000" required>
+						</label>
+						<label>País
+							<select name="pais" required>
+								<option value="">Selecciona</option>
+								<option value="CO">Colombia</option>
+								<option value="MX">México</option>
+								<option value="AR">Argentina</option>
+								<option value="ES">España</option>
+							</select>
+						</label>
+						<label>Moneda
+							<select name="moneda" required>
+								<option value="COP">COP (Peso Colombiano)</option>
+								<option value="USD">USD (Dólar)</option>
+								<option value="EUR">EUR (Euro)</option>
+							</select>
+						</label>
+					</form>
+				</section>
+
+				<!-- MÉTODOS DE PAGO -->
+				<section class="payment-methods">
+					<h2>Método de Pago</h2>
+
+					<!-- Tarjeta -->
+					<div class="payment-option">
+						<input type="radio" id="tarjeta" name="metodo" checked>
+						<label for="tarjeta">💳 Tarjeta de Crédito/Débito</label>
+						<div class="payment-fields">
+							<input type="text" placeholder="Número de tarjeta">
+							<div class="card-row">
+								<input type="text" placeholder="MM/AA">
+								<input type="text" placeholder="CVV">
+							</div>
+							<input type="text" placeholder="Nombre del titular">
+						</div>
+					</div>
+
+					<!-- PSE -->
+					<div class="payment-option">
+						<input type="radio" id="pse" name="metodo">
+						<label for="pse">🏦 Pago con PSE</label>
+						<div class="payment-fields">
+							<select>
+								<option>Selecciona tu banco</option>
+								<option>Bancolombia</option>
+								<option>Davivienda</option>
+								<option>Banco de Bogotá</option>
+								<option>BBVA</option>
+								<option>Banco AV Villas</option>
+							</select>
+							<p class="hint">Serás redirigido al portal de tu banco para completar el pago.</p>
+						</div>
+					</div>
+
+					<!-- Billeteras Digitales -->
+					<div class="payment-option">
+						<input type="radio" id="wallets" name="payment" />
+						<label for="wallets">🧾 Billeteras Digitales</label>
+
+						<div class="payment-fields wallets">
+							<p>Selecciona tu billetera preferida:</p>
+
+							<label>
+								<input type="radio" name="wallet" value="nequi" />
+								Nequi
+							</label>
+
+							<label>
+								<input type="radio" name="wallet" value="daviplata" />
+								Daviplata
+							</label>
+
+							<label>
+								<input type="radio" name="wallet" value="paypal" />
+								PayPal
+							</label>
+
+							<label>
+								<input type="radio" name="wallet" value="binance" />
+								Binance Pay
+							</label>
+
+							<input type="text" placeholder="Correo o número asociado" />
+						</div>
+					</div>
+				</section>
+
+				<!-- BOTÓN FINALIZAR -->
+				<footer class="checkout-footer">
+					<button type="submit" class="btn-pagar">
+						<span>Pagar ahora</span>
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 74 74" height="34" width="34">
+							<circle stroke-width="3" stroke="black" r="35.5" cy="37" cx="37"></circle>
+							<path fill="black"
+								d="M25 35.5C24.1716 35.5 23.5 36.1716 23.5 37C23.5 37.8284 24.1716 38.5 25 38.5V35.5ZM49.0607 38.0607C49.6464 37.4749 49.6464 36.5251 49.0607 35.9393L39.5147 26.3934C38.9289 25.8076 37.9792 25.8076 37.3934 26.3934C36.8076 26.9792 36.8076 27.9289 37.3934 28.5147L45.8787 37L37.3934 45.4853C36.8076 46.0711 36.8076 47.0208 37.3934 47.6066C37.9792 48.1924 38.9289 48.1924 39.5147 47.6066L49.0607 38.0607ZM25 38.5L48 38.5V35.5L25 35.5V38.5Z">
+							</path>
+						</svg>
+
+
+
+					</button>
+				</footer>
+			</section>
+
+			<!-- COLUMNA DERECHA -->
+			<aside class="order-summary">
+				<h2>Resumen del Pedido</h2>
+				<ul>
+					<li>Producto A <span>$50.000</span></li>
+					<li>Producto B <span>$80.000</span></li>
+					<li class="total">Total <span>$130.000</span></li>
+				</ul>
+			</aside>
+		</main>
+
+		<!-- FOOTER GLOBAL -->
+		<footer class="footer">
+			<div class="container">
+				<div class="footer-content">
+					<div class="footer-section">
+						<h4>Just Me</h4>
+						<p>
+							Servicios de belleza a domicilio para hombres y mujeres en
+							cualquier lugar.
+						</p>
+						<div class="social-icons">
+							<a href="#"><i class="fab fa-facebook-f"></i></a>
+							<a href="#"><i class="fab fa-instagram"></i></a>
+							<a href="#"><i class="fab fa-tiktok"></i></a>
+							<a href="#"><i class="fab fa-whatsapp"></i></a>
+						</div>
+					</div>
+
+					<div class="footer-section">
+						<h4>Enlaces</h4>
+						<ul>
+							<li><a href="#">Inicio</a></li>
+							<li><a href="#">Servicios</a></li>
+							<li><a href="#">Sobre Nosotros</a></li>
+							<li><a href="#">Contacto</a></li>
+						</ul>
+					</div>
+
+					<div class="footer-section">
+						<h4>Servicios</h4>
+						<ul>
+							<li><a href="#">Corte de Cabello</a></li>
+							<li><a href="#">Maquillaje</a></li>
+							<li><a href="#">Uñas</a></li>
+							<li><a href="#">Tratamientos Faciales</a></li>
+						</ul>
+					</div>
+
+					<div class="footer-section">
+						<h4>Contacto</h4>
+						<ul>
+							<li><i class="fas fa-map-marker-alt"></i> Bogotá, Colombia</li>
+							<li><i class="fas fa-phone"></i> +57 123 456 7890</li>
+							<li><i class="fas fa-envelope"></i> hola@justme.com</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="footer-bottom">
+					<p>&copy; 2025 Just Me. Todos los derechos reservados.</p>
+					<div class="legal-links">
+						<a href="#">Términos y Condiciones</a>
+						<a href="#">Política de Privacidad</a>
+					</div>
+				</div>
+			</div>
+		</footer>
+	</div>
+</body>
+
+</html>

@@ -328,5 +328,45 @@ document.addEventListener('DOMContentLoaded', function() {
 	  });
 	});
 
+	
+	
+	document.addEventListener('DOMContentLoaded', () => {
+	  const form = document.getElementById('loginForm');
+	  const btn = document.getElementById('loginBtn');
+	  const terms = document.getElementById('terms');
+	  const errorMessage = document.getElementById('errorMessage');
+
+	  function showError(msg) {
+	    errorMessage.textContent = msg;
+	    errorMessage.style.display = 'block';
+	  }
+
+	  function hideError() {
+	    errorMessage.textContent = '';
+	    errorMessage.style.display = 'none';
+	  }
+
+	  btn.addEventListener('click', async (e) => {
+	    e.preventDefault();
+
+	    // Validación básica del form
+	    if (!form.checkValidity()) {
+	      showError('Completa todos los campos correctamente.');
+	      return;
+	    }
+
+	    // Validación de términos
+	    if (!terms.checked) {
+	      showError('Debes aceptar los Términos y Condiciones para continuar.');
+	      return;
+	    }
+
+	    hideError();
+
+	    // Enviar formulario al backend (/acceder en tu controlador Spring)
+	    form.submit();
+	  });
+	});
+
 
     

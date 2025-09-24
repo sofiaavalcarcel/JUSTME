@@ -42,6 +42,9 @@
 					<a class="menu-item" th:href="@{/assetsADMIN/clientes.html}">
 						<span class="dot"></span> Clientes
 					</a>
+					<a class="menu-item" th:href="@{/cerrar}">
+						<span class="dot"></span> Cerrar Sesión
+					</a>
 				</nav>
 			</div>
 
@@ -114,7 +117,7 @@
 												<th>Precio Base</th>
 												<th>Categoría</th>
 												<th>Estado</th>
-											
+
 												<th>Acciones</th>
 											</tr>
 										</thead>
@@ -129,7 +132,7 @@
 												</td>
 												<td th:text="${servicio.categoria}">Categoría</td>
 												<td><span class="state" th:text="${servicio.estado}">Activo</span></td>
-												
+
 												<td>
 													<a th:href="@{/servicios/editar/{id}(id=${servicio.idservicios})}"
 														class="btn-edit">✏️</a>

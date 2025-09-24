@@ -48,7 +48,7 @@ public class UsuarioController {
         LOGGER.info("Registrando usuario: {}", usuario);
 
         // Rol por defecto: CLIENTE (id=2)
-        Optional<Rol> rolCliente = rolService.findById(2);
+        Optional<Rol> rolCliente = rolService.findById(3);
 
         if (rolCliente.isPresent()) {
             usuario.setRol(rolCliente.get());
@@ -67,7 +67,7 @@ public class UsuarioController {
         return "redirect:/login";
     }
 
-    // Procesar login
+ // Procesar login
     @PostMapping("/acceder")
     public String acceder(Usuarios usuario, HttpSession session, Model model) {
         Optional<Usuarios> userEmail = usuarioService.findByEmail(usuario.getEmail());
@@ -80,6 +80,9 @@ public class UsuarioController {
 
                 // Guardar usuario en sesión
                 session.setAttribute("idUsuario", user.getId());
+
+                // 👇 Guardar el nombre completo del usuario en sesión
+                session.setAttribute("nombreUsuario", user.getNombre() + " " + user.getApellido());
 
                 // Guardar rol en sesión (si no tiene rol -> CLIENTE por defecto)
                 String rolNombre = (user.getRol() != null) ? user.getRol().getNombre() : "CLIENTE";
@@ -108,6 +111,7 @@ public class UsuarioController {
             return "redirect:/";
         }
     }
+
 
     // Cerrar sesión
     @GetMapping("/cerrar")
