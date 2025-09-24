@@ -1,16 +1,20 @@
 package com.sena.JustMe.service;
 
-import java.util.List;
 
 import com.sena.JustMe.model.Usuarios;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface IUsuariosService {
+    
+    Usuarios save(Usuarios usuario);
 
-	List<Usuarios> listarUsuarios();
+    Optional<Usuarios> findById(Integer id);
 
-	Usuarios guardarUsuario(Usuarios usuario);
+    void delete(Integer id);
 
-	Usuarios buscarPorId(Integer id);
+    Optional<Usuarios> findByEmail(String email);
 
-	void eliminarUsuario(Integer id);
+    List<Usuarios> findAll();
 }

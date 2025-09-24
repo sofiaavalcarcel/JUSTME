@@ -23,12 +23,14 @@ public class inicioController {
 		return "servicios/inicio"; // -> templates/servicios/inicio.html
 	}
 
-	
-	
+
 	@GetMapping("/pasareladepagos")
 	public String pasareladepagos() {
 		// Busca src/main/resources/templates/terminosycondiciones.html
 		return "servicios/pasareladepagos";
 	}
+	
+	
+
 
 }

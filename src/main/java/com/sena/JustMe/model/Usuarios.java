@@ -1,52 +1,49 @@
 package com.sena.JustMe.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "usuarios")
 public class Usuarios {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-
 	private Integer idusuarios;
+
 	private String nombre;
 	private String apellido;
 	private String email;
-	private String contraseña;
+
+	private String contrasena;
+
 	private String direccion;
 	private String biografia;
 	private String documentos;
 	private String portafolio;
 	private String estado;
 	private String disponibilidad;
-	
 
-	// constructor vacio
+	@ManyToOne
+	@JoinColumn(name = "rol_idrol", referencedColumnName = "idrol")
+	private Rol rol;
+
+
 	public Usuarios() {
-
 	}
 
-//constructor con datos
-	public Usuarios(Integer id, String nombre, String apellido, String email, String contraseña, String direccion,
-			String biografia, String documentos, String portafolio, String estado, String disponibilidad,
-			Integer idrol) {
-		super();
-		this.idusuarios= id;
+	public Usuarios(Integer id, String nombre, String apellido, String email, String contrasena, String direccion,
+			String biografia, String documentos, String portafolio, String estado, String disponibilidad, Rol rol) {
+		this.idusuarios = id;
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.email = email;
-		this.contraseña = contraseña;
+		this.contrasena = contrasena;
 		this.direccion = direccion;
 		this.biografia = biografia;
 		this.documentos = documentos;
 		this.portafolio = portafolio;
 		this.estado = estado;
 		this.disponibilidad = disponibilidad;
-
+		this.rol = rol;
 	}
 
 	// GETTERS AND SETTERS
@@ -82,12 +79,12 @@ public class Usuarios {
 		this.email = email;
 	}
 
-	public String getContraseña() {
-		return contraseña;
+	public String getContrasena() {
+		return contrasena;
 	}
 
-	public void setContraseña(String contraseña) {
-		this.contraseña = contraseña;
+	public void setContrasena(String contrasena) {
+		this.contrasena = contrasena;
 	}
 
 	public String getDireccion() {
@@ -138,13 +135,17 @@ public class Usuarios {
 		this.disponibilidad = disponibilidad;
 	}
 
-	// metodo TOSTRING
-	@Override
-	public String toString() {
-		return "Usuario [id=" + idusuarios + ", nombre=" + nombre + ", apellido=" + apellido + ", email=" + email
-				+ ", contraseña=" + contraseña + ", direccion=" + direccion + ", biografia=" + biografia
-				+ ", documentos=" + documentos + ", portafolio=" + portafolio + ", estado=" + estado
-				+ ", disponibilidad=" + disponibilidad + "]";
+	public Rol getRol() {
+		return rol;
 	}
 
+	public void setRol(Rol rol) {
+		this.rol = rol;
+	}
+
+	@Override
+	public String toString() {
+		return "Usuarios [id=" + idusuarios + ", nombre=" + nombre + ", apellido=" + apellido + ", email=" + email
+				+ ", contrasena=" + contrasena + ", rol=" + (rol != null ? rol.getNombre() : "null") + "]";
+	}
 }
