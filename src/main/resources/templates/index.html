@@ -30,7 +30,7 @@
 
 <body>
 
-<!--	<div class="preloader" id="preloader">
+		<!--<div class="preloader" id="preloader">
 		<div class="preloader-content">
 			<div class="preloader-card">
 				<div class="preloader-loader">
@@ -73,7 +73,7 @@
 			</ul>
 			<div class="auth-buttons">
 				<button class="login">Iniciar Sesión</button>
-				<a th:href="@{/servicios/registrar}" class="signup">Registrarse</a>
+				<a th:href="@{/registro}" class="signup">Registrarse</a>
 			</div>
 		</nav>
 	</header>
@@ -149,60 +149,69 @@
 		</div>
 	</section>
 	<div class="modal-overlay" id="modalOverlay"></div>
-	
-	
-	
+
+
+
 
 	<div class="modal glass" id="loginModal">
-	    <button class="close-modal">&times;</button>
-	    <div class="modal-content">
-	        <h2>Iniciar Sesión</h2>
-	        <form th:action="@{/acceder}" method="post" id="loginForm">
-	            <div class="form-group">
-	                <label for="loginEmail">Correo Electrónico</label>
-	                <input type="email" id="loginEmail" name="email" required />
-	            </div>
-	            <div class="form-group">
-	                <label for="loginPassword">Contraseña</label>
-	                <input type="password" id="loginPassword" name="contrasena" required />
-	            </div>
-	            <button type="submit" class="modal-btn">Ingresar</button>
-	        </form>
-	    </div>
+		<button class="close-modal">&times;</button>
+		<div class="modal-content">
+			<h2>Iniciar Sesión</h2>
+			<form th:action="@{/acceder}" method="post" id="loginForm">
+				<div class="form-group">
+					<label for="loginEmail">Correo Electrónico</label>
+					<input type="email" id="loginEmail" name="email" required />
+				</div>
+				<div class="form-group">
+					<label for="loginPassword">Contraseña</label>
+					<input type="password" id="loginPassword" name="contrasena" required />
+				</div>
+				<div class="form-group checklist">
+					<input type="checkbox" id="terms" />
+					<label for="terms">
+						Acepto los <a th:href="@{/terminosycondiciones}" target="_blank">Términos y Condiciones</a>
+					</label>
+
+
+
+				</div>
+				<button type="submit" class="modal-btn">Ingresar</button>
+			</form>
+		</div>
 	</div>
 
-	
-	
+
+
 
 	<div class="modal glass" id="loginModal">
-	    <button class="close-modal">&times;</button>
-	    <div class="modal-content">
-	        <h2>Iniciar Sesión</h2>
-	        <form th:action="@{/acceder}" method="post" id="loginForm">
-	            <div class="form-group">
-	                <label for="loginEmail">Correo Electrónico</label>
-	                <input type="email" id="loginEmail" name="email" required />
-	            </div>
-	            <div class="form-group">
-	                <label for="loginPassword">Contraseña</label>
-	                <input type="password" id="loginPassword" name="contrasena" required />
-	            </div>
-	            <div class="form-group checklist">
-	                <input type="checkbox" id="terms" name="terms" required />
-	                <label for="terms">
-	                    Acepto los 
-	                    <a th:href="@{/terminosycondiciones}" target="_blank">Términos y Condiciones</a>
-	                </label>
-	            </div>
-	            <p id="errorMessage" class="error-message"
-	               th:if="${param.error}" th:text="'Credenciales incorrectas'"></p>
-	            <button type="submit" class="modal-btn">Ingresar</button>
-	            <p class="modal-text">
-	                ¿No tienes cuenta? 
-	                <a th:href="@{/registro}" id="goToRegister">Regístrate</a>
-	            </p>
-	        </form>
-	    </div>
+		<button class="close-modal">&times;</button>
+		<div class="modal-content">
+			<h2>Iniciar Sesión</h2>
+			<form th:action="@{/acceder}" method="post" id="loginForm">
+				<div class="form-group">
+					<label for="loginEmail">Correo Electrónico</label>
+					<input type="email" id="loginEmail" name="email" required />
+				</div>
+				<div class="form-group">
+					<label for="loginPassword">Contraseña</label>
+					<input type="password" id="loginPassword" name="contrasena" required />
+				</div>
+				<div class="form-group checklist">
+					<input type="checkbox" id="terms" name="terms" required />
+					<label for="terms">
+						Acepto los
+						<a th:href="@{/terminosycondiciones}" target="_blank">Términos y Condiciones</a>
+					</label>
+				</div>
+				<p id="errorMessage" class="error-message" th:if="${param.error}" th:text="'Credenciales incorrectas'">
+				</p>
+				<button type="submit" class="modal-btn">Ingresar</button>
+				<p class="modal-text">
+					¿No tienes cuenta?
+					<a th:href="@{/registro}" >Regístrate</a>
+				</p>
+			</form>
+		</div>
 	</div>
 
 

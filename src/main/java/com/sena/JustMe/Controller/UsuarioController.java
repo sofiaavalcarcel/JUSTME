@@ -39,7 +39,7 @@ public class UsuarioController {
     @GetMapping("/registro")
     public String mostrarFormularioRegistro(Model model) {
         model.addAttribute("usuario", new Usuarios());
-        return "usuario/registro"; 
+        return "servicios/registrar"; 
     }
 
     // Guardar usuario en DB
@@ -58,13 +58,13 @@ public class UsuarioController {
         }
 
         usuarioService.save(usuario);
-        return "redirect:/login";
+        return "redirect:/";
     }
 
     // Vista de login
     @GetMapping("/login")
     public String login() {
-        return "usuario/login";
+        return "redirect:/login";
     }
 
     // Procesar login
@@ -99,13 +99,13 @@ public class UsuarioController {
             } else {
                 LOGGER.warn("Contraseña incorrecta para usuario {}", usuario.getEmail());
                 model.addAttribute("error", "Contraseña incorrecta");
-                return "usuario/login";
+                return "redirect:/";
             }
 
         } else {
             LOGGER.warn("Usuario con email {} no existe en la DB", usuario.getEmail());
             model.addAttribute("error", "Usuario no encontrado");
-            return "usuario/login";
+            return "redirect:/";
         }
     }
 
