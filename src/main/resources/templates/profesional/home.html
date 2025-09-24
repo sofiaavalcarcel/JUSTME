@@ -206,13 +206,15 @@
 									<td th:text="${#dates.format(cita.fecha_hora, 'yyyy-MM-dd HH:mm')}"></td>
 									<td th:text="${cita.direccion_servicio}"></td>
 									<td th:text="${cita.estado_cita}"></td>
-									<td th:text="${#strings.concat('$', cita.precio)}"></td>
+									<td th:text="${#strings.concat('$', #numbers.formatDecimal(cita.precio, 0, 'POINT', 0, 'POINT'))}"></td>
 									<td th:text="${cita.observacionesCl}"></td>
 									<td th:text="${cita.observacionesLb}"></td>
 									<td th:text="${cita.fechaEdicion}"></td>
 									<td>
-										<a th:href="@{/citas/editar/{id}(id=${cita.idcitas_reservas})}" class="btn-edit">✏️</a>
+										<a th:href="@{/citas/editar/{id}(id=${cita.idcitas_reservas})}"
+											class="btn-edit">✏️</a>
 									</td>
+
 								</tr>
 							</tbody>
 						</table>
