@@ -1,5 +1,7 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
+    // ================================
     // Datos de servicios
+    // ================================
     const services = [
         {
             title: "Corte de Cabello",
@@ -37,13 +39,13 @@ document.addEventListener('DOMContentLoaded', function() {
             price: "$180,000",
             image: "https://images.pexels.com/photos/8468157/pexels-photo-8468157.jpeg"
         },
-                {
+        {
             title: "Masajes Corporales",
             description: "Relajantes, descontracturantes o reductores. Se utilizan aceites esenciales y técnicas manuales para aliviar tensiones y mejorar la circulación.",
             price: "$180,000",
             image: "https://images.pexels.com/photos/6560289/pexels-photo-6560289.jpeg"
         },
-                {
+        {
             title: "Diseño de Cejas y Pestañas",
             description: "Depilación, perfilado, tinte o laminado de cejas. Extensiones, lifting o tintura de pestañas para realzar la mirada.",
             price: "$180,000",
@@ -51,13 +53,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     ];
 
-    // Llenar la sección de servicios
     const servicesGrid = document.querySelector('.services-grid');
-    
     services.forEach(service => {
         const serviceCard = document.createElement('div');
         serviceCard.className = 'service-card';
-        
         serviceCard.innerHTML = `
             <div class="service-img" style="background-image: url('${service.image}')"></div>
             <div class="service-info">
@@ -66,12 +65,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 <p class="service-price">${service.price}</p>
             </div>
         `;
-        
         servicesGrid.appendChild(serviceCard);
     });
 
-    // Efectos de scroll
-    window.addEventListener('scroll', function() {
+    // ================================
+    // Efectos de scroll en navbar
+    // ================================
+    window.addEventListener('scroll', () => {
         const nav = document.querySelector('nav');
         if (window.scrollY > 50) {
             nav.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
@@ -82,25 +82,47 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Botones de autenticación
-    const loginBtn = document.querySelector('.login');
-    const signupBtn = document.querySelector('.signup');
-    
+    // ================================
+    // Preloader
+    // ================================
+    const preloader = document.getElementById('preloader');
+    const loadingProgress = document.querySelector('.loading-progress');
+    let progress = 0;
+    const progressInterval = setInterval(() => {
+        progress += Math.random() * 15;
+        if (progress >= 100) {
+            progress = 100;
+            clearInterval(progressInterval);
+        }
+        loadingProgress.style.width = progress + '%';
+    }, 300);
 
-
-    // Botones CTA
-    const primaryCta = document.querySelector('.primary-cta');
-    const secondaryCta = document.querySelector('.secondary-cta');
-    
-    primaryCta.addEventListener('click', function() {
-        window.location.href = '#services';
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            loadingProgress.style.width = '100%';
+            setTimeout(() => {
+                preloader.classList.add('hidden');
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                }, 500);
+            }, 300);
+        }, 1500);
     });
-    
-    secondaryCta.addEventListener('click', function() {
-        window.location.href = '#services';
-    });
-});
 
+    window.addEventListener('error', () => {
+        clearInterval(progressInterval);
+        loadingProgress.style.width = '100%';
+        setTimeout(() => {
+            preloader.classList.add('hidden');
+            setTimeout(() => {
+                preloader.style.display = 'none';
+            }, 500);
+        }, 500);
+    });
+
+    // ================================
+    // Modales Login y Registro
+    // ================================
     const modalOverlay = document.getElementById('modalOverlay');
     const loginModal = document.getElementById('loginModal');
     const registerModal = document.getElementById('registerModal');
@@ -109,34 +131,33 @@ document.addEventListener('DOMContentLoaded', function() {
     const goToRegister = document.getElementById('goToRegister');
     const goToLogin = document.getElementById('goToLogin');
     const closeModalBtns = document.querySelectorAll('.close-modal');
-    const loginForm = document.getElementById('loginForm');
-    const registerForm = document.getElementById('registerForm');
 
-    // Abrir modal de login
-    loginBtn.addEventListener('click', () => {
-        openModal(loginModal);
-    });
+    function openModal(modal) {
+        modalOverlay.classList.add('active');
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeModal(modal) {
+        modalOverlay.classList.remove('active');
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
 
-    // Abrir modal de registro
-    signupBtn.addEventListener('click', () => {
-        openModal(registerModal);
-    });
+    if (loginBtn) loginBtn.addEventListener('click', () => openModal(loginModal));
+    if (signupBtn) signupBtn.addEventListener('click', () => openModal(registerModal));
 
-    // Cambiar a registro desde login
-    goToRegister.addEventListener('click', (e) => {
+    if (goToRegister) goToRegister.addEventListener('click', e => {
         e.preventDefault();
         closeModal(loginModal);
         openModal(registerModal);
     });
 
-    // Cambiar a login desde registro
-    goToLogin.addEventListener('click', (e) => {
+    if (goToLogin) goToLogin.addEventListener('click', e => {
         e.preventDefault();
         closeModal(registerModal);
         openModal(loginModal);
     });
 
-    // Cerrar modales
     closeModalBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             const modal = btn.closest('.modal');
@@ -144,229 +165,53 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Cerrar al hacer clic fuera del modal
-    modalOverlay.addEventListener('click', () => {
-        closeModal(loginModal);
-        closeModal(registerModal);
-    });
-
-    // Función para abrir modal
-    function openModal(modal) {
-        modalOverlay.classList.add('active');
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    }
-
-    // Función para cerrar modal
-    function closeModal(modal) {
-        modalOverlay.classList.remove('active');
-        modal.classList.remove('active');
-        document.body.style.overflow = 'auto';
-    }
-
-    // Manejar envío del formulario de login
-    loginForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const email = document.getElementById('loginEmail').value;
-        const password = document.getElementById('loginPassword').value;
-        
-        // Aquí iría la validación real con el backend
-        console.log('Login attempt with:', email, password);
-        
-        // Simular inicio de sesión exitoso
-        setTimeout(() => {
+    if (modalOverlay) {
+        modalOverlay.addEventListener('click', () => {
             closeModal(loginModal);
-            window.location.href = 'inicio.html';
-        }, 1000);
-    });
-
-    // Manejar envío del formulario de registro
-    registerForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const name = document.getElementById('registerName').value;
-        const email = document.getElementById('registerEmail').value;
-        const phone = document.getElementById('registerPhone').value;
-        const password = document.getElementById('registerPassword').value;
-        const confirmPassword = document.getElementById('registerConfirm').value;
-        
-        // Validar que las contraseñas coincidan
-        if (password !== confirmPassword) {
-            alert('Las contraseñas no coinciden');
-            return;
-        }
-        
-        // Aquí iría el registro real con el backend
-        console.log('Register attempt with:', {name, email, phone, password});
-        
-        // Simular registro exitoso
-        setTimeout(() => {
             closeModal(registerModal);
-            window.location.href = 'inicio.html';
-        }, 1000);
-    });
+        });
+    }
 
-    // Cerrar con la tecla ESC
-    document.addEventListener('keydown', (e) => {
+    document.addEventListener('keydown', e => {
         if (e.key === 'Escape') {
             closeModal(loginModal);
             closeModal(registerModal);
         }
     });
 
-     // modal contactanos
-    document.getElementById('contactLink').addEventListener('click', function(e) {
-        e.preventDefault();
-        document.getElementById('contactModal').style.display = 'block';
-        document.getElementById('modalNav').style.display = 'block';
-    });
-    
-    // Cerrar modal
-    document.getElementById('closeModal').addEventListener('click', function() {
-        document.getElementById('contactModal').style.display = 'none';
-        document.getElementById('modalNav').style.display = 'none';
-    });
-    
-    // Cerrar al hacer clic fuera
-    window.addEventListener('click', function(event) {
-        if (event.target == document.getElementById('contactModal')) {
-            document.getElementById('contactModal').style.display = 'none';
-            document.getElementById('modalNav').style.display = 'none';
+    // ================================
+    // Modal de Contacto
+    // ================================
+    const contactLink = document.getElementById('contactLink');
+    const contactModal = document.getElementById('contactModal');
+    const closeContact = document.getElementById('closeModal');
+    const contactForm = document.getElementById('contactForm');
+
+    if (contactLink) {
+        contactLink.addEventListener('click', e => {
+            e.preventDefault();
+            contactModal.style.display = 'block';
+        });
+    }
+
+    if (closeContact) {
+        closeContact.addEventListener('click', () => {
+            contactModal.style.display = 'none';
+        });
+    }
+
+    window.addEventListener('click', event => {
+        if (event.target === contactModal) {
+            contactModal.style.display = 'none';
         }
     });
-    
-    // Enviar formulario
-    document.getElementById('contactForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        alert('Formulario enviado con éxito!');
-        document.getElementById('contactModal').style.display = 'none';
-        document.getElementById('modalNav').style.display = 'none';
-        this.reset();
-    });
-	
-	// Preloader functionality
-	document.addEventListener('DOMContentLoaded', function() {
-	    const preloader = document.getElementById('preloader');
-	    const loadingProgress = document.querySelector('.loading-progress');
-	    
-	    // Simular progreso de carga
-	    let progress = 0;
-	    const progressInterval = setInterval(function() {
-	        progress += Math.random() * 15;
-	        if (progress >= 100) {
-	            progress = 100;
-	            clearInterval(progressInterval);
-	        }
-	        loadingProgress.style.width = progress + '%';
-	    }, 300);
-		
-		
-	    
-	    // Ocultar preloader cuando la página esté completamente cargada
-	    window.addEventListener('load', function() {
-	        setTimeout(function() {
-	            loadingProgress.style.width = '100%';
-	            
-	            setTimeout(function() {
-	                preloader.classList.add('hidden');
-	                
-	                // Eliminar completamente el preloader después de la animación
-	                setTimeout(function() {
-	                    preloader.style.display = 'none';
-	                }, 500);
-	            }, 300);
-	        }, 1500); // Tiempo mínimo que se mostrará el preloader (1.5 segundos)
-	    });
-	    
-	    // En caso de error, también ocultar el preloader
-	    window.addEventListener('error', function() {
-	        clearInterval(progressInterval);
-	        loadingProgress.style.width = '100%';
-	        
-	        setTimeout(function() {
-	            preloader.classList.add('hidden');
-	            setTimeout(function() {
-	                preloader.style.display = 'none';
-	            }, 500);
-	        }, 500);
-	    });
-	});
-	
-	document.addEventListener('DOMContentLoaded', () => {
-	  const form = document.getElementById('loginForm');
-	  const btn = document.getElementById('loginBtn');
-	  const terms = document.getElementById('terms');
-	  const errorMessage = document.getElementById('errorMessage');
 
-	  function showError(msg) {
-	    errorMessage.textContent = msg;
-	    errorMessage.style.display = 'block';
-	  }
-
-	  function hideError() {
-	    errorMessage.textContent = '';
-	    errorMessage.style.display = 'none';
-	  }
-
-	  btn.addEventListener('click', async (e) => {
-	    e.preventDefault();
-
-	    
-	    if (!form.checkValidity()) {
-	      showError('Completa todos los campos correctamente.');
-	      return;
-	    }
-
-	    
-	    if (!terms.checked) {
-	      showError('Debes aceptar los Términos y Condiciones para continuar.');
-	      return;
-	    }
-
-	    hideError();
-	    form.submit();
-	    
-	  });
-	});
-
-	
-	
-	document.addEventListener('DOMContentLoaded', () => {
-	  const form = document.getElementById('loginForm');
-	  const btn = document.getElementById('loginBtn');
-	  const terms = document.getElementById('terms');
-	  const errorMessage = document.getElementById('errorMessage');
-
-	  function showError(msg) {
-	    errorMessage.textContent = msg;
-	    errorMessage.style.display = 'block';
-	  }
-
-	  function hideError() {
-	    errorMessage.textContent = '';
-	    errorMessage.style.display = 'none';
-	  }
-
-	  btn.addEventListener('click', async (e) => {
-	    e.preventDefault();
-
-	    // Validación básica del form
-	    if (!form.checkValidity()) {
-	      showError('Completa todos los campos correctamente.');
-	      return;
-	    }
-
-	    // Validación de términos
-	    if (!terms.checked) {
-	      showError('Debes aceptar los Términos y Condiciones para continuar.');
-	      return;
-	    }
-
-	    hideError();
-
-	    // Enviar formulario al backend (/acceder en tu controlador Spring)
-	    form.submit();
-	  });
-	});
-
-
-    
+    if (contactForm) {
+        contactForm.addEventListener('submit', e => {
+            e.preventDefault();
+            alert('Formulario enviado con éxito!');
+            contactModal.style.display = 'none';
+            contactForm.reset();
+        });
+    }
+});
