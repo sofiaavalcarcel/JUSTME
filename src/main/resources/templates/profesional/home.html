@@ -40,7 +40,7 @@
 			<div class="user-menu">
 				<div class="user-profile" id="userProfile">
 					<img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Usuario" />
-					<span>María González</span>
+					<span th:text="${session.nombreUsuario}">Usuario</span>
 					<i class="fas fa-chevron-down"></i>
 
 					<div class="dropdown-menu" id="dropdownMenu">
@@ -75,7 +75,7 @@
 	<main class="main">
 		<section class="welcome-section">
 			<div class="container">
-				<h2>¡Bienvenida a tu panel profesional, María!</h2>
+				 <h2>¡Bienvenida de nuevo, <span th:text="${session.nombreUsuario}">Usuario</span></h2>
 				<p>Gestiona tus servicios y clientes desde aquí</p>
 				<div class="quick-stats">
 					<div class="stat-card"> <i class="fas fa-calendar-check"></i>
@@ -376,7 +376,7 @@
 
 
 
-	<script src="scripts/profesional.js"></script>
+	<script th:src="@{scripts/profesional.js}"></script>
 
 
 
