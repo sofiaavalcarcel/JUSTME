@@ -30,6 +30,18 @@ public class inicioController {
 		return "servicios/pasareladepagos";
 	}
 	
+	@GetMapping("/perfilUsuario")
+	public String perfilUsuario() {
+		// Busca src/main/resources/templates/terminosycondiciones.html
+		return "perfilUsuario/perfil_usuario";
+	}
+	
+	
+	@GetMapping("/perfilProfesional")
+	public String perfilProfesional() {
+		// Busca src/main/resources/templates/terminosycondiciones.html
+		return "perfilProfesional/home";
+	}
 	
 
 

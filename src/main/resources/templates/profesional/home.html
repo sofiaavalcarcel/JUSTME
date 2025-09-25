@@ -46,11 +46,9 @@
 					<div class="dropdown-menu" id="dropdownMenu">
 						<ul>
 							<li>
-								<a href="perfil_usuario.html"><i class="fas fa-user"></i> Mi Perfil</a>
+								<a th:href="@{/perfilProfesional}"><i class="fas fa-user"></i> Mi Perfil</a>
 							</li>
-							<li>
-								<a href="#"><i class="fas fa-cog"></i> Configuración</a>
-							</li>
+
 
 							<li>
 								<a th:href="@{/inicio}">
@@ -206,7 +204,9 @@
 									<td th:text="${#dates.format(cita.fecha_hora, 'yyyy-MM-dd HH:mm')}"></td>
 									<td th:text="${cita.direccion_servicio}"></td>
 									<td th:text="${cita.estado_cita}"></td>
-									<td th:text="${#strings.concat('$', #numbers.formatDecimal(cita.precio, 0, 'POINT', 0, 'POINT'))}"></td>
+									<td
+										th:text="${#strings.concat('$', #numbers.formatDecimal(cita.precio, 0, 'POINT', 0, 'POINT'))}">
+									</td>
 									<td th:text="${cita.observacionesCl}"></td>
 									<td th:text="${cita.observacionesLb}"></td>
 									<td th:text="${cita.fechaEdicion}"></td>
