@@ -12,7 +12,8 @@ public class Usuarios {
 	private String nombre;
 	private String apellido;
 	private String email;
-
+	private String numero;
+	private String fotoperfil;
 	private String contrasena;
 
 	private String direccion;
@@ -21,6 +22,7 @@ public class Usuarios {
 	private String portafolio;
 	private String estado;
 	private String disponibilidad;
+	
 
 	@ManyToOne
 	@JoinColumn(name = "rol_idrol", referencedColumnName = "idrol")
@@ -31,7 +33,7 @@ public class Usuarios {
 	}
 
 	public Usuarios(Integer id, String nombre, String apellido, String email, String contrasena, String direccion,
-			String biografia, String documentos, String portafolio, String estado, String disponibilidad, Rol rol) {
+			String biografia, String documentos, String portafolio, String estado, String disponibilidad, Rol rol, String numero) {
 		this.idusuarios = id;
 		this.nombre = nombre;
 		this.apellido = apellido;
@@ -44,6 +46,7 @@ public class Usuarios {
 		this.estado = estado;
 		this.disponibilidad = disponibilidad;
 		this.rol = rol;
+		this.numero = numero;
 	}
 
 	// GETTERS AND SETTERS
@@ -142,10 +145,31 @@ public class Usuarios {
 	public void setRol(Rol rol) {
 		this.rol = rol;
 	}
+	
+	public void setNumero (String numero) {
+		this.numero = numero;
+	}
+	
+	public String getNumero () {
+		return numero;
+	}
+	public String getFotoperfil() {
+	    return fotoperfil;
+	}
+
+	public void setFotoperfil(String fotoperfil) {
+	    this.fotoperfil = fotoperfil;
+	}
 
 	@Override
 	public String toString() {
-		return "Usuarios [id=" + idusuarios + ", nombre=" + nombre + ", apellido=" + apellido + ", email=" + email
-				+ ", contrasena=" + contrasena + ", rol=" + (rol != null ? rol.getNombre() : "null") + "]";
+		return "Usuarios [idusuarios=" + idusuarios + ", nombre=" + nombre + ", apellido=" + apellido + ", email="
+				+ email + ", numero=" + numero + ", contrasena=" + contrasena + ", direccion=" + direccion
+				+ ", biografia=" + biografia + ", documentos=" + documentos + ", portafolio=" + portafolio + ", estado="
+				+ estado + ", disponibilidad=" + disponibilidad + ", rol=" + rol + "]";
 	}
+	
+	
+
+
 }
