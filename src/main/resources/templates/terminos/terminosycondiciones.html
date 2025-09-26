@@ -6,7 +6,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Términos y Condiciones</title>
 	<link rel="stylesheet" th:href="@{/styles/terminos y condiciones.css}">
-
 </head>
 
 <body>
@@ -15,6 +14,7 @@
 		<div class="modal-content">
 			<h2>Términos y Condiciones</h2>
 			<div class="terms-text">
+				<p>
 				<p>
 					1. Aceptación de los Términos
 					Al crear una cuenta o utilizar los Servicios de Just Me, usted declara que tiene la edad legal para
@@ -117,6 +117,7 @@
 					Cualquier disputa relacionada con estos Términos se resolverá
 					primero mediante negociación y, si no se resuelve, sometiéndose a los correspondientes tribunales.
 				</p>
+				</p>
 			</div>
 
 			<div class="modal-actions">
@@ -126,22 +127,8 @@
 		</div>
 	</div>
 
-	<script>
-		document.addEventListener("DOMContentLoaded", () => {
-			const acceptBtn = document.getElementById("acceptTerms");
-			const declineBtn = document.getElementById("declineTerms");
-
-			// Aceptar → redirige al login
-			acceptBtn.addEventListener("click", () => {
-				window.location.href = "/login";
-			});
-
-			// Cancelar → redirige al inicio
-			declineBtn.addEventListener("click", () => {
-				window.location.href = "/";
-			});
-		});
-	</script>
+	<!-- Script externo -->
+	<script th:src="@{/js/terminos.js}"></script>
 </body>
 
 </html>

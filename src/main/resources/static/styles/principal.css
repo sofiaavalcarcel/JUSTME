@@ -1043,3 +1043,32 @@ main {
 .btn-custom:hover {
   background-color: #a43bd1;
 }
+
+
+
+/* Hacer scroll solo en el contenido de los términos */
+#termsModal .terms-scroll {
+    max-height: 400px; /* Altura máxima del contenido visible */
+    overflow-y: auto;
+    padding-right: 10px; /* Evita que el scroll tape el contenido */
+    margin-top: 15px;
+}
+
+/* Opcional: estilo de scroll más bonito */
+#termsModal .terms-scroll::-webkit-scrollbar {
+    width: 8px;
+}
+
+#termsModal .terms-scroll::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.3);
+    border-radius: 4px;
+}
+
+#termsModal .terms-scroll::-webkit-scrollbar-track {
+    background-color: rgba(0,0,0,0.1);
+}
+
+
+
+
+
