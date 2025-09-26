@@ -1,7 +1,13 @@
 package com.sena.JustMe.Controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.sena.JustMe.model.Usuarios;
 import com.sena.JustMe.model.Rol;
@@ -47,14 +55,19 @@ public class UsuarioController {
     public String save(Usuarios usuario) {
         LOGGER.info("Registrando usuario: {}", usuario);
 
-        // Rol por defecto: CLIENTE (id=2)
+        // Rol por defecto: CLIENTE
         Optional<Rol> rolCliente = rolService.findById(3);
 
         if (rolCliente.isPresent()) {
             usuario.setRol(rolCliente.get());
         } else {
-            LOGGER.error("No se encontró el rol CLIENTE con id=2. Revisa tu tabla roles.");
+            LOGGER.error("No se encontró el rol CLIENTE con id=3. Revisa tu tabla roles.");
             return "redirect:/registro?error=rol";
+        }
+
+        // Foto de perfil por defecto
+        if (usuario.getFotoperfil() == null || usuario.getFotoperfil().isEmpty()) {
+            usuario.setFotoperfil("defaultuser.jpg");
         }
 
         usuarioService.save(usuario);
@@ -67,7 +80,10 @@ public class UsuarioController {
         return "redirect:/login";
     }
 
- // Procesar login
+
+
+
+    // Procesar login
     @PostMapping("/acceder")
     public String acceder(Usuarios usuario, HttpSession session, Model model) {
         Optional<Usuarios> userEmail = usuarioService.findByEmail(usuario.getEmail());
@@ -75,16 +91,24 @@ public class UsuarioController {
         if (userEmail.isPresent()) {
             Usuarios user = userEmail.get();
 
-            // Validar contraseña (si existe en la DB)
+            // Validar contraseña
             if (user.getContrasena() != null && user.getContrasena().equals(usuario.getContrasena())) {
 
                 // Guardar usuario en sesión
                 session.setAttribute("idUsuario", user.getId());
-
-                // 👇 Guardar el nombre completo del usuario en sesión
                 session.setAttribute("nombreUsuario", user.getNombre() + " " + user.getApellido());
+                session.setAttribute("emailUsuario", user.getEmail());
+                session.setAttribute("numeroUsuario", user.getNumero());
+                session.setAttribute("direccionUsuario", user.getDireccion());
+                session.setAttribute("biografiaUsuario", user.getBiografia());
 
-                // Guardar rol en sesión (si no tiene rol -> CLIENTE por defecto)
+                // Foto de perfil (defaultuser.jpg si no tiene)
+                session.setAttribute("fotoperfil", 
+                    (user.getFotoperfil() != null && !user.getFotoperfil().isEmpty()) 
+                        ? user.getFotoperfil() 
+                        : "defaultuser.jpg");
+
+                // Guardar rol
                 String rolNombre = (user.getRol() != null) ? user.getRol().getNombre() : "CLIENTE";
                 session.setAttribute("rolUsuario", rolNombre);
 
@@ -112,7 +136,6 @@ public class UsuarioController {
         }
     }
 
-
     // Cerrar sesión
     @GetMapping("/cerrar")
     public String cerrarSesion(HttpSession session) {
@@ -120,7 +143,7 @@ public class UsuarioController {
         return "redirect:/";
     }
 
-    // Listar todos los usuarios (solo admin)
+    // Listar usuarios (solo admin)
     @GetMapping("/listar")
     public String listarUsuarios(Model model, HttpSession session) {
         Object rol = session.getAttribute("rolUsuario");
@@ -133,4 +156,87 @@ public class UsuarioController {
             return "redirect:/login?unauthorized=true";
         }
     }
+    
+    @PostMapping("/usuario/actualizar")
+    public String actualizarUsuario(
+            @RequestParam(value = "foto", required = false) MultipartFile archivo,
+            @RequestParam("nombre") String nombre,
+            @RequestParam("email") String email,
+            @RequestParam("numero") String numero,
+            @RequestParam("direccion") String direccion,
+            @RequestParam("biografia") String biografia,
+            HttpSession session) {
+
+        try {
+            Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+
+            if (idUsuario != null) {
+                Usuarios user = usuarioService.findById(idUsuario).orElse(null);
+
+                if (user != null) {
+                    // Actualizar datos básicos
+                    user.setNombre(nombre.split(" ")[0]); // Primer nombre
+                    if (nombre.split(" ").length > 1) {
+                        user.setApellido(nombre.substring(nombre.indexOf(" ") + 1)); // Apellidos
+                    }
+                    user.setEmail(email);
+                    user.setNumero(numero);
+                    user.setDireccion(direccion);
+                    user.setBiografia(biografia);
+
+                    // Actualizar foto
+                    if (archivo != null && !archivo.isEmpty()) {
+                        String nombreArchivo = UUID.randomUUID().toString() + "_" + archivo.getOriginalFilename();
+                        Path ruta = Paths.get("uploads").resolve(nombreArchivo);
+                        Files.copy(archivo.getInputStream(), ruta, StandardCopyOption.REPLACE_EXISTING);
+                        user.setFotoperfil(nombreArchivo);
+                    } else if (user.getFotoperfil() == null || user.getFotoperfil().isEmpty()) {
+                        user.setFotoperfil("default.jpg");
+                    }
+
+                    usuarioService.save(user);
+
+                    // Refrescar datos en sesión
+                    session.setAttribute("nombreUsuario", user.getNombre() + " " + user.getApellido());
+                    session.setAttribute("emailUsuario", user.getEmail());
+                    session.setAttribute("numeroUsuario", user.getNumero());
+                    session.setAttribute("direccionUsuario", user.getDireccion());
+                    session.setAttribute("biografiaUsuario", user.getBiografia());
+                    session.setAttribute("fotoperfil", user.getFotoperfil());
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return "redirect:/perfil_usuario"; // Asegúrate que exista perfil_usuario.html en /templates
+    }
+
+    @GetMapping("/perfil_usuario")
+    public String mostrarPerfil(HttpSession session, Model model) {
+        // Obtener id del usuario de la sesión
+        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+        if (idUsuario != null) {
+            // Traer el usuario desde la base de datos
+            Usuarios user = usuarioService.findById(idUsuario).orElse(null);
+            if (user != null) {
+                // Colocar datos en la sesión si no están ya
+                session.setAttribute("nombreUsuario", user.getNombre() + " " + user.getApellido());
+                session.setAttribute("emailUsuario", user.getEmail());
+                session.setAttribute("numeroUsuario", user.getNumero());
+                session.setAttribute("direccionUsuario", user.getDireccion());
+                session.setAttribute("biografiaUsuario", user.getBiografia());
+                session.setAttribute("fotoperfil", user.getFotoperfil());
+            }
+        }
+
+        // Thymeleaf usará los atributos de la sesión
+        return "perfilUsuario/perfil_usuario"; // Asegúrate de tener perfil_usuario.html en /templates
+    }
+
+    
 }
+
+
+
+
