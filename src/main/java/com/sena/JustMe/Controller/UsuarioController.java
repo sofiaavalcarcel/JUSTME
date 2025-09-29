@@ -217,6 +217,7 @@ public class UsuarioController {
                     session.setAttribute("direccionUsuario", user.getDireccion());
                     session.setAttribute("biografiaUsuario", user.getBiografia());
                     session.setAttribute("fotoperfil", user.getFotoperfil());
+
                 }
             }
         } catch (IOException e) {
