@@ -17,10 +17,35 @@
 
 /* === LAYOUT PRINCIPAL === */
 html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    line-height: 1.6;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    
+    /* Fondo decorativo */
+	background-color: #f9f9f9;
+	  background-image: repeating-radial-gradient(
+	    circle at center,
+	    #e16bff22 0,
+	    #e16bff22 1px,
+	    transparent 1px,
+	    transparent 20px
+	  );
+	  background-attachment: fixed;
+	  background-size: cover;
+	  min-height: 100vh;
+	  margin: 0;
+	  font-family: Arial, sans-serif;
+	  display: flex;
+	  flex-direction: column;
 }
+
+
+
 
 /* From Uiverse.io by kennyotsu */
 .card {
@@ -112,13 +137,6 @@ html, body {
     }
 }
 
-body {
-    display: flex;
-    flex-direction: column;
-    background: #f4f6f9;
-    color: #333;
-    line-height: 1.6;
-}
 
 /* El contenido crece y empuja el footer */
 main {
@@ -174,14 +192,15 @@ nav {
 
 /* === CONTENEDOR REGISTRO === */
 .register-container {
-    background: white;
+    background: rgba(255, 255, 255, 0.9); /* semitransparente */
     padding: 30px;
-    align-self: center;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     width: 90%;
     max-width: 900px;
+    backdrop-filter: blur(5px); /* efecto elegante */
 }
+
 
 /* === FORMULARIO === */
 h2 {
@@ -221,7 +240,6 @@ input {
 }
 
 .modal-btn {
-    width: 150%;
     background: var(--primary-color);
     color: white;
     border: none;
@@ -230,10 +248,11 @@ input {
     border-radius: 8px;
     cursor: pointer;
     transition: 0.3s;
-    margin: 0 auto;
-    width: 600px;
-    align-self: center;
-    margin-bottom: 15px;
+    width: 100%; /* Ocupa todo el ancho del contenedor */
+    max-width: 400px; /* Máximo ancho deseado */
+    margin: 0 auto 15px; /* Centra horizontalmente y margen abajo */
+    display: block; /* Para que margin auto funcione */
+    align-self: center; /* Si el contenedor es flex */
 }
 
 .modal-btn:hover {
