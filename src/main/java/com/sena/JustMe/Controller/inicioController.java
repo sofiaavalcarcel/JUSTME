@@ -43,6 +43,11 @@ public class inicioController {
 		return "perfilProfesional/home";
 	}
 	
+	@GetMapping("/cambioProfesional")
+	public String cambioProfesional() {
+		return "perfilProfesional/cambioProfesional";
+	}
+	
 
 
 }

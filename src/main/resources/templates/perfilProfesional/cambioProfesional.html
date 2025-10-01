@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Formulario Profesional</title>
+	<link rel="stylesheet" th:href="@{/styles/cambioprofesional.css}">
+
+</head>
+
+<body>
+	<header>
+		<nav>
+			<div class="card">
+				<div class="loader">
+					<p>Just</p>
+					<div class="words">
+						<span class="word">Me</span>
+						<span class="word">Beauty</span>
+						<span class="word">Me</span>
+						<span class="word">Stylish</span>
+						<span class="word">Me</span>
+					</div>
+				</div>
+			</div>
+		</nav>
+	</header>
+	<main>
+		<div class="container">
+			<h1>Cambio a Cuenta Profesional</h1>
+
+			<form id="formulario-profesional" enctype="multipart/form-data">
+				<div class="form-group">
+					<label for="biografia">Biografía:</label>
+					<textarea id="biografia" name="biografia" rows="4" placeholder="Escribe una breve biografía..."
+						required></textarea>
+				</div>
+
+				<div class="form-group">
+					<label for="portafolio">Sube tu portafolio (imágenes, documentos, etc.):</label>
+					<input type="file" id="portafolio" name="portafolio[]" multiple accept="image/*,.pdf,.doc,.docx">
+					<small>Puedes subir varios archivos.</small>
+				</div>
+
+				<div class="form-group">
+					<label for="disponibilidad">Disponibilidad:</label>
+					<!-- From Uiverse.io by Na3ar-17 -->
+					<div class="radio-input">
+						<label class="label">
+							<input type="radio" id="value-1" checked="" name="value-radio" value="value-1" />
+							<p class="text">Mañana</p>
+						</label>
+						<label class="label">
+							<input type="radio" id="value-2" name="value-radio" value="value-2" />
+							<p class="text">Tarde</p>
+						</label>
+						<label class="label">
+							<input type="radio" id="value-2" name="value-radio" value="value-2" />
+							<p class="text">Todo el dia</p>
+						</label>
+					</div>
+
+				</div>
+
+				<div class="btn-container">
+				<a th:href="@{/profesional}" class="btn-profesional cambiar"
+					onclick="confirmarCambioAProfesional(event, '/ruta-destino')">
+					Cambiar a Profesional
+				</a>
+				<a th:href="@{/inicio}" class="btn-profesional cancelar">
+					Cancelar
+				</a>
+				</div>
+		</div>
+
+
+		</form>
+		</div>
+	</main>
+
+	<script th:src="@{/scripts/cambioprofesional.js}"></script>
+</body>
+
+</html>
