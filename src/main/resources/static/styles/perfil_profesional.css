@@ -10,9 +10,49 @@
     --black: #000;
 }
 
+/* =========================
+   ESTILOS GENERALES MEJORADOS
+   ========================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--dark-color);
+    background-color: var(--light-color);
+    line-height: 1.6;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* =========================
+   HEADER MEJORADO
+   ========================= */
+.header {
+    background-color: var(--white);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+}
+
 .card {
-    /* color used to softly clip top and bottom of the .words container */
-    --bg-color: #ffffff;
     background-color: var(--bg-color);
     padding: 0rem 0rem;
     border-radius: 1.25rem;
@@ -99,58 +139,6 @@
     }
 }
 
-/* Reset y estilos base */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: var(--dark-color);
-    background-color: var(--light-color);
-    line-height: 1.6;
-}
-
-a {
-    text-decoration: none;
-    color: inherit;
-}
-
-ul {
-    list-style: none;
-}
-
-.container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 15px;
-}
-
-/* Header */
-.header {
-    background-color: var(--white);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    position: fixed;
-    width: 100%;
-    top: 0;
-    z-index: 1000;
-}
-
-.header .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 0;
-}
-
-.logo h1 {
-    color: var(--primary-color);
-    font-size: 28px;
-}
-
 .nav ul {
     display: flex;
 }
@@ -179,105 +167,62 @@ ul {
     color: var(--primary-color);
 }
 
-/* User Menu */
 .user-menu {
-    position: relative;
-}
-
-.user-profile {
     display: flex;
     align-items: center;
-    cursor: pointer;
-    padding: 8px 12px;
-    border-radius: 30px;
-    transition: background-color 0.3s;
 }
 
-.user-profile:hover {
-    background-color: var(--light-gray);
-}
-
-.user-profile img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 10px;
-}
-
-.user-profile span {
-    font-weight: 500;
-    margin-right: 8px;
-}
-
-.dropdown-menu {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background-color: var(--white);
-    border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    width: 220px;
-    padding: 10px 0;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(10px);
-    transition: all 0.3s;
-    z-index: 1001;
-}
-
-.user-profile.active .dropdown-menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-.dropdown-menu ul li a {
-    display: flex;
-    align-items: center;
+.btn-custom {
+    display: inline-block;
+    background-color: #e16bff;
+    color: #fff;
     padding: 10px 20px;
-    transition: all 0.3s;
-}
-
-.dropdown-menu ul li a:hover {
-    background-color: var(--secondary-color);
-    padding-left: 25px;
-}
-
-.dropdown-menu ul li a i {
-    margin-right: 10px;
-    width: 20px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
     text-align: center;
+    transition: background 0.3s ease, transform 0.2s;
 }
 
-/* Main Content */
+.btn-custom:hover {
+    background-color: #a43bd1;
+    transform: translateY(-2px);
+}
+
+/* =========================
+   CONTENIDO PRINCIPAL MEJORADO
+   ========================= */
 .main {
-    margin-top: 80px;
+    margin-top: 0px;
     padding: 30px 0;
 }
 
-/* Profile Section */
 .profile-section {
     background-color: var(--white);
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 5px 45px rgba(8, 7, 7, 0.05);
+    padding: 0;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
 }
 
+/* =========================
+   ENCABEZADO DEL PERFIL MEJORADO
+   ========================= */
 .profile-header {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    gap: 40px;
-    margin-bottom: 40px;
-    padding-bottom: 30px;
+    padding: 30px;
+    background: linear-gradient(135deg, #f9f3ff 0%, #f9f2ff 100%);
     border-bottom: 1px solid var(--light-gray);
+    gap: 25px;
 }
 
 .profile-image-container {
     position: relative;
-    width: 150px;
-    height: 150px;
+    width: 120px;
+    height: 120px;
+    flex-shrink: 0;
 }
 
 .profile-image {
@@ -285,18 +230,14 @@ ul {
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
-    border: 5px solid var(--light-gray);
-    transition: all 0.3s;
-}
-
-.profile-image:hover {
-    border-color: var(--primary-color);
+    border: 4px solid var(--white);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .image-upload {
     position: absolute;
-    bottom: 0;
-    right: 0;
+    bottom: 5px;
+    right: 5px;
 }
 
 .upload-btn {
@@ -304,12 +245,13 @@ ul {
     color: white;
     padding: 8px 12px;
     border-radius: 20px;
-    font-size: 14px;
+    font-size: 12px;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 5px;
     transition: background-color 0.3s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .upload-btn:hover {
@@ -320,50 +262,13 @@ ul {
     display: none;
 }
 
-.card-portafolio {
-    background-color: var(--light-color);
-    position: relative;
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 20px;
-    text-align: center;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+.profile-info {
+    flex: 1;
 }
-
-.imagenn {
-    width: 100%;
-    border-radius: 10px;
-    margin-bottom: 10px;
-}
-
-.upload-btnn {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 10px 16px;
-    border-radius: 20px;
-    font-size: 14px;
-    cursor: pointer;
-    border: none;
-    
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin-right: 5%;
-    transition: background-color 0.3s;
-}
-
-.upload-btnn:hover {
-    background-color: var(--primary-dark);
-}
-
-#fileInput {
-    display: none;
-}
-
 
 .profile-info h2 {
     font-size: 28px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     color: var(--dark-color);
 }
 
@@ -381,6 +286,7 @@ ul {
 .rating span {
     font-weight: 500;
     color: var(--gray-color);
+    margin-left: 5px;
 }
 
 .member-since {
@@ -388,15 +294,17 @@ ul {
     font-size: 14px;
 }
 
+/* =========================
+   FORMULARIO MEJORADO
+   ========================= */
+.profile-form {
+    padding: 30px;
+}
+
 .profile-content {
     display: flex;
     flex-wrap: wrap;
-    gap: 40px;
-}
-
-.profile-form {
-    flex: 2;
-    min-width: 300px;
+    gap: 30px;
 }
 
 .form-row {
@@ -404,24 +312,28 @@ ul {
     flex-wrap: wrap;
     gap: 20px;
     margin-bottom: 20px;
+    width: 100%;
 }
 
 .form-group {
     flex: 1;
     min-width: 250px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .form-group label {
-    display: block;
+    display: flex;
+    align-items: center;
+    font-weight: 600;
     margin-bottom: 8px;
-    font-weight: 500;
     color: var(--dark-color);
+    font-size: 14px;
 }
 
 .form-group label i {
     margin-right: 8px;
     color: var(--primary-color);
+    font-size: 16px;
     width: 16px;
     text-align: center;
 }
@@ -431,10 +343,11 @@ ul {
 .form-group textarea {
     width: 100%;
     padding: 12px 15px;
-    border: 1px solid var(--light-gray);
-    border-radius: 8px;
-    font-size: 16px;
-    transition: border-color 0.3s;
+    border: 1.5px solid var(--light-gray);
+    border-radius: 10px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    background-color: #fff;
 }
 
 .form-group input:focus,
@@ -442,6 +355,7 @@ ul {
 .form-group textarea:focus {
     outline: none;
     border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(225, 107, 255, 0.2);
 }
 
 .form-group textarea {
@@ -449,85 +363,130 @@ ul {
     min-height: 100px;
 }
 
-.checkbox-group {
+/* =========================
+   SECCIÓN DE ESTADO Y DISPONIBILIDAD MEJORADA
+   ========================= */
+.status-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.status-card {
+    background-color: var(--light-color);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--light-gray);
+}
+
+.status-card h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: var(--dark-color);
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 
-.checkbox-group input {
-    width: auto;
+.status-card h3 i {
+    color: var(--primary-color);
 }
 
+/* =========================
+   PORTFOLIO MEJORADO
+   ========================= */
+.portfolio-section {
+    margin-bottom: 20px;
+}
+
+.portfolio-upload {
+    text-align: center;
+    padding: 20px;
+    border: 2px dashed var(--light-gray);
+    border-radius: 10px;
+    transition: all 0.3s;
+    cursor: pointer;
+    background-color: #fafafa;
+}
+
+.portfolio-upload:hover {
+    border-color: var(--primary-color);
+    background-color: rgba(225, 107, 255, 0.05);
+}
+
+.upload-text {
+    font-size: 14px;
+    color: var(--gray-color);
+    margin-bottom: 15px;
+}
+
+.upload-btnn {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.3s;
+    font-weight: 500;
+}
+
+.upload-btnn:hover {
+    background-color: var(--primary-dark);
+}
+
+/* =========================
+   BOTONES DE ACCIÓN MEJORADOS
+   ========================= */
 .form-actions {
     display: flex;
     justify-content: flex-end;
     gap: 15px;
     margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--light-gray);
 }
 
-.cancel-btn,
-.save-btn {
+.cancel-btn, .save-btn {
     padding: 12px 25px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 500;
+    border-radius: 30px;
+    font-size: 15px;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
+    border: none;
 }
 
 .cancel-btn {
     background-color: var(--light-gray);
     color: var(--gray-color);
-    border: none;
 }
 
 .cancel-btn:hover {
-    background-color: #d1d5db;
+    background-color: #dde1e6;
 }
 
 .save-btn {
-    background-color: var(--primary-color);
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
     color: var(--white);
-    border: none;
+    box-shadow: 0 4px 12px rgba(225, 107, 255, 0.3);
 }
 
 .save-btn:hover {
-    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(225, 107, 255, 0.4);
 }
 
-.profile-stats {
-    flex: 1;
-    min-width: 250px;
-}
-
-.stats-card {
-    background-color: var(--light-color);
-    position: relative;
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 20px;
-    text-align: center;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-}
-
-.stats-card h3 {
-    font-size: 18px;
-    margin-bottom: 10px;
-    color: var(--dark-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.stats-card p {
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--primary-color);
-}
-
-/* Modal */
+/* =========================
+   MODAL MEJORADO
+   ========================= */
 .modal {
     display: none;
     position: fixed;
@@ -548,7 +507,7 @@ ul {
 
 .modal-content {
     background-color: var(--white);
-    border-radius: 10px;
+    border-radius: 15px;
     padding: 30px;
     width: 90%;
     max-width: 600px;
@@ -596,11 +555,24 @@ ul {
     margin-bottom: 20px;
 }
 
-/* Footer */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.checkbox-group input {
+    width: auto;
+}
+
+/* =========================
+   FOOTER MEJORADO
+   ========================= */
 .footer {
     background-color: var(--dark-color);
     color: var(--white);
     padding: 50px 0 0;
+    margin-top: 50px;
 }
 
 .footer-content {
@@ -692,65 +664,84 @@ ul {
     color: var(--primary-color);
 }
 
-/* Responsive */
+/* =========================
+   RESPONSIVE
+   ========================= */
 @media (max-width: 768px) {
     .header .container {
         flex-direction: column;
         padding: 15px;
     }
     
-    .logo {
-        margin-bottom: 15px;
-    }
-    
-    .nav ul {
-        margin-bottom: 15px;
-    }
-    
-    .nav ul li {
-        margin-left: 15px;
-        margin-right: 15px;
-    }
+	/* =========================
+	   NAVBAR ORIGINAL
+	   ========================= */
+	.nav ul {
+	    display: flex;
+	}
+
+	.nav ul li {
+	    margin-left: 25px;
+	}
+
+	.nav ul li a {
+	    font-weight: 500;
+	    transition: color 0.3s;
+	    display: flex;
+	    align-items: center;
+	}
+
+	.nav ul li a i {
+	    margin-right: 8px;
+	    font-size: 16px;
+	}
+
+	.nav ul li a:hover {
+	    color: var(--primary-color);
+	}
+
+	.nav ul li a.active {
+	    color: var(--primary-color);
+	}
     
     .user-menu {
         margin-top: 15px;
     }
     
-    .quick-stats {
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 25px 20px;
+    }
+    
+    .profile-content {
         flex-direction: column;
     }
     
-    .stat-card {
+    .status-section {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .cancel-btn, .save-btn {
         width: 100%;
-    }
-    
-    .search-form {
-        flex-direction: column;
-    }
-    
-    .search-btn {
-        width: 100%;
-        justify-content: center;
-    }
-    
-    .reviews-summary {
-        flex-direction: column;
     }
 }
 
-.btn-custom {
-  display: inline-block;
-  background-color:#e16bff;
-  color: #fff;
-  padding: 7px 12px;
-  border-radius: 50px;
-  font-size: 13px;
-  font-weight: bold;
-  text-decoration: none;
-  text-align: center;
-  transition: background 0.3s ease;
-}
-
-.btn-custom:hover {
-  background-color: #a43bd1;
+@media (max-width: 480px) {
+    .profile-section {
+        margin: 0 10px;
+        border-radius: 10px;
+    }
+    
+    .profile-form {
+        padding: 20px 15px;
+    }
+    
+    .form-group {
+        min-width: 100%;
+    }
 }

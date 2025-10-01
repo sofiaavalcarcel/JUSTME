@@ -14,18 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const configModal = document.getElementById("configModal");
 
     // Datos iniciales del usuario
-    const userData = {
-        name: "Julieta Romero",
-        email: "Julieta@example.com",
-        phone: "+57 311 555 666",
-        birthdate: "1994-01-15",
-        address: "Calle 123 #45-67, Bogotá",
-        about: "Soy una cliente frecuente de servicios de belleza, me encanta probar nuevos estilos y mantener mi apariencia fresca.",
-        image: "https://randomuser.me/api/portraits/women/44.jpg",
-        memberSince: "Enero 15",
-        servicesCompleted: 15,
-        rating: 4.8,
-    };
+
 
     // Configuración inicial
     const userConfig = {
@@ -184,3 +173,14 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     
 });
+
+document.getElementById("fileInput").addEventListener("change", function(event) {
+	  const file = event.target.files[0];
+	  if (file) {
+	    const reader = new FileReader();
+	    reader.onload = function(e) {
+	      document.getElementById("profileImageDisplay").src = e.target.result;
+	    };
+	    reader.readAsDataURL(file);
+	  }
+	});

@@ -135,20 +135,7 @@ public class UsuarioController {
         return "redirect:/";
     }
 
-    // =========================
-    // Listar usuarios (solo admin)
-    // =========================
-    @GetMapping("/listar")
-    public String listarUsuarios(Model model, HttpSession session) {
-        Object rol = session.getAttribute("rolUsuario");
-        if (rol != null && rol.toString().equalsIgnoreCase("ADMIN")) {
-            List<Usuarios> usuarios = usuarioService.findAll();
-            model.addAttribute("usuarios", usuarios);
-            return "usuario/listar";
-        } else {
-            return "redirect:/login?unauthorized=true";
-        }
-    }
+
 
     // =========================
     // Perfil de usuario
