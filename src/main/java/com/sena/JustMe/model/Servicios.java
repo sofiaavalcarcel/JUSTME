@@ -14,6 +14,12 @@ public class Servicios {
     private String categoria;
     private String estado;
     private String imagen;
+    
+    
+    @ManyToOne
+    @JoinColumn(name = "usuarios_idusuarios", referencedColumnName = "idusuarios")
+    private Usuarios usuario;
+
 
 
     public Servicios() {

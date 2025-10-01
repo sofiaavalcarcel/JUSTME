@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
 	// ================================
 	// Datos de servicios
@@ -109,40 +110,82 @@ document.addEventListener('DOMContentLoaded', () => {
 	setTimeout(hidePreloader, 5000);
 
 	// ================================
-	// Modal Login
+	// Modales (Login, Contacto, Términos)
 	// ================================
 	const modalOverlay = document.getElementById('modalOverlay');
 	const loginModal = document.getElementById('loginModal');
 	const loginBtn = document.querySelector('.login');
-	const closeModalBtns = document.querySelectorAll('.close-modal');
+	const termsModal = document.getElementById('termsModal');
+	const contactModal = document.getElementById('contactModal');
 
+	// Abrir modal
 	function openModal(modal) {
 		if (!modal) return;
 		modal.classList.add('active');
 		if (modalOverlay) modalOverlay.classList.add('active');
 	}
 
-	function closeModal() {
-		document.querySelectorAll('.modal').forEach(modal => modal.classList.remove('active'));
-		if (modalOverlay) modalOverlay.classList.remove('active');
+	// Cerrar modal específico
+	function closeSingleModal(modal) {
+		if (!modal) return;
+		modal.classList.remove('active');
+
+		// Si no quedan modales activos, ocultar overlay
+		const anyOpen = document.querySelector('.modal.active');
+		if (!anyOpen && modalOverlay) {
+			modalOverlay.classList.remove('active');
+		}
 	}
 
+	// Login
 	if (loginBtn && loginModal) {
 		loginBtn.addEventListener('click', () => openModal(loginModal));
 	}
 
-	if (modalOverlay) {
-		modalOverlay.addEventListener('click', closeModal);
+	// Términos
+	const openTermsLinks = document.querySelectorAll('.open-terms');
+	if (openTermsLinks && termsModal) {
+		openTermsLinks.forEach(link => {
+			link.addEventListener('click', e => {
+				e.preventDefault();
+				openModal(termsModal);
+			});
+		});
 	}
 
-	closeModalBtns.forEach(btn => btn.addEventListener('click', closeModal));
+	// Contacto
+	const contactLink = document.getElementById('contactLink');
+	if (contactLink && contactModal) {
+		contactLink.addEventListener('click', (e) => {
+			e.preventDefault();
+			openModal(contactModal);
+		});
+	}
+
+	// Botones de cerrar (x)
+	document.querySelectorAll('.close-modal').forEach(btn => {
+		btn.addEventListener('click', function() {
+			const modal = this.closest('.modal');
+			closeSingleModal(modal);
+		});
+	});
+
+	// Cerrar al hacer click en overlay
+	if (modalOverlay) {
+		modalOverlay.addEventListener('click', () => {
+			const openModalElement = document.querySelector('.modal.active');
+			if (openModalElement) {
+				closeSingleModal(openModalElement);
+			}
+		});
+	}
 
 	// ================================
 	// Validación Términos y Condiciones
 	// ================================
 	const loginForm = document.getElementById('loginForm');
 	if (loginForm) {
-		loginForm.addEventListener('submit', function (e) {
+		loginForm.addEventListener('submit', function(e) {
 			const termsCheckbox = document.getElementById('terms');
 			const termsError = document.getElementById('termsError');
 			if (termsCheckbox && !termsCheckbox.checked) {
@@ -153,66 +196,5 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 		});
 	}
-
-	// ================================
-	// Modal de Contacto
-	// ================================
-	const contactLink = document.getElementById('contactLink');
-	const contactModal = document.getElementById('contactModal');
-	const closeContact = document.getElementById('closeModal');
-
-	if (contactLink && contactModal) {
-		contactLink.addEventListener('click', (e) => {
-			e.preventDefault();
-			contactModal.style.display = "block";
-		});
-	}
-
-	if (closeContact && contactModal) {
-		closeContact.addEventListener('click', () => {
-			contactModal.style.display = "none";
-		});
-	}
-
-	window.addEventListener('click', (e) => {
-		if (e.target === contactModal) {
-			contactModal.style.display = "none";
-		}
-	});
-
-	// ================================
-	// Modal de Términos y Condiciones
-	// ================================
-	const termsModal = document.getElementById('termsModal');
-	const openTermsLinks = document.querySelectorAll('.open-terms'); 
-	const closeTermsBtn = termsModal ? termsModal.querySelector('.close-modal') : null;
-
-	if (openTermsLinks && termsModal) {
-		openTermsLinks.forEach(link => {
-			link.addEventListener('click', e => {
-				e.preventDefault();
-				termsModal.classList.add('active');
-				if (modalOverlay) modalOverlay.classList.add('active');
-			});
-		});
-	}
-
-	if (closeTermsBtn && termsModal) {
-		closeTermsBtn.addEventListener('click', () => {
-			termsModal.classList.remove('active');
-			if (modalOverlay) modalOverlay.classList.remove('active');
-		});
-	}
-
-	if (modalOverlay && termsModal) {
-		modalOverlay.addEventListener('click', (e) => {
-			if (termsModal.classList.contains('active')) {
-				termsModal.classList.remove('active');
-				modalOverlay.classList.remove('active');
-			}
-		});
-	}
 });
-
-
 
