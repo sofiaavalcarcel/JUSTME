@@ -140,7 +140,11 @@
 					</div>
 
 					<div class="card-footer">
-						<a th:href="@{/pasareladepagos}" class="btn-interesa">Me interesa</a>
+						<a th:href="@{/pasareladepagos(id=${servicio.idservicios})}" 
+						   class="btn-interesa">
+						   Me interesa
+						</a>
+
 					</div>
 				</div>
 			</div>

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.sena.JustMe.model.Servicios;
 import com.sena.JustMe.service.IServiciosService;
@@ -25,10 +26,17 @@ public class inicioController {
 
 
 	@GetMapping("/pasareladepagos")
-	public String pasareladepagos() {
-		// Busca src/main/resources/templates/terminosycondiciones.html
-		return "servicios/pasareladepagos";
+	public String pasareladepagos(@RequestParam("id") Integer id, Model model) {
+	    // Buscar el servicio en la BD
+	    Servicios servicio = serviciosService.buscarPorId(id)
+	            .orElseThrow(() -> new IllegalArgumentException("Servicio no encontrado: " + id));
+
+	    // Pasar el servicio a la vista
+	    model.addAttribute("servicio", servicio);
+
+	    return "servicios/pasareladepagos";
 	}
+
 	
 	@GetMapping("/perfilUsuario")
 	public String perfilUsuario() {

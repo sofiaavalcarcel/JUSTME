@@ -535,3 +535,66 @@ main {
 .legal-links a:hover {
     color: var(--primary-color);
 }
+
+.order-summary {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+    font-family: "Poppins", sans-serif;
+    color: #1f2937;
+    max-width: 420px;
+}
+
+.order-summary h2 {
+    font-size: 1.4rem;
+    color: #6d28d9;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.order-summary ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.order-summary li {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 1rem;
+    border-bottom: 1px dashed #e5e7eb;
+    padding-bottom: 8px;
+}
+
+.order-summary li strong {
+    color: #374151;
+}
+
+.order-summary li em {
+    color: #4b5563;
+    font-size: 0.9rem;
+}
+
+.order-summary li.total {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #6d28d9;
+    border-top: 2px solid #d1d5db;
+    margin-top: 15px;
+    padding-top: 10px;
+}
+.order-summary li.descripcion {
+    flex-direction: column; /* Título arriba, texto abajo */
+    align-items: flex-start;
+}
+
+.order-summary li.descripcion p {
+    margin: 5px 0 0 0;
+    font-size: 0.95rem;
+    color: #4b5563;   /* gris elegante */
+    font-style: normal; /* 🔑 elimina cursiva */
+}
+
+

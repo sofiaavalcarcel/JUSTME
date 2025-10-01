@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
 	<meta charset="UTF-8">
@@ -27,29 +27,16 @@
 					<h2>Información de Contacto</h2>
 					<form>
 						<label>Nombre completo
-							<input type="text" name="nombre" placeholder="Nombre completo" required>
+							<input type="text" name="nombre" placeholder="Nombre completo"
+								th:value="${session.nombreUsuario}" required>
 						</label>
 						<label>Correo electrónico
-							<input type="email" name="correo" placeholder="correo@ejemplo.com" required>
+							<input type="email" name="correo" placeholder="correo@ejemplo.com"
+								th:value="${session.emailUsuario}" required>
 						</label>
 						<label>Teléfono
-							<input type="tel" name="telefono" placeholder="+57 300 000 0000" required>
-						</label>
-						<label>País
-							<select name="pais" required>
-								<option value="">Selecciona</option>
-								<option value="CO">Colombia</option>
-								<option value="MX">México</option>
-								<option value="AR">Argentina</option>
-								<option value="ES">España</option>
-							</select>
-						</label>
-						<label>Moneda
-							<select name="moneda" required>
-								<option value="COP">COP (Peso Colombiano)</option>
-								<option value="USD">USD (Dólar)</option>
-								<option value="EUR">EUR (Euro)</option>
-							</select>
+							<input type="tel" name="telefono" placeholder="+57 300 000 0000"
+								th:value="${session.numeroUsuario}" required>
 						</label>
 					</form>
 				</section>
@@ -124,7 +111,9 @@
 
 				<!-- BOTÓN FINALIZAR -->
 				<footer class="checkout-footer">
-					<button type="submit" class="btn-pagar">
+					
+
+					<button type="button" class="btn-pagar" id="btnPagar">
 						<span>Pagar ahora</span>
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 74 74" height="34" width="34">
 							<circle stroke-width="3" stroke="black" r="35.5" cy="37" cx="37"></circle>
@@ -132,22 +121,73 @@
 								d="M25 35.5C24.1716 35.5 23.5 36.1716 23.5 37C23.5 37.8284 24.1716 38.5 25 38.5V35.5ZM49.0607 38.0607C49.6464 37.4749 49.6464 36.5251 49.0607 35.9393L39.5147 26.3934C38.9289 25.8076 37.9792 25.8076 37.3934 26.3934C36.8076 26.9792 36.8076 27.9289 37.3934 28.5147L45.8787 37L37.3934 45.4853C36.8076 46.0711 36.8076 47.0208 37.3934 47.6066C37.9792 48.1924 38.9289 48.1924 39.5147 47.6066L49.0607 38.0607ZM25 38.5L48 38.5V35.5L25 35.5V38.5Z">
 							</path>
 						</svg>
-
-
-
 					</button>
+
+					<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+					<script>
+					document.getElementById("btnPagar").addEventListener("click", function () {
+					    Swal.fire({
+					        title: "Procesando pago...",
+					        text: "Por favor espera un momento",
+					        allowOutsideClick: false,
+					        allowEscapeKey: false,
+					        didOpen: () => {
+					            Swal.showLoading();
+					        }
+					    });
+
+					    // Simula tiempo de procesamiento (3s)
+					    setTimeout(() => {
+					        Swal.fire({
+					            icon: "success",
+					            title: "¡Pago exitoso!",
+					            text: "Tu servicio ha sido pagado correctamente",
+					            confirmButtonText: "OK"
+					        }).then((result) => {
+					            if (result.isConfirmed) {
+					                window.location.href = "/inicio"; // aquí redirige solo si el usuario presiona OK
+					            }
+					        });
+					    }, 3000);
+					});
+					</script>
 				</footer>
 			</section>
 
 			<!-- COLUMNA DERECHA -->
 			<aside class="order-summary">
-				<h2>Resumen del Pedido</h2>
+				<h2>Resumen del Servicio</h2>
 				<ul>
-					<li>Producto A <span>$50.000</span></li>
-					<li>Producto B <span>$80.000</span></li>
-					<li class="total">Total <span>$130.000</span></li>
+					<li>
+						<strong>Categoría:</strong>
+						<span th:text="${servicio.categoria}">Belleza</span>
+					</li>
+					<li>
+						<strong>Servicio:</strong>
+						<span th:text="${servicio.nombre_servicios}">Pestañas 3D volumen</span>
+					</li>
+					<li>
+						<strong>Precio:</strong>
+						<span
+							th:text="${#numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 2, 'COMMA')}">240.000,00</span>
+					</li>
+					<li class="descripcion">
+						<strong>Descripción:</strong>
+						<p th:text="${servicio.descripcion}">
+							Corte profesional con asesoría de estilo personalizada.
+						</p>
+					</li>
+
+
+					<li class="total">
+						<span>Total:</span>
+						<strong
+							th:text="${#numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 2, 'COMMA')}">240.000,00</strong>
+					</li>
 				</ul>
 			</aside>
+
+
 		</main>
 
 		<!-- FOOTER GLOBAL -->
@@ -208,6 +248,8 @@
 			</div>
 		</footer>
 	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>
