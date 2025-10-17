@@ -261,12 +261,13 @@ input {
 
 /* From Uiverse.io by ryota1231 */
 .animated-button {
-    position: static;
+    position: relative;
     grid-column: 1 / 2;
     display: flex;
     width: 60%;
-    margin: 0 auto;
+    margin-left: 70%;
     display: flex;
+	
     align-items: center;
     align-content: end;
     justify-content: center;

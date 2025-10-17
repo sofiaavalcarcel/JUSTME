@@ -11,13 +11,11 @@
 	<!-- =======================================================
 	    * Template Name: JusteMe
 	    * Template URL: 
-	    * Updated: Jul 25 2025 with Bootstrap v5.3.3
-	    * Author: Haruto Tsukasa
+	    * Updated: Oct 03 2025 with Bootstrap v5.3.3
+	    * Author: JustMe
 	    * License: Este proyecto está bajo la [Licencia MIT](LICENSE). Siéntete libre de usarlo y modificarlo.
 	    * Características:
 	    *   - Navbar con menú desplegable.
-	    *   - Input de búsqueda.
-	    *   - Carrusel de imágenes.
 	    *   - Cards de productos.
 	    *   - Tabla interactiva con DataTables.
 	    *   - Formulario de contácto
@@ -68,7 +66,7 @@
 				<li><a href="#home">Inicio</a></li>
 				<li><a href="#services">Servicios</a></li>
 				<li><a href="#about">Nosotros</a></li>
-				<li><a href="#contact" id="contactLink">Contacto</a></li>
+				<li><a href="">Contactanos</a></li>
 
 			</ul>
 			<div class="auth-buttons">
@@ -166,18 +164,14 @@
 					<label for="loginPassword">Contraseña</label>
 					<input type="password" id="loginPassword" name="contrasena" required />
 				</div>
-				<div class="form-group checklist">
-					<input type="checkbox" id="terms" name="terms" required />
-					<label for="terms">
-						Acepto los
-						<a href="#" class="open-terms">Términos y Condiciones</a>
-					</label>
-					<p id="termsError" style="display:none; color:red; font-size:0.9em;">Debes aceptar los términos para
-						continuar.</p>
-				</div>
 				<p id="errorMessage" class="error-message" th:if="${param.error}" th:text="'Credenciales incorrectas'">
 				</p>
 				<button type="submit" class="modal-btn">Ingresar</button>
+
+				<p class="signup-link">
+					No tienes cuenta?
+					<a th:href="@{/registro}" class="signup-link link"> Registrate ahora</a>
+				</p>
 
 			</form>
 		</div>
@@ -328,37 +322,7 @@
 			</div>
 		</div>
 	</section>
-
-	<!-- Modal de Contacto -->
-	<div id="contactModal">
-		<div id="modalContent">
-			<span id="closeModal">&times;</span>
-
-			<div id="modalHeader">
-				<h2>Contáctanos</h2>
-			</div>
-
-			<form id="contactForm">
-				<div class="formGroup">
-					<label for="userName">Nombre</label>
-					<input type="text" id="userName">
-				</div>
-
-				<div class="formGroup">
-					<label for="userEmail">Email</label>
-					<input type="email" id="userEmail">
-				</div>
-
-				<div class="formGroup">
-					<label for="userMessage">Mensaje</label>
-					<textarea id="userMessage"></textarea>
-				</div>
-
-				<button type="submit" id="submitBtn">ENVIAR</button>
-			</form>
-		</div>
-	</div>
-
+	
 	<!-- Footer -->
 	<footer class="footer">
 		<div class="container">

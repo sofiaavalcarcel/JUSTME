@@ -827,6 +827,7 @@ nav {
 	cursor: pointer;
 	transition: all 0.3s;
 	margin-top: 0.5rem;
+	margin-bottom: 0.5rem;
 }
 
 .modal-btn:hover {
@@ -1123,3 +1124,225 @@ main {
 	transform: scale(1.2);
 	color: #9c4dcc;
 }
+
+.link {
+  color: #e16bff;
+  text-decoration: none;
+}
+
+ .signup-link {
+  align-self: center;
+  font-weight: 500;
+}
+
+.signup-link .link {
+  font-weight: 400;
+}
+
+.link:hover {
+  text-decoration: underline;
+  color: rgb(255, 128, 192)
+}
+
+	
+
+
+/* Sección de Contacto */
+.contact-section {
+    padding: 5rem 10%;
+    background: linear-gradient(135deg, #f8f9fa 0%, #f8f9fa 100%);
+}
+
+.contact-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 3rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.contact-title {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.contact-description {
+    text-align: center;
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 2.5rem;
+}
+
+.contact-form {
+    width: 100%;
+}
+
+.form-row {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s;
+    background: #fff;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #e16bff;
+    box-shadow: 0 0 0 3px rgba(225, 107, 255, 0.2);
+}
+
+.contact-btn {
+    width: 100%;
+    padding: 0.8rem;
+    background: #e16bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 0.5rem;
+}
+
+.contact-btn:hover {
+    background: #d14de6;
+    transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .contact-section {
+        padding: 3rem 5%;
+    }
+    
+    .contact-container {
+        padding: 2rem;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .contact-title {
+        font-size: 2rem;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* === SOBRE NOSOTROS + CONTÁCTANOS lado a lado === */
+#about-contact {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  gap: 60px;
+  padding: 5rem 8%;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  flex-wrap: wrap; /* En pantallas pequeñas se apilan */
+}
+
+/* === Sección Sobre Nosotros (ya toma parte de tus estilos existentes) === */
+.about-section {
+  flex: 1;
+  min-width: 350px;
+  max-width: 600px;
+}
+
+.about-section .quesomos-container {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.about-section .quesomos-container:hover {
+  transform: translateY(-5px);
+}
+
+.about-section .quesomos-imagen {
+  height: 250px;
+  background-size: cover;
+  background-position: center;
+  border-bottom: 1px solid #eee;
+}
+
+/* === Sección de Contacto === */
+.contact-section {
+  flex: 1;
+  min-width: 350px;
+  max-width: 600px;
+}
+
+.contact-container {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  padding: 2.5rem;
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s ease;
+}
+
+.contact-container:hover {
+  transform: translateY(-5px);
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  #about-contact {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .about-section,
+  .contact-section {
+    max-width: 100%;
+  }
+}
+

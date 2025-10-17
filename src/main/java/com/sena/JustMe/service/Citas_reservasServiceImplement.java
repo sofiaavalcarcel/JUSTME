@@ -2,9 +2,7 @@ package com.sena.JustMe.service;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.stereotype.Service;
-
 import com.sena.JustMe.model.Citas_reservas;
 import com.sena.JustMe.repository.ICitas_reservasRepository;
 
@@ -24,7 +22,6 @@ public class Citas_reservasServiceImplement implements ICitas_reservasService {
     
     @Override
     public Optional<Citas_reservas> buscarPorId(Integer id) {
-    	
         return repository.findById(id);
     }
 
@@ -33,7 +30,9 @@ public class Citas_reservasServiceImplement implements ICitas_reservasService {
         return repository.save(cita);
     }
 
-    
-
-
+    // ✅ CORRECTO
+    @Override
+    public List<Citas_reservas> listarcitasPorUsuario(Integer idUsuario) {
+        return repository.findByServicio_Usuario_Idusuarios(idUsuario);
+    }
 }

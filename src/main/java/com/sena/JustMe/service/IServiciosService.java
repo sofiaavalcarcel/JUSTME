@@ -10,4 +10,7 @@ public interface IServiciosService {
     Optional<Servicios> buscarPorId(Integer id);
     Servicios editarServicio(Integer id, Servicios servicioActualizado);
     Servicios guardar(Servicios servicio);
+    List<Servicios> listarPorUsuario(Long idUsuario);
+
+    
 }

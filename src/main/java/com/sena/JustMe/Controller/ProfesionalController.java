@@ -39,12 +39,20 @@ public class ProfesionalController {
 	private IUsuariosService usuarioService;
 
 	@GetMapping("")
-	public String home(Model model) {
-		List<Servicios> servicios = productoservice.listarServicios();
-		model.addAttribute("servicios", servicios);
-		model.addAttribute("citas", citasreservas.listarcitas());
-		return "profesional/home";
+	public String home(HttpSession session, Model model) {
+	    Integer idUsuario = (Integer) session.getAttribute("idUsuario"); // 👈 id guardado en sesión al iniciar
+	    if (idUsuario == null) {
+	        return "redirect:/login"; // o donde manejes el login
+	    }
+
+	    // ✅ Filtramos servicios por el usuario logueado
+	    List<Servicios> servicios = productoservice.listarPorUsuario(idUsuario.longValue());
+
+	    model.addAttribute("servicios", servicios);
+	    model.addAttribute("citas", citasreservas.listarcitasPorUsuario(idUsuario)); // si luego quieres filtrar también las citas
+	    return "profesional/home"; // tu vista actual
 	}
+
 	
 	// =========================
 	// Perfil de profesional

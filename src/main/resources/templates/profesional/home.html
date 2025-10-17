@@ -126,7 +126,6 @@
 						<table id="servicesTable">
 							<thead>
 								<tr>
-									<th>ID</th>
 									<th>Nombre</th>
 									<th>Descripción</th>
 									<th>Precio</th>
@@ -138,7 +137,8 @@
 							</thead>
 							<tbody id="servicesBody">
 								<tr th:each="servicio : ${servicios}">
-									<td th:text="${servicio.idservicios}"></td>
+									<td th:text="${servicio.idservicios}" hidden></td>
+
 									<td th:text="${servicio.nombre_servicios}"></td>
 									<td th:text="${servicio.descripcion}"></td>
 									<td
@@ -195,7 +195,7 @@
 						<table id="citasTable">
 							<thead>
 								<tr>
-									<th>ID</th>
+								
 									<th>Fecha y Hora</th>
 									<th>Dirección</th>
 									<th>Estado</th>
@@ -208,7 +208,7 @@
 							</thead>
 							<tbody id="citasTableBody">
 								<tr th:each="cita : ${citas}">
-									<td th:text="${cita.idcitas_reservas}"></td>
+									<td th:text="${cita.idcitas_reservas}" hidden></td>
 									<td th:text="${#dates.format(cita.fecha_hora, 'yyyy-MM-dd HH:mm')}"></td>
 									<td th:text="${cita.direccion_servicio}"></td>
 									<td th:text="${cita.estado_cita}"></td>
@@ -373,7 +373,7 @@
 			</div>
 
 			<div class="footer-bottom">
-				<p>&copy; 2023 Just Me. Todos los derechos reservados.</p>
+				<p>&copy; 2025 Just Me. Todos los derechos reservados.</p>
 				<div class="legal-links">
 					<a href="#">Términos y Condiciones</a>
 					<a href="#">Política de Privacidad</a>
