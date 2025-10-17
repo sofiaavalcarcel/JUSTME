@@ -8,6 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -26,6 +28,13 @@ public class Citas_reservas {
 	private String observacionesCl;
 	private String observacionesLb;
 	private String fechaEdicion;
+	
+	
+	// 🔹 Relación con Servicios
+    @ManyToOne
+    @JoinColumn(name = "idservicio") // debe coincidir con tu FK en la base de datos
+    private Servicios servicio;
+	
 
 	// constructor vacio
 	public Citas_reservas() {

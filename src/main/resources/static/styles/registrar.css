@@ -308,6 +308,42 @@ body::before {
     padding: 10px 20px;
     border-radius: 20px;
     font-size: 0.85rem;
+    padding: 18px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 100%; /* Ocupa todo el ancho del contenedor */
+    max-width: 400px; /* Máximo ancho deseado */
+    margin: 0 auto 15px; /* Centra horizontalmente y margen abajo */
+    display: block; /* Para que margin auto funcione */
+    align-self: center; /* Si el contenedor es flex */
+}
+
+.modal-btn:hover {
+    background: #5a005a;
+}
+
+/* From Uiverse.io by ryota1231 */
+.animated-button {
+    position: relative;
+    grid-column: 1 / 2;
+    display: flex;
+    width: 60%;
+    margin-left: 70%;
+    display: flex;
+	
+    align-items: center;
+    align-content: end;
+    justify-content: center;
+    gap: 4px;
+    padding: 16px 50px;
+    border: 4px solid;
+    border-color: transparent;
+    font-size: 16px;
+    background-color: #5a005a;
+    border-radius: 100px;
+
     font-weight: 600;
     cursor: pointer;
     display: flex;
