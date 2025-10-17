@@ -5,10 +5,8 @@
     box-sizing: border-box;
 }
 
-
 :root {
-    
-    --primary-color:#e16bff ;
+    --primary-color: #e16bff;
     --primary-dark: #9033a7;
     --secondary-color: #e16bff;
     --dark-color: #333;
@@ -16,19 +14,19 @@
     --gray-color: #6c757d;
     --light-gray: #e9ecef;
     --white: #fff;
-    --black: #000;
-        --success-color: #2ecc71;
+    --black: #000;
+    --success-color: #2ecc71;
     --error-color: #e74c3c;
-        --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.12);
-     font-family: "Poppins", sans-serif;
+    font-family: "Poppins", sans-serif;
 }
 
 /* === FONDO CON IMAGEN DE BELLEZA === */
 body {
     margin: 0;
     padding: 0;
-    color: var(--text);
+    color: var(--dark-color);
     line-height: 1.3;
     min-height: 100vh;
     display: flex;
@@ -59,7 +57,7 @@ body::before {
 /* === CONTENEDOR PRINCIPAL === */
 .main-container {
     background: var(--white);
-    border-radius: var(--radius-lg);
+    border-radius: 20px;
     box-shadow: var(--shadow-lg);
     padding: 45px;
     max-width: 900px;
@@ -70,7 +68,6 @@ body::before {
     flex-direction: column;
     position: relative;
     z-index: 1;
-    border-radius: 20px;
 }
 
 /* === FORMULARIO HORIZONTAL COMPACTO === */
@@ -95,7 +92,7 @@ body::before {
 }
 
 .form-header p {
-    color: var(--muted);
+    color: var(--gray-color);
     font-size: 0.9rem;
 }
 
@@ -125,19 +122,18 @@ body::before {
     width: 100%;
     padding: 10px 12px;
     border: 2px solid var(--light-gray);
-    border-radius: var(--radius);
+    border-radius: 10px;
     font-size: 0.85rem;
     transition: all 0.3s;
     background: var(--white);
     height: 42px;
     box-sizing: border-box;
-    border-radius: 10px;
 }
 
 .form-group input:focus {
     border-color: var(--primary-color);
     outline: none;
-    box-shadow: 0 0 0 3px rgba(214, 51, 132, 0.1);
+    box-shadow: 0 0 0 3px rgba(225, 107, 255, 0.1);
 }
 
 /* === CONTRASEÑAS EN MISMA FILA === */
@@ -179,7 +175,7 @@ body::before {
     gap: 6px;
     font-size: 0.8rem;
     padding: 8px 10px;
-    border-radius: var(--radius);
+    border-radius: 6px;
     grid-column: 1 / -1;
     margin-top: -5px;
     transition: all 0.3s;
@@ -210,7 +206,7 @@ body::before {
     gap: 6px;
     font-size: 0.8rem;
     padding: 8px 10px;
-    border-radius: var(--radius);
+    border-radius: 6px;
     background: rgba(231, 76, 60, 0.1);
     color: var(--error-color);
     grid-column: 1 / -1;
@@ -308,42 +304,6 @@ body::before {
     padding: 10px 20px;
     border-radius: 20px;
     font-size: 0.85rem;
-    padding: 18px;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.3s;
-    width: 100%; /* Ocupa todo el ancho del contenedor */
-    max-width: 400px; /* Máximo ancho deseado */
-    margin: 0 auto 15px; /* Centra horizontalmente y margen abajo */
-    display: block; /* Para que margin auto funcione */
-    align-self: center; /* Si el contenedor es flex */
-}
-
-.modal-btn:hover {
-    background: #5a005a;
-}
-
-/* From Uiverse.io by ryota1231 */
-.animated-button {
-    position: relative;
-    grid-column: 1 / 2;
-    display: flex;
-    width: 60%;
-    margin-left: 70%;
-    display: flex;
-	
-    align-items: center;
-    align-content: end;
-    justify-content: center;
-    gap: 4px;
-    padding: 16px 50px;
-    border: 4px solid;
-    border-color: transparent;
-    font-size: 16px;
-    background-color: #5a005a;
-    border-radius: 100px;
-
     font-weight: 600;
     cursor: pointer;
     display: flex;
@@ -351,14 +311,14 @@ body::before {
     justify-content: center;
     gap: 8px;
     transition: all 0.3s;
-    box-shadow: 0 4px 12px rgba(214, 51, 132, 0.3);
+    box-shadow: 0 4px 12px rgba(225, 107, 255, 0.3);
     width: auto;
     min-width: 140px;
 }
 
 .submit-button:hover {
     transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(214, 51, 132, 0.4);
+    box-shadow: 0 6px 16px rgba(225, 107, 255, 0.4);
 }
 
 .submit-button:active {
@@ -396,7 +356,7 @@ body::before {
 
 .login-redirect {
     text-align: center;
-    color: var(--muted);
+    color: var(--gray-color);
     font-size: 0.8rem;
 }
 
@@ -455,8 +415,6 @@ body::before {
     }
 }
 
-
-
 /* === AJUSTES PARA PANTALLAS MUY PEQUEÑAS === */
 @media (max-height: 600px) {
     .main-container {
@@ -467,8 +425,4 @@ body::before {
     .form-container {
         gap: 12px;
     }
-	
-
 }
-
-
