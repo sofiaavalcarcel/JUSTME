@@ -43,7 +43,7 @@ public class UsuarioController {
 
     @GetMapping("/terminosycondiciones")
     public String terminos() {
-        return "terminos/terminosycondiciones";
+        return "servicios/terminos";
     }
 
     @GetMapping("/registro")
