@@ -9,6 +9,8 @@
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 
 </head>
 
@@ -17,15 +19,15 @@
 	<header class="header">
 		<div class="container">
 			<div class="loader">
-								<p>Just</p>
-								<div class="words">
-									<span class="word">Me</span>
-									<span class="word">Beauty</span>
-									<span class="word">Me</span>
-									<span class="word">Stylish</span>
-									<span class="word">Me</span>
-								</div>
-							</div>
+				<p>Just</p>
+				<div class="words">
+					<span class="word">Me</span>
+					<span class="word">Beauty</span>
+					<span class="word">Me</span>
+					<span class="word">Stylish</span>
+					<span class="word">Me</span>
+				</div>
+			</div>
 
 			<nav class="nav">
 				<ul>
@@ -103,140 +105,124 @@
 				</div>
 			</div>
 		</section>
-		<section class="services-section">
-			<div class="container">
-				<!-- Encabezado con título y botón -->
-				<div class="section-header">
-					<h3>Mis servicios ofrecidos</h3>
-					<a th:href="@{servicios/profesional/servicios}" class="btn-primary" id="addServiceBtn">
-						<i class="fas fa-plus"></i> Agregar servicio
-					</a>
-				</div>
 
-				<!-- Tabla servicios -->
-				<section class="panel" th:if="${!#lists.isEmpty(servicios)}">
-					<div class="toolbar">
-						<span class="badge" th:text="${'Total: ' + servicios.size() + ' servicios'}">
-							Total: 0 servicios
-						</span>
-					</div>
-
-					<!-- Contenedor de tabla -->
-					<div class="table-container">
-						<table id="servicesTable">
-							<thead>
-								<tr>
-									<th>Nombre</th>
-									<th>Descripción</th>
-									<th>Precio</th>
-									<th>Categoría</th>
-									<th>Estado</th>
-									<th>Imagen</th> <!-- ✅ Nueva columna para el nombre -->
-									<th>Acciones</th>
-								</tr>
-							</thead>
-							<tbody id="servicesBody">
-								<tr th:each="servicio : ${servicios}">
-									<td th:text="${servicio.idservicios}" hidden></td>
-
-									<td th:text="${servicio.nombre_servicios}"></td>
-									<td th:text="${servicio.descripcion}"></td>
-									<td
-										th:text="${#strings.concat('$', #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 0, 'POINT'))}">
-									</td>
-									<td th:text="${servicio.categoria}"></td>
-									<td th:text="${servicio.estado}"></td>
-									<td th:text="${servicio.imagen}"></td>
-
-									<td>
-										<a th:href="@{/servicios/editar/{id}(id=${servicio.idservicios})}"
-											class="btn-edit">✏️</a>
-
-										<form th:action="@{/servicios/eliminar/{id}(id=${servicio.idservicios})}"
-											method="post" style="display:inline">
-											<button type="submit" class="btn-delete">🗑️</button>
-										</form>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-
-
-					<!-- 🔹 Controles de paginación -->
-					<div class="pagination">
-						<button id="prevBtn">← Anterior</button>
-						<span id="pageInfo"></span>
-						<button id="nextBtn">Siguiente →</button>
-					</div>
-			</div>
-		</section>
 		</div>
 		</section>
 
 
+		<!-- 🔹 Servicios -->
 		<section class="services-section">
-			<div class="container">
-				<!-- Encabezado con título -->
-				<div class="section-header">
-					<h3>Mis citas</h3>
-				</div>
+		    <div class="container">
+		        <div class="section-header">
+		            <h3>
+		                Mis servicios ofrecidos <br />
+		                <span class="badge" th:text="${'Total: ' + servicios.size() + ' servicios'}">Total: 0
+		                    servicios</span>
+		            </h3>
 
-				<!-- Panel de citas -->
-				<section class="panel">
-					<div class="toolbar">
-						<span class="badge" th:text="${'Total: ' + citas.size() + ' citas'}">
-							Total: 0 citas
-						</span>
-					</div>
+		            <a th:href="@{servicios/profesional/servicios}" class="btn-primary" id="addServiceBtn">
+		                <i class="fas fa-plus"></i> Agregar servicio
+		            </a>
+		        </div>
 
-					<!-- Contenedor de tabla de citas -->
-					<div class="table-container">
-						<table id="citasTable">
-							<thead>
-								<tr>
-								
-									<th>Fecha y Hora</th>
-									<th>Dirección</th>
-									<th>Estado</th>
-									<th>Precio</th>
-									<th>Observaciones Cliente</th>
-									<th>Observaciones Laburante</th>
-									<th>Fecha Edición</th>
-									<th>Acciones</th>
-								</tr>
-							</thead>
-							<tbody id="citasTableBody">
-								<tr th:each="cita : ${citas}">
-									<td th:text="${cita.idcitas_reservas}" hidden></td>
-									<td th:text="${#dates.format(cita.fecha_hora, 'yyyy-MM-dd HH:mm')}"></td>
-									<td th:text="${cita.direccion_servicio}"></td>
-									<td th:text="${cita.estado_cita}"></td>
-									<td
-										th:text="${#strings.concat('$', #numbers.formatDecimal(cita.precio, 0, 'POINT', 0, 'POINT'))}">
-									</td>
-									<td th:text="${cita.observacionesCl}"></td>
-									<td th:text="${cita.observacionesLb}"></td>
-									<td th:text="${cita.fechaEdicion}"></td>
-									<td>
-										<a th:href="@{/citas/editar/{id}(id=${cita.idcitas_reservas})}"
-											class="btn-edit">✏️</a>
-									</td>
+		        <div class="cards-container">
+		            <div class="service-card" th:each="servicio : ${servicios}">
+		                <div class="service-content">
+		                    <img th:src="@{'/uploads/' + ${servicio.imagen}}" alt="Imagen del servicio"
+		                        class="service-image" />
 
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</section>
-			</div>
+		                    <div class="service-info">
+		                        <h4 th:text="${servicio.nombre_servicios}">Nombre del servicio</h4>
+		                        <p><i class="fas fa-tag"></i> <span th:text="${servicio.categoria}">Categoría</span></p>
+		                        <p>
+		                            <i class="fas fa-dollar-sign"></i>
+		                            <span class="price"
+		                                th:text="${#strings.concat('$', #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 0, 'POINT'))}">
+		                                $0
+		                            </span>
+		                        </p>
+		                        <div class="descripcion-container">
+		                            <p class="descripcion">
+		                                <i class="fas fa-align-left"></i>
+		                                <span th:text="${servicio.descripcion}">Descripción del servicio</span>
+		                            </p>
+		                        </div>
+		                    </div>
+		                </div>
 
-			<!-- 🔹 Paginación -->
-			<div class="pagination">
-				<button id="citasPrevBtn">← Anterior</button>
-				<span id="citasPageInfo"></span>
-				<button id="citasNextBtn">Siguiente →</button>
-			</div>
+		                <div class="card-actions">
+		                    <a th:href="@{/servicios/editar/{id}(id=${servicio.idservicios})}" class="btn-action btn-edit" title="Editar servicio">
+		                        <i class="fas fa-pen"></i>
+		                        <span>Editar</span>
+		                    </a>
+
+		                    <form th:action="@{/servicios/eliminar/{id}(id=${servicio.idservicios})}" method="post" class="delete-form">
+		                        <button type="submit" class="btn-action btn-delete" title="Eliminar servicio">
+		                            <i class="fas fa-trash"></i>
+		                            <span>Eliminar</span>
+		                        </button>
+		                    </form>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
 		</section>
+
+
+		<!-- 🔹 Citas -->
+		<section class="services-section">
+		    <div class="container">
+		        <div class="section-header">
+		            <h3>
+		                Mis citas
+		                <br />
+		                <span class="badge" th:text="${'Total: ' + citas.size() + ' citas'}">Total: 0 citas</span>
+		            </h3>
+		        </div>
+
+		        <section class="panel">
+		            <div class="citas-container">
+		                <div class="cita-card" th:each="cita : ${citas}">
+		                    <div class="card-content">
+		                        <p><i class="fas fa-calendar-alt"></i> <strong>Fecha y Hora:</strong> 
+		                            <span th:text="${#dates.format(cita.fecha_hora, 'yyyy-MM-dd HH:mm')}"></span>
+		                        </p>
+		                        <p><i class="fas fa-map-marker-alt"></i> <strong>Dirección:</strong> 
+		                            <span th:text="${cita.direccion_servicio}"></span>
+		                        </p>
+		                        <p><i class="fas fa-info-circle"></i> <strong>Estado:</strong> 
+		                            <span th:text="${cita.estado_cita}"></span>
+		                        </p>
+		                        <p><i class="fas fa-dollar-sign"></i> <strong>Precio:</strong>
+		                            <span class="price"
+		                                th:text="${#strings.concat('$', #numbers.formatDecimal(cita.precio, 0, 'POINT', 0, 'POINT'))}"></span>
+		                        </p>
+		                        <p><i class="fas fa-user-edit"></i> <strong>Observaciones Cliente:</strong> 
+		                            <span th:text="${cita.observacionesCl}"></span>
+		                        </p>
+		                        <p><i class="fas fa-user-cog"></i> <strong>Observaciones Laburante:</strong> 
+		                            <span th:text="${cita.observacionesLb}"></span>
+		                        </p>
+		                        <p><i class="fas fa-edit"></i> <strong>Fecha Edición:</strong> 
+		                            <span th:text="${cita.fechaEdicion}"></span>
+		                        </p>
+		                    </div>
+
+		                    <div class="card-actions">
+		                        <a th:href="@{/citas/editar/{id}(id=${cita.idcitas_reservas})}" class="btn-action btn-edit" title="Editar cita">
+		                            <i class="fas fa-pen"></i>
+		                            <span>Editar</span>
+		                        </a>
+		                    </div>
+		                </div>
+		            </div>
+		        </section>
+		    </div>
+		</section>
+
+
+
+
 
 
 
