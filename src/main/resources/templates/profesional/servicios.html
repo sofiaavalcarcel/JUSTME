@@ -53,9 +53,24 @@
 							</div>
 
 							<div class="form-group">
-								<label for="categoria"><i class="fas fa-tag"></i> Categoría</label>
-								<input type="text" th:field="*{categoria}" id="categoria" required>
+							    <label for="categoria"><i class="fas fa-tag"></i> Categoría</label>
+							    <select th:field="*{categoria}" id="categoria" required>
+							        <option value="" disabled selected>Seleccione una categoría</option>
+							        <option value="Cabello">Cabello</option>
+							        <option value="Cejas y pestañas">Cejas y pestañas</option>
+							        <option value="Facial">Tratamientos faciales</option>
+							        <option value="Depilación">Depilación</option>
+							        <option value="Masajes Corporales y Spa">Masajes Corporales y Spa</option>
+							        <option value="Maquillaje">Maquillaje</option>
+							        <option value="Tintura">Coloración y Mechas</option>
+							        <option value="Tratamiento Capilar">Tratamiento Capilar</option>
+							        <option value="Uñas">Uñas</option>
+									<option value="Barberia">Barbería</option>
+									<option value="Perfilado">Perfilado de Barba y Bigote</option>
+									
+							    </select>
 							</div>
+
 						</div>
 
 						<div class="form-row">

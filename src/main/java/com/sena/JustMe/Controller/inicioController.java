@@ -71,6 +71,7 @@ public class inicioController {
 
         List<Servicios> servicios = serviciosService.buscarPorCategoriaYNombre(categoria, nombre_servicios);
         model.addAttribute("servicios", servicios);
+        model.addAttribute("categoriaSeleccionada", categoria); // 👈 mantiene seleccionada la opción
         return "servicios/inicio"; // tu vista principal
     }
 

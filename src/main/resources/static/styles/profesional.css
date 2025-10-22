@@ -1098,7 +1098,18 @@ ul {
 }
 
 /* ==========================================================
-   🔹 TARJETA DE SERVICIO
+   🔹 CONTENEDOR DE CARDS - CORREGIDO
+   ========================================================== */
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  width: 100%;
+  align-items: start;
+}
+
+/* ==========================================================
+   🔹 TARJETA DE SERVICIO - CORREGIDO
    ========================================================== */
 .service-card {
   position: relative;
@@ -1106,7 +1117,6 @@ ul {
   border-radius: 16px;
   border-left: 4px solid #c95ce4;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-  width: 100%;
   padding: 16px;
   display: flex;
   flex-direction: column;
@@ -1114,11 +1124,33 @@ ul {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   overflow: hidden;
   min-height: 420px;
+  height: fit-content;
+  /* Eliminamos el max-width fijo para permitir que el grid funcione */
 }
 
 .service-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+
+/* ==========================================================
+   🔹 CUANDO SOLO HAY UNA CARD - MÁS ANCHA
+   ========================================================== */
+.cards-container:has(> .service-card:only-child) {
+  grid-template-columns: minmax(400px, 500px);
+  justify-content: center;
+}
+
+.cards-container:has(> .service-card:only-child) .service-card {
+  min-height: 420px;
+  max-width: 500px;
+  width: 100%;
+}
+/* Cuando solo hay una card */
+.cards-container .service-card:first-child:last-child {
+  max-width: 500px;
+  margin: 0 auto;
+  justify-self: center;
 }
 
 /* ==========================================================
@@ -1224,7 +1256,7 @@ ul {
 }
 
 /* ==========================================================
-   🔹 BOTONES DE ACCIÓN MEJORADOS - MISMAS DIMENSIONES
+   🔹 BOTONES DE ACCIÓN
    ========================================================== */
 .card-actions {
   display: flex;
@@ -1318,6 +1350,15 @@ ul {
     min-width: 85px;
     padding: 7px 14px;
   }
+  
+  /* Para una sola card en móvil */
+  .cards-container:has(> :only-child) {
+    grid-template-columns: minmax(280px, 350px);
+  }
+  
+  .cards-container .service-card:first-child:last-child {
+    max-width: 350px;
+  }
 }
 
 @media (max-width: 600px) {
@@ -1328,11 +1369,13 @@ ul {
   
   .cards-container {
     grid-template-columns: 1fr;
+    gap: 16px;
   }
   
   .service-card {
     min-height: auto;
     padding-bottom: 16px;
+    max-width: 100% !important;
   }
   
   .service-image {
@@ -1355,6 +1398,16 @@ ul {
   .btn-action i {
     font-size: 1rem;
     margin: 0;
+  }
+  
+  /* Para una sola card en móvil pequeño */
+  .cards-container:has(> :only-child) {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+  }
+  
+  .cards-container .service-card:first-child:last-child {
+    max-width: 100% !important;
   }
 }
 
@@ -1380,7 +1433,6 @@ ul {
   padding: 16px 16px 60px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   max-width: 500px;
-  
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
