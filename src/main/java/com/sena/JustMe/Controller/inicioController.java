@@ -56,6 +56,23 @@ public class inicioController {
 		return "perfilProfesional/cambioProfesional";
 	}
 	
+	@GetMapping("/contactanos")
+	public String contacto() {
+		return "servicios/contactanos";
+	}
+
+	
+
+	@GetMapping("/servicios/buscar")
+    public String buscarServicios(
+            @RequestParam(required = false) String categoria,
+            @RequestParam(required = false) String nombre_servicios,
+            Model model) {
+
+        List<Servicios> servicios = serviciosService.buscarPorCategoriaYNombre(categoria, nombre_servicios);
+        model.addAttribute("servicios", servicios);
+        return "servicios/inicio"; // tu vista principal
+    }
 
 
 }

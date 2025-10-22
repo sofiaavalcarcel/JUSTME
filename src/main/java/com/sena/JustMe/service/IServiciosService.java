@@ -5,12 +5,20 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IServiciosService {
-    List<Servicios> listarServicios();
-    void eliminar(Integer id);
-    Optional<Servicios> buscarPorId(Integer id);
-    Servicios editarServicio(Integer id, Servicios servicioActualizado);
-    Servicios guardar(Servicios servicio);
-    List<Servicios> listarPorUsuario(Long idUsuario);
+	List<Servicios> listarServicios();
 
-    
+	void eliminar(Integer id);
+
+	Optional<Servicios> buscarPorId(Integer id);
+
+	Servicios editarServicio(Integer id, Servicios servicioActualizado);
+
+	Servicios guardar(Servicios servicio);
+
+	List<Servicios> listarPorUsuario(Long idUsuario);
+
+	List<Servicios> buscarPorCategoriaYNombre(String categoria, String nombre_servicios);
+
+	
+
 }

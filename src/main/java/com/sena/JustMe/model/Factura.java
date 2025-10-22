@@ -1,5 +1,6 @@
 package com.sena.JustMe.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,7 +14,9 @@ public class Factura {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer idfactura;
 	private String num_pago;
+	@Column(columnDefinition = "VARCHAR(500)")
 	private String otros_detalles;
+
 
 	// constructor vacio
 	public Factura() {

@@ -124,7 +124,8 @@
 							<div class="form-group">
 								<label for="disponibilidad"><i class="fas fa-toggle-on"></i> Disponibilidad</label>
 								<select id="disponibilidad" name="disponibilidad" class="form-control">
-									<option th:value="disponible" th:selected="${session.estadoUsuario == 'Activo'}">Disponible
+									<option th:value="disponible" th:selected="${session.estadoUsuario == 'Activo'}">
+										Disponible
 									</option>
 									<option th:value="ocupado" th:selected="${session.estadoUsuario == 'Inactivo'}">
 										Ocupado</option>
@@ -133,7 +134,7 @@
 
 
 							<div class="form-actions">
-								
+
 								<button type="submit" class="save-btn">Guardar cambios</button>
 							</div>
 						</div>

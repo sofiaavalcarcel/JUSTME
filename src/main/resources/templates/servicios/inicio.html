@@ -16,15 +16,15 @@
 	<header class="header">
 		<div class="container">
 			<div class="loader">
-						<p>Just</p>
-						<div class="words">
-							<span class="word">Me</span>
-							<span class="word">Beauty</span>
-							<span class="word">Me</span>
-							<span class="word">Stylish</span>
-							<span class="word">Me</span>
-						</div>
-					</div>
+				<p>Just</p>
+				<div class="words">
+					<span class="word">Me</span>
+					<span class="word">Beauty</span>
+					<span class="word">Me</span>
+					<span class="word">Stylish</span>
+					<span class="word">Me</span>
+				</div>
+			</div>
 
 			<nav class="nav">
 				<ul>
@@ -81,70 +81,68 @@
 			</div>
 		</section>
 
+		<!-- Search Section (mantiene tus clases y estructura) -->
 		<section class="search-section" id="servicios">
-			<div class="container">
-				<h3>Buscar servicios</h3>
+		  <div class="container">
+		    <h3>Categorías</h3>
 
-				<form class="search-form">
-					<div class="form-group">
-						<label for="service-type"><i class="fas fa-spa"></i> Tipo de Servicio</label>
-						<select id="service-type">
-							<option value="">Todos los servicios</option>
-							<option value="hair">Corte de Cabello</option>
-							<option value="makeup">Maquillaje</option>
-							<option value="nails">Uñas</option>
-							<option value="facial">Facial</option>
-							<option value="waxing">Depilación</option>
-						</select>
-					</div>
+			<form class="search-form" action="/servicios/buscar" method="get">
+			    <div class="form-group">
+			        <label for="service-type"><i class="fas fa-spa"></i> Tipo de Servicio</label>
+			        <select id="service-type" name="categoria">
+			            <option value="">Todos los servicios</option>
+			            <option value="Corte de Cabello">Corte de Cabello</option>
+			            <option value="Maquillaje">Maquillaje</option>
+			            <option value="Uñas">Uñas</option>
+			            <option value="Facial">Facial</option>
+			            <option value="Depilación">Depilación</option>
+						<option value="Cejas">Cejas</option>
+						<option value="Alisado">Alisado</option>
+			        </select>
+			    </div>
 
-					<div class="form-group">
-						<label for="location"><i class="fas fa-map-marker-alt"></i> Ubicación</label>
-						<input type="text" id="location" placeholder="¿Dónde necesitas el servicio?" />
-					</div>
+			    <div class="form-group">
+			        <label for="nombre_servicios"><i class="fas fa-scissors"></i> Nombre del Servicio</label>
+			        <input type="text" id="nombre_servicios" name="nombre_servicios" placeholder="Ejemplo: Corte moderno" />
+			    </div>
 
-					<div class="form-group">
-						<label for="date"><i class="fas fa-calendar-day"></i> Fecha</label>
-						<input type="date" id="date" />
-					</div>
+			    <button type="submit" class="search-btn">
+			        <i class="fas fa-search"></i> Buscar
+			    </button>
+			</form>
 
-					<div class="form-group">
-						<label for="time"><i class="fa-solid fa-clock"></i> Hora</label>
-						<input type="time" id="time" />
-					</div>
-
-					<button type="button" class="search-btn" id="openModalBtn">
-						<i class="fas fa-search"></i> Buscar
-					</button>
-				</form>
-			</div>
+		  </div>
 		</section>
 
-		<section class="servicios-section">
-			<h2>Servicios disponibles</h2>
-			<div class="servicios-grid">
-				<!-- Thymeleaf: recorrer servicios -->
-				<div th:each="servicio : ${servicios}" class="card">
-					<img th:src="@{'/uploads/' + ${servicio.imagen}}" th:alt="${servicio.nombre_servicios}"
-						class="card-img-top">
 
-					<div class="card-body">
-						<h3 th:text="${servicio.nombre_servicios}" class="card-title">Nombre Servicio</h3>
-						<p th:text="${servicio.descripcion}" class="card-text">Descripción</p>
-						<p><strong>Precio:</strong>
-							<span
-								th:text="${#strings.concat('$', #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 0, 'POINT'))}">
-							</span>
-						</p>
-						<p><strong>Categoría:</strong> <span th:text="${servicio.categoria}">Belleza</span></p>
+		<!-- Servicios Section: se actualiza con la lista enviada en el model -->
+		<section class="servicios-section">
+			<div class="container">
+				<h2>Servicios disponibles</h2>
+				<div class="servicios-grid">
+					<!-- Thymeleaf recorre servicios (lista pasada desde el controlador) -->
+					<div th:if="${servicios == null or #lists.isEmpty(servicios)}">
+						<p>No hay servicios para mostrar.</p>
 					</div>
 
-					<div class="card-footer">
-						<a th:href="@{/pasareladepagos(id=${servicio.idservicios})}" 
-						   class="btn-interesa">
-						   Me interesa
-						</a>
+					<div th:each="servicio : ${servicios}" class="card">
+						<img th:src="@{'/uploads/' + ${servicio.imagen}}" th:alt="${servicio.nombre_servicios}"
+							class="card-img-top">
 
+						<div class="card-body">
+							<h3 th:text="${servicio.nombre_servicios}" class="card-title">Nombre Servicio</h3>
+							<p th:text="${servicio.descripcion}" class="card-text">Descripción</p>
+							<p><strong>Precio:</strong>
+								<span th:text="${#strings.concat('$', #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 0, 'POINT'))}"></span>
+							</p>
+							<p><strong>Categoría:</strong> <span th:text="${servicio.categoria}">Belleza</span></p>
+						</div>
+
+						<div class="card-footer">
+							<a th:href="@{/pasareladepagos(id=${servicio.idservicios})}" class="btn-interesa">
+								Me interesa
+							</a>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -280,14 +278,14 @@
 
 	<!-- Scripts -->
 	<script>
-		// ✅ Mostrar/Ocultar el menú desplegable del usuario
+		// Mostrar/Ocultar el menú desplegable del usuario
 		document.addEventListener("DOMContentLoaded", function () {
 			const userProfile = document.getElementById("userProfile");
 			const dropdownMenu = document.getElementById("dropdownMenu");
 
 			if (userProfile && dropdownMenu) {
 				userProfile.addEventListener("click", () => {
-					dropdownMenu.classList.toggle("active"); // Activa/desactiva la clase
+					dropdownMenu.classList.toggle("active");
 				});
 			}
 		});

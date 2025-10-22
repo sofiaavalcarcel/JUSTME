@@ -85,4 +85,25 @@ public class ServiciosServiceImplement implements IServiciosService {
         return usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con ID: " + idUsuario));
     }
+    
+ 
+    
+    
+    @Override
+    public List<Servicios> buscarPorCategoriaYNombre(String categoria, String nombre_servicios) {
+        boolean categoriaVacia = (categoria == null || categoria.trim().isEmpty());
+        boolean nombreVacio = (nombre_servicios == null || nombre_servicios.trim().isEmpty());
+
+        if (categoriaVacia && nombreVacio) {
+            return serviciosRepository.findAll();
+        } else if (!categoriaVacia && nombreVacio) {
+            return serviciosRepository.findByCategoriaContainingIgnoreCase(categoria);
+        } else if (categoriaVacia && !nombreVacio) {
+            return serviciosRepository.findByNombre_serviciosContainingIgnoreCase(nombre_servicios);
+        } else {
+            return serviciosRepository.findByCategoriaContainingIgnoreCaseAndNombre_serviciosContainingIgnoreCase(categoria, nombre_servicios);
+        }
+    }
+    
+    
 }
