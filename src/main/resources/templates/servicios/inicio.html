@@ -16,22 +16,21 @@
 	<header class="header">
 		<div class="container">
 			<div class="loader">
-						<p>Just</p>
-						<div class="words">
-							<span class="word">Me</span>
-							<span class="word">Beauty</span>
-							<span class="word">Me</span>
-							<span class="word">Stylish</span>
-							<span class="word">Me</span>
-						</div>
-					</div>
+				<p>Just</p>
+				<div class="words">
+					<span class="word">Me</span>
+					<span class="word">Beauty</span>
+					<span class="word">Me</span>
+					<span class="word">Stylish</span>
+					<span class="word">Me</span>
+				</div>
+			</div>
 
 			<nav class="nav">
 				<ul>
 					<li><a href="#" class="active"><i class="fas fa-home"></i> Inicio</a></li>
 					<li><a href="#servicios"><i class="fas fa-search"></i> Buscar Servicios</a></li>
 					<li><a href="#citas"><i class="fas fa-calendar-alt"></i> Mis Citas</a></li>
-					<li><a href="#comentarios"><i class="fas fa-comments"></i> Comentarios</a></li>
 				</ul>
 			</nav>
 
@@ -46,7 +45,8 @@
 				<div class="dropdown-menu" id="dropdownMenu">
 					<ul>
 						<li><a th:href="@{/perfilUsuario}"><i class="fas fa-user"></i> Mi Perfil</a></li>
-						<li><a th:href="@{/cambioProfesional}"><i class="fas fa-sync-alt"></i> Cambiar a Profesional</a></li>
+						<li><a th:href="@{/cambioProfesional}"><i class="fas fa-sync-alt"></i> Cambiar a Profesional</a>
+						</li>
 						<li><a th:href="@{/cerrar}"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
 					</ul>
 				</div>
@@ -123,32 +123,62 @@
 		<section class="servicios-section">
 			<h2>Servicios disponibles</h2>
 			<div class="servicios-grid">
-				<!-- Thymeleaf: recorrer servicios -->
+				<!-- Recorre los servicios -->
 				<div th:each="servicio : ${servicios}" class="card">
+
+					<!-- Imagen del servicio -->
 					<img th:src="@{'/uploads/' + ${servicio.imagen}}" th:alt="${servicio.nombre_servicios}"
 						class="card-img-top">
 
 					<div class="card-body">
 						<h3 th:text="${servicio.nombre_servicios}" class="card-title">Nombre Servicio</h3>
 						<p th:text="${servicio.descripcion}" class="card-text">Descripción</p>
-						<p><strong>Precio:</strong>
+
+						<p>
+							<strong>Precio:</strong>
 							<span
 								th:text="${#strings.concat('$', #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 0, 'POINT'))}">
 							</span>
 						</p>
-						<p><strong>Categoría:</strong> <span th:text="${servicio.categoria}">Belleza</span></p>
+
+						<p>
+							<strong>Categoría:</strong>
+							<span th:text="${servicio.categoria}">Belleza</span>
+						</p>
+						
+						<p class="izquierda"><strong>Profesional a cargo:</strong></p>
+
+						<!-- 🧍 Información del profesional -->
+						<div class="profesional-info">
+							
+							<img th:if="${servicio.usuario != null and servicio.usuario.fotoperfil != null}"
+								th:src="@{'/uploads/' + ${servicio.usuario.fotoperfil}}" alt="Foto del profesional"
+								class="profesional-foto">
+
+							<img th:if="${servicio.usuario == null or servicio.usuario.fotoperfil == null}"
+								src="/img/default-user.jpg" alt="Usuario sin foto" class="profesional-foto">
+
+							<div class="profesional-detalles">
+								<span class="profesional-nombre"
+									th:text="${servicio.usuario.nombre + ' ' + servicio.usuario.apellido}">
+									Nombre del profesional
+								</span>
+								<small class="profesional-email" th:text="${servicio.usuario.email}">
+									email@ejemplo.com
+								</small>
+							</div>
+						</div>
 					</div>
 
 					<div class="card-footer">
-						<a th:href="@{/pasareladepagos(id=${servicio.idservicios})}" 
-						   class="btn-interesa">
-						   Me interesa
+						<a th:href="@{/pasareladepagos(id=${servicio.idservicios})}" class="btn-interesa">
+							Me interesa
 						</a>
-
 					</div>
 				</div>
 			</div>
 		</section>
+
 
 		<section class="appointments-section" id="citas">
 			<div class="container">
