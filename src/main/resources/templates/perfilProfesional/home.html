@@ -42,12 +42,12 @@
 			<div class="container">
 				<div class="profile-header">
 
-					<!-- ✅ Un solo form -->
 					<form th:action="@{/profesional/actualizar}" method="post" enctype="multipart/form-data"
 						class="profile-form">
+
+						<!-- 🔹 Cabecera del perfil -->
 						<div class="profile-header">
 							<div class="profile-image-container">
-								<!-- ✅ Sintaxis de imagen corregida -->
 								<img th:src="${session.fotoperfil != null} ? @{/uploads/{foto}(foto=${session.fotoperfil})} : @{/img/default.jpg}"
 									alt="Foto de perfil" id="profileImageDisplay" class="profile-image">
 
@@ -73,8 +73,9 @@
 							</div>
 						</div>
 
-						<!-- Campos editables -->
+						<!-- 🔹 Campos editables -->
 						<div class="profile-content">
+
 							<div class="form-row">
 								<div class="form-group">
 									<label for="fullName"><i class="fas fa-user"></i> Nombre completo</label>
@@ -106,9 +107,55 @@
 								<textarea id="about" name="biografia" rows="4"
 									th:text="${session.biografiaUsuario}"></textarea>
 							</div>
-							<div class="form-group">
-								<label for="about"><i class="fas fa-info-circle"></i> Portafolio</label>
-								<input type="file">
+
+							<!-- 🔹 PORTAFOLIO -->
+							<div class="form-group mt-4">
+								<label><i class="fas fa-folder-open"></i> Portafolio</label>
+
+								<div th:if="${session.portafolioUsuario != null}">
+									<h5>Archivos actuales:</h5>
+									<div class="portfolio-preview" style="display: flex; flex-wrap: wrap; gap: 15px;">
+
+										<div th:each="file : ${#strings.arraySplit(session.portafolioUsuario, ',')}"
+											th:if="${file != ''}"
+											style="text-align: center; width: 150px; position: relative;">
+
+											<!-- 🔹 Imagen (preview) -->
+											<img th:if="${#strings.endsWith(file, '.jpg') or #strings.endsWith(file, '.jpeg') or #strings.endsWith(file, '.png')}"
+												th:src="@{'/uploads/' + ${file}}" alt="Imagen del portafolio"
+												style="width: 100%; height: 120px; object-fit: cover; border-radius: 10px;">
+
+											<!-- 🔹 PDF con enlace -->
+											<div th:if="${#strings.endsWith(file, '.pdf')}"
+												style="display: flex; flex-direction: column; align-items: center;">
+												<a th:href="@{'/uploads/' + ${file}}" target="_blank"
+													style="text-decoration: none; color: inherit;">
+													<i class="fas fa-file-pdf fa-3x" style="color:#d9534f;"></i>
+													<p th:text="${file}"
+														style="font-size: 0.8rem; word-break: break-all; margin-top: 5px; color:#007bff; text-decoration: underline;">
+													</p>
+												</a>
+											</div>
+
+											<!-- 🔹 Word con ícono -->
+											<div th:if="${#strings.endsWith(file, '.doc') or #strings.endsWith(file, '.docx')}"
+												style="display: flex; flex-direction: column; align-items: center;">
+												<a th:href="@{'/uploads/' + ${file}}" target="_blank"
+													style="text-decoration: none; color: inherit;">
+													<i class="fas fa-file-word fa-3x" style="color:#0275d8;"></i>
+													<p th:text="${file}"
+														style="font-size: 0.8rem; word-break: break-all; margin-top: 5px; color:#007bff; text-decoration: underline;">
+													</p>
+												</a>
+											</div>
+										</div>
+
+									</div>
+								</div>
+
+							
+
+						
 							</div>
 
 							<div class="form-group">
@@ -124,21 +171,20 @@
 							<div class="form-group">
 								<label for="disponibilidad"><i class="fas fa-toggle-on"></i> Disponibilidad</label>
 								<select id="disponibilidad" name="disponibilidad" class="form-control">
-									<option th:value="disponible" th:selected="${session.estadoUsuario == 'Activo'}">
-										Disponible
+									<option th:value="disponible"
+										th:selected="${session.disponibilidadUsuario == 'disponible'}">Disponible
 									</option>
-									<option th:value="ocupado" th:selected="${session.estadoUsuario == 'Inactivo'}">
-										Ocupado</option>
+									<option th:value="ocupado"
+										th:selected="${session.disponibilidadUsuario == 'ocupado'}">Ocupado</option>
 								</select>
 							</div>
 
-
 							<div class="form-actions">
-
 								<button type="submit" class="save-btn">Guardar cambios</button>
 							</div>
 						</div>
 					</form>
+
 
 				</div>
 			</div>

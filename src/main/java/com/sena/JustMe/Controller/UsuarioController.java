@@ -5,6 +5,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -75,6 +78,8 @@ public class UsuarioController {
         usuarioService.save(usuario);
         return "redirect:/";
     }
+    
+    
 
     // =========================
     // Login y sesión
@@ -213,4 +218,82 @@ public class UsuarioController {
 
         return "redirect:/perfil_usuario";
     }
+ // =========================
+ // Cambio a cuenta profesional
+ // =========================
+ @PostMapping("/profesional/cambio")
+ public String cambioAProfesional(
+         @RequestParam("biografia") String biografia,
+         @RequestParam("availability") String disponibilidad,
+         @RequestParam(value = "portafolio", required = false) MultipartFile[] portafolioFiles,
+         HttpSession session,
+         Model model) {
+
+     Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+
+     if (idUsuario == null) {
+         model.addAttribute("error", "No hay sesión activa.");
+         return "redirect:/";
+     }
+
+     Optional<Usuarios> optionalUsuario = usuarioService.findById(idUsuario);
+     if (optionalUsuario.isEmpty()) {
+         model.addAttribute("error", "Usuario no encontrado.");
+         return "redirect:/";
+     }
+
+     try {
+         Usuarios usuario = optionalUsuario.get();
+         usuario.setBiografia(biografia);
+         usuario.setDisponibilidad(disponibilidad);
+
+         // 📁 Guardar portafolio en carpeta uploads y almacenar nombres en la BD
+         if (portafolioFiles != null && portafolioFiles.length > 0) {
+             StringBuilder sb = new StringBuilder();
+             Path uploadPath = Paths.get("uploads");
+
+             // Crear carpeta si no existe
+             if (!Files.exists(uploadPath)) {
+                 Files.createDirectories(uploadPath);
+             }
+
+             for (MultipartFile file : portafolioFiles) {
+                 if (!file.isEmpty()) {
+                     String nombreArchivo = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+                     Path destino = uploadPath.resolve(nombreArchivo);
+                     Files.copy(file.getInputStream(), destino, StandardCopyOption.REPLACE_EXISTING);
+                     sb.append(nombreArchivo).append(",");
+                 }
+             }
+
+             usuario.setPortafolio(sb.toString());
+         }
+
+         // 🔄 Cambiar rol a profesional (ID = 2)
+         Optional<Rol> rolProfesional = rolService.findById(2);
+         rolProfesional.ifPresent(usuario::setRol);
+
+         usuario.setEstado("PROFESIONAL");
+         usuarioService.save(usuario);
+
+         // 🔁 Refrescar datos de sesión
+         session.setAttribute("biografiaUsuario", usuario.getBiografia());
+         session.setAttribute("rolUsuario", "PROFESIONAL");
+         session.setAttribute("portafolioUsuario", usuario.getPortafolio());
+
+         return "redirect:/profesional"; // Redirige a la vista de profesional
+
+     } catch (IOException e) {
+         e.printStackTrace();
+         model.addAttribute("error", "Error al procesar los archivos: " + e.getMessage());
+         return "redirect:/perfil_usuario";
+     }
+ }
+ 
+ 
+
+
+
+
+
 }

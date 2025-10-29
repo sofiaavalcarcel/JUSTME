@@ -18,7 +18,10 @@ public class Usuarios {
 	private String direccion;
 	private String biografia;
 	private String documentos;
-	private String portafolio;
+	@Column(length = 1000)
+	private String portafolio; // guardará nombres separados por coma
+
+
 	private String estado;
 	private String disponibilidad;
 	

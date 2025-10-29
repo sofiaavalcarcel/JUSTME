@@ -71,6 +71,8 @@ public class ProfesionalController {
 	            session.setAttribute("fotoperfil", user.getFotoperfil());
 	            session.setAttribute("estadoUsuario", user.getEstado());
 	            session.setAttribute("disponibilidadUsuario", user.getDisponibilidad()); // 👈 nuevo
+	            session.setAttribute("portafolioUsuario", user.getPortafolio());
+
 	        }
 	    }
 	    return "perfilProfesional/home";
@@ -139,6 +141,8 @@ public class ProfesionalController {
 	    // ✅ Redirige al home del profesional
 	    return "redirect:/perfilProfesional";
 	}
+	
+	
 
     }
 

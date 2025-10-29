@@ -6,7 +6,10 @@ import com.sena.JustMe.repository.IUsuarioRepository;
 import com.sena.JustMe.repository.IRolRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,15 +24,16 @@ public class UsuariosServiceImplement implements IUsuariosService {
 
     @Override
     public Usuarios save(Usuarios usuario) {
-        // Buscar el rol con ID = 3 (ejemplo: CLIENTE)
-        Rol rolCliente = rolRepository.findById(3)
-                .orElseThrow(() -> new RuntimeException("El rol con ID=3 no existe en la BD"));
-
-        // Asignar rol automáticamente
-        usuario.setRol(rolCliente);
+        // Si el usuario no tiene rol, se asigna CLIENTE por defecto
+        if (usuario.getRol() == null) {
+            Rol rolCliente = rolRepository.findById(3)
+                    .orElseThrow(() -> new RuntimeException("El rol con ID=3 no existe en la BD"));
+            usuario.setRol(rolCliente);
+        }
 
         return usuarioRepository.save(usuario);
     }
+
 
     @Override
     public Optional<Usuarios> findById(Integer id) {
@@ -49,5 +53,41 @@ public class UsuariosServiceImplement implements IUsuariosService {
     @Override
     public List<Usuarios> findAll() {
         return usuarioRepository.findAll();
+    }
+
+    // 🔹 NUEVO MÉTODO: actualizar perfil profesional
+    public void actualizarPerfilProfesional(Integer idUsuario, String biografia, 
+                                            String disponibilidad, MultipartFile[] portafolioFiles) throws IOException {
+        Optional<Usuarios> optionalUsuario = usuarioRepository.findById(idUsuario);
+
+        if (optionalUsuario.isPresent()) {
+            Usuarios usuario = optionalUsuario.get();
+
+            usuario.setBiografia(biografia);
+            usuario.setDisponibilidad(disponibilidad);
+
+            // Si se suben archivos, los convertimos a Base64 y se guardan en la BD
+            if (portafolioFiles != null && portafolioFiles.length > 0) {
+                StringBuilder sb = new StringBuilder();
+                for (MultipartFile file : portafolioFiles) {
+                    if (!file.isEmpty()) {
+                        String base64 = Base64.getEncoder().encodeToString(file.getBytes());
+                        sb.append(base64).append(",");
+                    }
+                }
+                usuario.setPortafolio(sb.toString());
+            }
+
+            // Cambiar estado o rol si deseas marcarlo como profesional
+            Rol rolProfesional = rolRepository.findById(2) // Ejemplo: rol 2 = PROFESIONAL
+                    .orElseThrow(() -> new RuntimeException("El rol con ID=2 no existe en la BD"));
+            usuario.setRol(rolProfesional);
+
+            usuario.setEstado("PROFESIONAL");
+
+            usuarioRepository.save(usuario);
+        } else {
+            throw new RuntimeException("No se encontró el usuario con ID: " + idUsuario);
+        }
     }
 }
