@@ -273,7 +273,7 @@ public class UsuarioController {
          Optional<Rol> rolProfesional = rolService.findById(2);
          rolProfesional.ifPresent(usuario::setRol);
 
-         usuario.setEstado("PROFESIONAL");
+         usuario.setEstado("Activo");
          usuarioService.save(usuario);
 
          // 🔁 Refrescar datos de sesión
