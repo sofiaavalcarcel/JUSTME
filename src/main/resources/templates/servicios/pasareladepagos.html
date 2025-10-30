@@ -1,625 +1,406 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Checkout - Stripe</title>
-  <link rel="stylesheet" th:href="@{/styles/pasarela_pagos.css}">
-  <script src="https://js.stripe.com/v3/"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <style>
-    :root {
-      --primary-color: #e16bff;
-      --primary-dark: #9033a7;
-      --secondary-color: #e16bff;
-      --dark-color: #333;
-      --light-color: #f8f9fa;
-      --gray-color: #6c757d;
-      --light-gray: #e9ecef;
-      --white: #fff;
-      --black: #000;
-      --bg-color: #ffffff;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout Premium - Stripe</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{/styles/pasarela_pagos.css}"/>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    body {
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-
-    .checkout-container {
-      display: flex;
-      max-width: 1000px;
-      width: 100%;
-      gap: 30px;
-      flex-wrap: wrap;
-    }
-
-    /* Tarjetas comunes */
-    .card {
-      background: var(--white);
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-      padding: 30px;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
-    }
-
-    h2 {
-      color: var(--dark-color);
-      margin-bottom: 20px;
-      font-weight: 600;
-      font-size: 1.5rem;
-      border-bottom: 2px solid var(--light-gray);
-      padding-bottom: 10px;
-    }
-
-    /* Resumen del servicio */
-    .order-summary {
-      flex: 1;
-      min-width: 300px;
-    }
-
-    .order-summary ul {
-      list-style: none;
-    }
-
-    .order-summary li {
-      margin-bottom: 15px;
-      padding-bottom: 15px;
-      border-bottom: 1px solid var(--light-gray);
-    }
-
-    .order-summary strong {
-      color: var(--gray-color);
-      display: inline-block;
-      width: 120px;
-    }
-
-    .order-summary .descripcion {
-      border-bottom: none;
-    }
-
-    .order-summary .descripcion p {
-      margin-top: 8px;
-      color: var(--gray-color);
-      line-height: 1.5;
-    }
-
-    .order-summary .total {
-      display: flex;
-      justify-content: space-between;
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: var(--dark-color);
-      border-top: 2px solid var(--light-gray);
-      padding-top: 15px;
-      margin-top: 15px;
-      border-bottom: none;
-    }
-
-    /* Tarjeta de pago */
-    .payment-card {
-      flex: 1;
-      min-width: 300px;
-    }
-
-    form {
-      margin-bottom: 25px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 10px;
-      font-weight: 500;
-      color: var(--dark-color);
-    }
-
-    .card-element {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 12px 15px;
-      margin-bottom: 20px;
-      background: var(--light-gray);
-      transition: all 0.3s;
-    }
-
-    .card-element:focus-within {
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 1px var(--primary-color);
-      background: var(--white);
-    }
-
-    .StripeElement--focus {
-      background: var(--white);
-    }
-
-    .card-details {
-      display: flex;
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-
-    .card-details .form-group {
-      flex: 1;
-    }
-
-    .form-group {
-      margin-bottom: 15px;
-    }
-
-    .form-group label {
-      margin-bottom: 8px;
-      font-size: 0.9rem;
-    }
-
-    .form-group input {
-      width: 100%;
-      padding: 12px 15px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-size: 1rem;
-      transition: all 0.3s;
-    }
-
-    .form-group input:focus {
-      outline: none;
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 1px var(--primary-color);
-    }
-
-    .pay-button {
-      width: 100%;
-      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-      color: var(--white);
-      border: none;
-      border-radius: 8px;
-      padding: 15px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s;
-      box-shadow: 0 4px 15px rgba(225, 107, 255, 0.3);
-    }
-
-    .pay-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(225, 107, 255, 0.4);
-    }
-
-    .pay-button:disabled {
-      background: var(--gray-color);
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .secure {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 15px;
-      background: var(--light-gray);
-      border-radius: 8px;
-      margin-top: 20px;
-    }
-
-    .secure img {
-      width: 24px;
-      height: 24px;
-    }
-
-    .secure p {
-      color: var(--gray-color);
-      font-size: 0.9rem;
-    }
-
-    /* Nuevos estilos para la tarjeta de pago personalizada */
-    .card-preview {
-      background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
-      border-radius: 12px;
-      padding: 20px;
-      color: white;
-      margin-bottom: 20px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card-preview::before {
-      content: "";
-      position: absolute;
-      top: -50%;
-      right: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
-    }
-
-    .card-chip {
-      width: 40px;
-      height: 30px;
-      background: linear-gradient(135deg, #c9a96e 0%, #d4b77d 100%);
-      border-radius: 5px;
-      margin-bottom: 20px;
-    }
-
-    .card-number {
-      font-size: 1.2rem;
-      letter-spacing: 2px;
-      margin-bottom: 20px;
-      font-family: monospace;
-    }
-
-    .card-bottom {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .card-info {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .card-label {
-      font-size: 0.7rem;
-      opacity: 0.7;
-      margin-bottom: 4px;
-    }
-
-    .card-expiry, .card-cvc {
-      font-size: 0.9rem;
-      font-family: monospace;
-    }
-
-    .card-logo {
-      font-weight: bold;
-      font-size: 1.2rem;
-      opacity: 0.9;
-    }
-
-    .card-fields {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    .field-row {
-      display: flex;
-      gap: 15px;
-    }
-
-    .field-row .form-group {
-      flex: 1;
-    }
-
-    .cvc-field {
-      max-width: 120px;
-    }
-
-    .test-cards {
-      background: var(--light-gray);
-      border-radius: 8px;
-      padding: 15px;
-      margin-top: 20px;
-      font-size: 0.85rem;
-    }
-
-    .test-cards h3 {
-      margin-bottom: 10px;
-      color: var(--dark-color);
-      font-size: 0.9rem;
-    }
-
-    .test-cards ul {
-      list-style: none;
-      color: var(--gray-color);
-    }
-
-    .test-cards li {
-      margin-bottom: 5px;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .checkout-container {
-        flex-direction: column;
-      }
-      
-      .card-details {
-        flex-direction: column;
-        gap: 0;
-      }
-      
-      .field-row {
-        flex-direction: column;
-        gap: 0;
-      }
-      
-      .cvc-field {
-        max-width: 100%;
-      }
-    }
-  </style>
+ 
 </head>
+
 <body>
-	<div class="checkout-container">
-	  <!-- 🧾 RESUMEN DEL SERVICIO -->
-	  <aside class="card order-summary">
-	    <h2>Resumen del Servicio</h2>
-	    <ul>
-	      <li>
-	        <strong>Categoría:</strong>
-	        <span th:text="${servicio.categoria}">Belleza</span>
-	      </li>
-	      <li>
-	        <strong>Servicio:</strong>
-	        <span th:text="${servicio.nombre_servicios}">Pestañas 3D volumen</span>
-	      </li>
-	      <li>
-	        <strong>Precio:</strong>
-	        <span th:text="${#numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 2, 'COMMA')}">240.000,00</span>
-	      </li>
-	      <li class="descripcion">
-	        <strong>Descripción:</strong>
-	        <p th:text="${servicio.descripcion}">
-	          Corte profesional con asesoría de estilo personalizada.
-	        </p>
-	      </li>
-	      <li class="total">
-	        <span>Total:</span>
-	        <strong th:text="${#numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 2, 'COMMA')}">240.000,00</strong>
-	      </li>
-	    </ul>
-	  </aside>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
 
-	  <!-- 💳 CARD DE PAGO STRIPE -->
-	  <div class="card payment-card">
-	    <h2>Detalles de Pago</h2>
-	    
-	    <!-- Vista previa de la tarjeta -->
-	    <div class="card-preview">
-	      <div class="card-chip"></div>
-	      <div class="card-number" id="card-number-preview">•••• •••• •••• ••••</div>
-	      <div class="card-bottom">
-	        <div class="card-info">
-	          <div class="card-label">VENCE</div>
-	          <div class="card-expiry" id="card-expiry-preview">MM/AA</div>
-	        </div>
-	        <div class="card-info">
-	          <div class="card-label">CVC</div>
-	          <div class="card-cvc" id="card-cvc-preview">•••</div>
-	        </div>
-	        <div class="card-logo">STRIPE</div>
-	      </div>
-	    </div>
-	    
-	    <form id="payment-form">
-	      <!-- Número de tarjeta -->
-	      <div class="form-group">
-	        <label for="card-number-element">Número de Tarjeta</label>
-	        <div id="card-number-element" class="card-element"></div>
-	      </div>
-	      
-	      <!-- Fecha de vencimiento y CVC en la misma fila -->
-	      <div class="field-row">
-	        <div class="form-group">
-	          <label for="card-expiry-element">Fecha de Vencimiento</label>
-	          <div id="card-expiry-element" class="card-element"></div>
-	        </div>
-	        <div class="form-group cvc-field">
-	          <label for="card-cvc-element">CVC</label>
-	          <div id="card-cvc-element" class="card-element"></div>
-	        </div>
-	      </div>
+    <div class="checkout-container">
+        <!-- Columna izquierda - Formulario de pago -->
+        <div class="checkout-form">
+            <!-- Detalles de pago -->
+            <div class="form-section">
+                <h2 class="section-title">Detalles de Pago</h2>
+                
+                <!-- Vista previa de la tarjeta con efecto flip -->
+                <div class="card-preview-container" id="card-preview-container">
+                    <div class="card-inner">
+                        <!-- Frente de la tarjeta -->
+                        <div class="card-front" id="card-front">
+                            <div class="card-chip"></div>
+                            <div class="card-number" id="card-number-preview">•••• •••• •••• ••••</div>
+                            <div class="card-bottom">
+                                <div class="card-info">
+                                    <div class="card-label">VENCE</div>
+                                    <div class="card-expiry" id="card-expiry-preview">MM/AA</div>
+                                </div>
+                                <div class="card-logo">STRIPE</div>
+                            </div>
+                        </div>
 
-	      <button id="submit" class="pay-button">
-	        <span id="button-text">Pagar</span>
-	      </button>
+                        <!-- Reverso de la tarjeta -->
+                        <div class="card-back">
+                            <div class="card-magnetic-strip"></div>
+                            <div class="card-cvc-strip">
+                                <div class="card-cvc-display" id="card-cvc-back-preview">•••</div>
+                            </div>
+                            <div style="flex: 1;"></div>
+                            <div class="card-logo">STRIPE</div>
+                        </div>
+                    </div>
+                </div>
 
-	      <p id="payment-message" class="hidden"></p>
-	    </form>
+                <form id="payment-form">
+                    <!-- Número de tarjeta -->
+                    <div class="form-group">
+                        <label for="card-number-element">Número de Tarjeta</label>
+                        <div id="card-number-element" class="card-element"></div>
+                    </div>
 
-	    <div class="test-cards">
-	      <h3>💳 Tarjetas de Prueba</h3>
-	      <ul>
-	        <li><strong>Visa:</strong> 4242 4242 4242 4242</li>
-	        <li><strong>Mastercard:</strong> 5555 5555 5555 4444</li>
-	        <li><strong>Fecha:</strong> Cualquier fecha futura</li>
-	        <li><strong>CVC:</strong> Cualquier código de 3 dígitos</li>
-	      </ul>
-	    </div>
+                    <!-- Fecha de vencimiento y CVC en la misma fila -->
+                    <div class="field-row">
+                        <div class="form-group">
+                            <label for="card-expiry-element">Fecha de Vencimiento</label>
+                            <div id="card-expiry-element" class="card-element"></div>
+                        </div>
+                        <div class="form-group cvc-field">
+                            <label for="card-cvc-element">CVC</label>
+                            <div id="card-cvc-element" class="card-element"></div>
+                        </div>
+                    </div>
 
-	    <div class="secure">
-	      <img src="https://cdn-icons-png.flaticon.com/512/942/942799.png" alt="Seguridad" />
-	      <p>Pago seguro procesado por <strong>Stripe</strong></p>
-	    </div>
-	  </div>
-	</div>
+                    <div class="button-container">
+                        <button id="submit" class="pay-button" type="submit">
+                            <span id="button-text">Pagar Ahora</span>
+                        </button>
 
-	<script th:inline="javascript">
-	  const servicePrice = /*[[${servicio.precio_base}]]*/ 0;
-	</script>
+                        <a th:href="@{/inicio}" class="cancel-button">
+                            <span>Cancelar</span>
+                        </a>
+                    </div>
 
-	<script>
-	  // Clave pública de prueba de Stripe
-	  const stripe = Stripe("pk_test_51SO0JaPlW1idieMBuFaLL5AyDp3bSKgMj0KddfZd4yRRtB36wwJzIXWVgTPufftpFfT81ra2iDGkHtS8qA79ReOf00M4qhTfnE");
-	  
-	  // Configuración de elementos de Stripe
-	  const elements = stripe.elements();
-	  
-	  // Estilos personalizados para los elementos
-	  const elementStyles = {
-	    base: {
-	      color: '#32325d',
-	      fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-	      fontSmoothing: 'antialiased',
-	      fontSize: '16px',
-	      '::placeholder': {
-	        color: '#aab7c4'
-	      }
-	    },
-	    invalid: {
-	      color: '#fa755a',
-	      iconColor: '#fa755a'
-	    }
-	  };
+                    <p id="payment-message" class="hidden"></p>
+                </form>
 
-	  // Crear elementos de Stripe separados
-	  const cardNumber = elements.create('cardNumber', {
-	    style: elementStyles,
-	    placeholder: '1234 1234 1234 1234'
-	  });
-	  
-	  const cardExpiry = elements.create('cardExpiry', {
-	    style: elementStyles,
-	    placeholder: 'MM/AA'
-	  });
-	  
-	  const cardCvc = elements.create('cardCvc', {
-	    style: elementStyles,
-	    placeholder: 'CVC'
-	  });
+              
+            </div>
+        </div>
 
-	  // Montar elementos
-	  cardNumber.mount('#card-number-element');
-	  cardExpiry.mount('#card-expiry-element');
-	  cardCvc.mount('#card-cvc-element');
-	  
-	  // Actualizar vista previa de la tarjeta
-	  cardNumber.on('change', (event) => {
-	    const display = event.empty ? '•••• •••• •••• ••••' : event.value;
-	    document.getElementById('card-number-preview').textContent = display;
-	  });
-	  
-	  cardExpiry.on('change', (event) => {
-	    const display = event.empty ? 'MM/AA' : event.value;
-	    document.getElementById('card-expiry-preview').textContent = display;
-	  });
-	  
-	  cardCvc.on('change', (event) => {
-	    const display = event.empty ? '•••' : event.value;
-	    document.getElementById('card-cvc-preview').textContent = display;
-	  });
+        <!-- Columna derecha - Resumen -->
+        <div class="order-summary">
+            <h2 class="summary-title">Resumen del servicio</h2>
 
-	  const form = document.getElementById("payment-form");
-	  const message = document.getElementById("payment-message");
-	  const button = document.getElementById("submit");
+            <!-- Información del servicio desde el backend -->
+            <div class="summary-item">
+                <div class="item-details">
+                    <span class="item-code" th:text="${servicio.categoria}">Categoría</span>
+                    <span class="item-name" th:text="${servicio.nombre_servicios}">Nombre del Servicio</span>
+                </div>
+                <div class="item-price" th:text="${'$' + #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 2, 'COMMA')}">$0.00</div>
+            </div>
 
-	  form.addEventListener("submit", async (e) => {
-	    e.preventDefault();
-	    button.disabled = true;
-	    button.textContent = "Procesando...";
+            <div class="summary-item">
+                <div class="item-details">
+                    <span class="item-code">Descripción</span>
+                    <span class="item-name" th:text="${servicio.descripcion}">Descripción del servicio</span>
+                </div>
+            </div>
 
-	    try {
-	      // Primero crear el Payment Intent en el servidor
-	      const res = await fetch("/api/stripe/create-payment-intent", {
-	        method: "POST",
-	        headers: { "Content-Type": "application/json" },
-	        body: JSON.stringify({ 
-	          amount: Math.round(servicePrice * 100), // Convertir a centavos
-	          currency: 'cop'
-	        })
-	      });
+            <div class="coupon-section">
+                <label for="coupon">Cupón</label>
+                <div class="coupon-input">
+                    <input type="text" id="coupon" placeholder="Ingrese un cupón">
+                    <button class="apply-btn" type="button">Aplicar</button>
+                </div>
+            </div>
 
-	      if (!res.ok) {
-	        throw new Error('Error al crear el payment intent');
-	      }
+            <div class="summary-total">
+                <div class="total-row">
+                    <span>Subtotal</span>
+                    <span th:text="${'$' + #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 2, 'COMMA')}">$0.00</span>
+                </div>
+                <div class="total-row">
+                    <span>Descuento</span>
+                    <span>$0</span>
+                </div>
+                <div class="total-row grand-total">
+                    <span>Total</span>
+                    <span th:text="${'$' + #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 2, 'COMMA')}">$0.00</span>
+                </div>
+            </div>
 
-	      const { clientSecret } = await res.json();
+            <div class="secure">
+                <img src="https://cdn-icons-png.flaticon.com/512/942/942799.png" alt="Seguridad" />
+                <p>Pago seguro procesado por <strong>Stripe</strong></p>
+            </div>
+        </div>
+    </div>
 
-	      // Confirmar el pago con los elementos de la tarjeta
-	      const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-	        payment_method: {
-	          card: cardNumber,
-	          billing_details: {
-	            // Aquí puedes agregar detalles de facturación si los tienes
-	          }
-	        }
-	      });
+    <script th:inline="javascript">
+        const servicePrice = /*[[${servicio.precio_base}]]*/ 0;
+    </script>
 
-	      if (error) {
-	        Swal.fire({
-	          icon: 'error',
-	          title: 'Error en el pago',
-	          text: error.message,
-	          confirmButtonColor: '#e16bff'
-	        });
-	        button.disabled = false;
-	        button.textContent = "Pagar";
-	      } else if (paymentIntent.status === "succeeded") {
-	        Swal.fire({
-	          icon: 'success',
-	          title: '¡Pago exitoso!',
-	          text: 'Tu pago se ha procesado correctamente.',
-	          confirmButtonColor: '#e16bff'
-	        }).then(() => {
-	          // Limpiar formulario
-	          cardNumber.clear();
-	          cardExpiry.clear();
-	          cardCvc.clear();
-	          // Restablecer vista previa
-	          document.getElementById('card-number-preview').textContent = '•••• •••• •••• ••••';
-	          document.getElementById('card-expiry-preview').textContent = 'MM/AA';
-	          document.getElementById('card-cvc-preview').textContent = '•••';
-	          // Redirigir o realizar otra acción
-	          setTimeout(() => {
-	            window.location.href = '/inicio';
-	          }, 2000);
-	        });
-	      }
-	    } catch (err) {
-	      console.error('Error:', err);
-	      Swal.fire({
-	        icon: 'error',
-	        title: 'Error',
-	        text: 'Ha ocurrido un error inesperado. Inténtalo de nuevo.',
-	        confirmButtonColor: '#e16bff'
-	      });
-	      button.disabled = false;
-	      button.textContent = "Pagar";
-	    }
-	  });
+    <script>
+        // Clave pública de prueba de Stripe
+        const stripe = Stripe("pk_test_51SO0JaPlW1idieMBuFaLL5AyDp3bSKgMj0KddfZd4yRRtB36wwJzIXWVgTPufftpFfT81ra2iDGkHtS8qA79ReOf00M4qhTfnE");
 
-	  // Manejar errores de validación en tiempo real
-	  cardNumber.on('change', (event) => {
-	    const displayError = document.getElementById('card-errors');
-	    if (event.error) {
-	      console.log('Error en número de tarjeta:', event.error.message);
-	    }
-	  });
+        // Configuración de elementos de Stripe
+        const elements = stripe.elements();
 
-	  cardExpiry.on('change', (event) => {
-	    if (event.error) {
-	      console.log('Error en fecha:', event.error.message);
-	    }
-	  });
+        // Estilos personalizados para los elementos
+        const elementStyles = {
+            base: {
+                color: '#32325d',
+                fontFamily: '"Inter", sans-serif',
+                fontSmoothing: 'antialiased',
+                fontSize: '16px',
+                '::placeholder': {
+                    color: '#aab7c4'
+                }
+            },
+            invalid: {
+                color: '#fa755a',
+                iconColor: '#fa755a'
+            }
+        };
 
-	  cardCvc.on('change', (event) => {
-	    if (event.error) {
-	      console.log('Error en CVC:', event.error.message);
-	    }
-	  });
-	</script>
+        // Crear elementos de Stripe separados
+        const cardNumber = elements.create('cardNumber', {
+            style: elementStyles,
+            placeholder: '1234 1234 1234 1234'
+        });
+
+        const cardExpiry = elements.create('cardExpiry', {
+            style: elementStyles,
+            placeholder: 'MM/AA'
+        });
+
+        const cardCvc = elements.create('cardCvc', {
+            style: elementStyles,
+            placeholder: 'CVC'
+        });
+
+        // Montar elementos
+        cardNumber.mount('#card-number-element');
+        cardExpiry.mount('#card-expiry-element');
+        cardCvc.mount('#card-cvc-element');
+
+        // Referencias a elementos de la vista previa
+        const cardPreviewContainer = document.getElementById('card-preview-container');
+        const cardFront = document.getElementById('card-front');
+        const cardNumberPreview = document.getElementById('card-number-preview');
+        const cardExpiryPreview = document.getElementById('card-expiry-preview');
+        const cardCvcPreview = document.getElementById('card-cvc-preview');
+        const cardCvcBackPreview = document.getElementById('card-cvc-back-preview');
+
+        // Función para formatear número de tarjeta con caracteres ocultos
+        function formatCardNumber(value) {
+            if (!value || value.length < 4) return '•••• •••• •••• ••••';
+
+            const visibleDigits = value.slice(-4);
+            const hiddenPart = '•••• •••• •••• ';
+            return hiddenPart + visibleDigits;
+        }
+
+        // Actualizar vista previa de la tarjeta con animaciones
+        cardNumber.on('change', (event) => {
+            if (event.empty) {
+                cardNumberPreview.textContent = '•••• •••• •••• ••••';
+            } else {
+                cardNumberPreview.textContent = formatCardNumber(event.value);
+            }
+
+            // Animación cuando se está escribiendo
+            if (event.empty || event.complete) {
+                cardFront.classList.remove('active');
+            } else {
+                cardFront.classList.add('active');
+            }
+        });
+
+        cardExpiry.on('change', (event) => {
+            const display = event.empty ? 'MM/AA' : event.value;
+            cardExpiryPreview.textContent = display;
+        });
+
+        cardCvc.on('change', (event) => {
+            const display = event.empty ? '•••' : '•'.repeat(event.value.length);
+            cardCvcPreview.textContent = display;
+            cardCvcBackPreview.textContent = display;
+        });
+
+        // Efectos de focus en los elementos - voltear tarjeta para CVC
+        cardNumber.on('focus', () => {
+            cardPreviewContainer.classList.remove('flipped');
+            cardFront.classList.add('active');
+        });
+
+        cardExpiry.on('focus', () => {
+            cardPreviewContainer.classList.remove('flipped');
+            cardFront.classList.add('active');
+        });
+
+        cardCvc.on('focus', () => {
+            cardPreviewContainer.classList.add('flipped');
+            cardFront.classList.remove('active');
+        });
+
+        cardNumber.on('blur', () => {
+            // No voltear automáticamente al perder el foco
+        });
+
+        cardExpiry.on('blur', () => {
+            // No voltear automáticamente al perder el foco
+        });
+
+        cardCvc.on('blur', () => {
+            // Voltear de nuevo al frente después de un breve delay
+            setTimeout(() => {
+                if (document.activeElement !== document.getElementById('card-cvc-element')) {
+                    cardPreviewContainer.classList.remove('flipped');
+                }
+            }, 500);
+        });
+
+        const form = document.getElementById("payment-form");
+        const message = document.getElementById("payment-message");
+        const button = document.getElementById("submit");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            button.disabled = true;
+            button.classList.add('loading');
+            button.innerHTML = '<span id="button-text">Procesando...</span>';
+
+            try {
+                // Primero crear el Payment Intent en el servidor
+                const res = await fetch("/api/stripe/create-payment-intent", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({
+                        amount: Math.round(servicePrice * 100), // Convertir a centavos
+                        currency: 'cop'
+                    })
+                });
+
+                if (!res.ok) {
+                    throw new Error('Error al crear el payment intent');
+                }
+
+                const {clientSecret} = await res.json();
+
+                // Confirmar el pago con los elementos de la tarjeta
+                const {error, paymentIntent} = await stripe.confirmCardPayment(clientSecret, {
+                    payment_method: {
+                        card: cardNumber,
+                        billing_details: {
+                            // Aquí puedes agregar detalles de facturación si los tienes
+                        }
+                    }
+                });
+
+                if (error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error en el pago',
+                        text: error.message,
+                        confirmButtonColor: '#8b5cf6',
+                        background: 'var(--card-bg)',
+                        color: 'var(--dark-color)'
+                    });
+                    button.disabled = false;
+                    button.classList.remove('loading');
+                    button.innerHTML = '<span id="button-text">Pagar Ahora</span>';
+                } else if (paymentIntent.status === "succeeded") {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Pago exitoso!',
+                        text: 'Tu pago se ha procesado correctamente. Serás redirigido en breve.',
+                        confirmButtonColor: '#8b5cf6',
+                        background: 'var(--card-bg)',
+                        color: 'var(--dark-color)',
+                        timer: 3000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        // Redirigir a /inicio después del pago exitoso
+                        window.location.href = '/inicio';
+                    });
+                }
+            } catch (err) {
+                console.error('Error:', err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Ha ocurrido un error inesperado. Inténtalo de nuevo.',
+                    confirmButtonColor: '#8b5cf6',
+                    background: 'var(--card-bg)',
+                    color: 'var(--dark-color)'
+                });
+                button.disabled = false;
+                button.classList.remove('loading');
+                button.innerHTML = '<span id="button-text">Pagar Ahora</span>';
+            }
+        });
+
+        // Manejar errores de validación en tiempo real
+        cardNumber.on('change', (event) => {
+            if (event.error) {
+                console.log('Error en número de tarjeta:', event.error.message);
+            }
+        });
+
+        cardExpiry.on('change', (event) => {
+            if (event.error) {
+                console.log('Error en fecha:', event.error.message);
+            }
+        });
+
+        cardCvc.on('change', (event) => {
+            if (event.error) {
+                console.log('Error en CVC:', event.error.message);
+            }
+        });
+
+        // Manejo del cupón
+        document.querySelector('.apply-btn').addEventListener('click', function (e) {
+            e.preventDefault();
+            const couponCode = document.getElementById('coupon').value;
+
+            if (couponCode) {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Cupón aplicado',
+                    text: 'El código de cupón ha sido aplicado correctamente.',
+                    confirmButtonColor: '#8b5cf6',
+                    background: 'var(--card-bg)',
+                    color: 'var(--dark-color)'
+                });
+            } else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Cupón vacío',
+                    text: 'Por favor ingresa un código de cupón válido.',
+                    confirmButtonColor: '#8b5cf6',
+                    background: 'var(--card-bg)',
+                    color: 'var(--dark-color)'
+                });
+            }
+        });
+
+        // Animación adicional para elementos al cargar
+        document.addEventListener('DOMContentLoaded', function () {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
 </body>
+
 </html>

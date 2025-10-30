@@ -10,6 +10,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 </head>
@@ -104,112 +105,116 @@
 
 		<!-- 🔹 Servicios -->
 		<section class="services-section">
-		    <div class="container">
-		        <div class="section-header">
-		            <h3>
-		                Mis servicios ofrecidos <br />
-		                <span class="badge" th:text="${'Total: ' + servicios.size() + ' servicios'}">Total: 0
-		                    servicios</span>
-		            </h3>
+			<div class="container">
+				<div class="section-header">
+					<h3>
+						Mis servicios ofrecidos <br />
+						<span class="badge" th:text="${'Total: ' + servicios.size() + ' servicios'}">Total: 0
+							servicios</span>
+					</h3>
 
-		            <a th:href="@{servicios/profesional/servicios}" class="btn-primary" id="addServiceBtn">
-		                <i class="fas fa-plus"></i> Agregar servicio
-		            </a>
-		        </div>
+					<a th:href="@{servicios/profesional/servicios}" class="btn-primary" id="addServiceBtn">
+						<i class="fas fa-plus"></i> Agregar servicio
+					</a>
+				</div>
 
-		        <div class="cards-container">
-		            <div class="service-card" th:each="servicio : ${servicios}">
-		                <div class="service-content">
-		                    <img th:src="@{'/uploads/' + ${servicio.imagen}}" alt="Imagen del servicio"
-		                        class="service-image" />
+				<div class="cards-container">
+					<div class="service-card" th:each="servicio : ${servicios}">
+						<div class="service-content">
+							<img th:src="@{'/uploads/' + ${servicio.imagen}}" alt="Imagen del servicio"
+								class="service-image" />
 
-		                    <div class="service-info">
-		                        <h4 th:text="${servicio.nombre_servicios}">Nombre del servicio</h4>
-		                        <p><i class="fas fa-tag"></i> <span th:text="${servicio.categoria}">Categoría</span></p>
-		                        <p>
-		                            <i class="fas fa-dollar-sign"></i>
-		                            <span class="price"
-		                                th:text="${#strings.concat('$', #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 0, 'POINT'))}">
-		                                $0
-		                            </span>
-		                        </p>
-		                        <div class="descripcion-container">
-		                            <p class="descripcion">
-		                                <i class="fas fa-align-left"></i>
-		                                <span th:text="${servicio.descripcion}">Descripción del servicio</span>
-		                            </p>
-		                        </div>
-		                    </div>
-		                </div>
+							<div class="service-info">
+								<h4 th:text="${servicio.nombre_servicios}">Nombre del servicio</h4>
+								<p><i class="fas fa-tag"></i> <span th:text="${servicio.categoria}">Categoría</span></p>
+								<p>
+									<i class="fas fa-dollar-sign"></i>
+									<span class="price"
+										th:text="${#strings.concat('$', #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 0, 'POINT'))}">
+										$0
+									</span>
+								</p>
+								<div class="descripcion-container">
+									<p class="descripcion">
+										<i class="fas fa-align-left"></i>
+										<span th:text="${servicio.descripcion}">Descripción del servicio</span>
+									</p>
+								</div>
+							</div>
+						</div>
 
-		                <div class="card-actions">
-		                    <a th:href="@{/servicios/editar/{id}(id=${servicio.idservicios})}" class="btn-action btn-edit" title="Editar servicio">
-		                        <i class="fas fa-pen"></i>
-		                        <span>Editar</span>
-		                    </a>
+						<div class="card-actions">
+							<a th:href="@{/servicios/editar/{id}(id=${servicio.idservicios})}"
+								class="btn-action btn-edit" title="Editar servicio">
+								<i class="fas fa-pen"></i>
+								<span>Editar</span>
+							</a>
 
-		                    <form th:action="@{/servicios/eliminar/{id}(id=${servicio.idservicios})}" method="post" class="delete-form">
-		                        <button type="submit" class="btn-action btn-delete" title="Eliminar servicio">
-		                            <i class="fas fa-trash"></i>
-		                            <span>Eliminar</span>
-		                        </button>
-		                    </form>
-		                </div>
-		            </div>
-		        </div>
-		    </div>
+							<!-- Formulario de eliminación -->
+							<form th:action="@{/servicios/eliminar/{id}(id=${servicio.idservicios})}" method="post"
+								class="delete-form">
+								<button type="submit" class="btn-action btn-delete" title="Eliminar servicio">
+									<i class="fas fa-trash"></i>
+									<span>Eliminar</span>
+								</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
 		</section>
 
 
 		<!-- 🔹 Citas -->
 		<section class="services-section">
-		    <div class="container">
-		        <div class="section-header">
-		            <h3>
-		                Mis citas
-		                <br />
-		                <span class="badge" th:text="${'Total: ' + citas.size() + ' citas'}">Total: 0 citas</span>
-		            </h3>
-		        </div>
+			<div class="container">
+				<div class="section-header">
+					<h3>
+						Mis citas
+						<br />
+						<span class="badge" th:text="${'Total: ' + citas.size() + ' citas'}">Total: 0 citas</span>
+					</h3>
+				</div>
 
-		        <section class="panel">
-		            <div class="citas-container">
-		                <div class="cita-card" th:each="cita : ${citas}">
-		                    <div class="card-content">
-		                        <p><i class="fas fa-calendar-alt"></i> <strong>Fecha y Hora:</strong> 
-		                            <span th:text="${#dates.format(cita.fecha_hora, 'yyyy-MM-dd HH:mm')}"></span>
-		                        </p>
-		                        <p><i class="fas fa-map-marker-alt"></i> <strong>Dirección:</strong> 
-		                            <span th:text="${cita.direccion_servicio}"></span>
-		                        </p>
-		                        <p><i class="fas fa-info-circle"></i> <strong>Estado:</strong> 
-		                            <span th:text="${cita.estado_cita}"></span>
-		                        </p>
-		                        <p><i class="fas fa-dollar-sign"></i> <strong>Precio:</strong>
-		                            <span class="price"
-		                                th:text="${#strings.concat('$', #numbers.formatDecimal(cita.precio, 0, 'POINT', 0, 'POINT'))}"></span>
-		                        </p>
-		                        <p><i class="fas fa-user-edit"></i> <strong>Observaciones Cliente:</strong> 
-		                            <span th:text="${cita.observacionesCl}"></span>
-		                        </p>
-		                        <p><i class="fas fa-user-cog"></i> <strong>Observaciones Laburante:</strong> 
-		                            <span th:text="${cita.observacionesLb}"></span>
-		                        </p>
-		                        <p><i class="fas fa-edit"></i> <strong>Fecha Edición:</strong> 
-		                            <span th:text="${cita.fechaEdicion}"></span>
-		                        </p>
-		                    </div>
+				<section class="panel">
+					<div class="citas-container">
+						<div class="cita-card" th:each="cita : ${citas}">
+							<div class="card-content">
+								<p><i class="fas fa-calendar-alt"></i> <strong>Fecha y Hora:</strong>
+									<span th:text="${#dates.format(cita.fecha_hora, 'yyyy-MM-dd HH:mm')}"></span>
+								</p>
+								<p><i class="fas fa-map-marker-alt"></i> <strong>Dirección:</strong>
+									<span th:text="${cita.direccion_servicio}"></span>
+								</p>
+								<p><i class="fas fa-info-circle"></i> <strong>Estado:</strong>
+									<span th:text="${cita.estado_cita}"></span>
+								</p>
+								<p><i class="fas fa-dollar-sign"></i> <strong>Precio:</strong>
+									<span class="price"
+										th:text="${#strings.concat('$', #numbers.formatDecimal(cita.precio, 0, 'POINT', 0, 'POINT'))}"></span>
+								</p>
+								<p><i class="fas fa-user-edit"></i> <strong>Observaciones Cliente:</strong>
+									<span th:text="${cita.observacionesCl}"></span>
+								</p>
+								<p><i class="fas fa-user-cog"></i> <strong>Observaciones Laburante:</strong>
+									<span th:text="${cita.observacionesLb}"></span>
+								</p>
+								<p><i class="fas fa-edit"></i> <strong>Fecha Edición:</strong>
+									<span th:text="${cita.fechaEdicion}"></span>
+								</p>
+							</div>
 
-		                    <div class="card-actions">
-		                        <a th:href="@{/citas/editar/{id}(id=${cita.idcitas_reservas})}" class="btn-action btn-edit" title="Editar cita">
-		                            <i class="fas fa-pen"></i>
-		                            <span>Editar</span>
-		                        </a>
-		                    </div>
-		                </div>
-		            </div>
-		        </section>
-		    </div>
+							<div class="card-actions">
+								<a th:href="@{/citas/editar/{id}(id=${cita.idcitas_reservas})}"
+									class="btn-action btn-edit" title="Editar cita">
+									<i class="fas fa-pen"></i>
+									<span>Editar</span>
+								</a>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
 		</section>
 
 
@@ -323,7 +328,29 @@
 
 	<script th:src="@{scripts/profesional.js}"></script>
 
+	<!-- Script SweetAlert para confirmación de eliminación -->
+	<script>
+		document.querySelectorAll('.delete-form').forEach(function (form) {
+			form.addEventListener('submit', function (event) {
+				event.preventDefault(); // Evita que el formulario se envíe inmediatamente
 
+				Swal.fire({
+					title: '¿Estás seguro?',
+					text: "¡Esta acción no se puede deshacer!",
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#d33',
+					cancelButtonColor: '#3085d6',
+					confirmButtonText: 'Sí, eliminar',
+					cancelButtonText: 'Cancelar'
+				}).then((result) => {
+					if (result.isConfirmed) {
+						form.submit(); // Envía el formulario si el usuario confirma
+					}
+				});
+			});
+		});
+	</script>
 
 
 </body>

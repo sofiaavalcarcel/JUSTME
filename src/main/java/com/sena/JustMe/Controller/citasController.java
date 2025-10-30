@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sena.JustMe.model.Citas_reservas;
+import com.sena.JustMe.model.Servicios;
 import com.sena.JustMe.service.ICitas_reservasService;
 
 @Controller
@@ -25,14 +26,24 @@ public class citasController {
         Citas_reservas cita = citasService.buscarPorId(id)
                 .orElseThrow(() -> new IllegalArgumentException("ID inválido: " + id));
 
+        // ✅ Evita error Thymeleaf: inicializa el servicio si está null
+        if (cita.getServicio() == null) {
+            cita.setServicio(new Servicios());
+        }
+
         model.addAttribute("cita", cita);
-        return "profesional/editar_cita"; // 👈 OJO: tu archivo se llama editar_ctia.html
+        return "profesional/editar_cita";
     }
 
     // Guardar cambios de edición
     @PostMapping("/actualizar")
     public String actualizarCita(@ModelAttribute("cita") Citas_reservas cita) {
+        // ✅ Verificación de seguridad: debe tener servicio con id
+        if (cita.getServicio() == null || cita.getServicio().getId() == null) {
+            throw new IllegalArgumentException("La cita debe tener un servicio asociado.");
+        }
+
         citasService.guardar(cita);
-        return "redirect:/profesional"; // 👈 vuelve a la lista
+        return "redirect:/profesional"; // vuelve a la lista
     }
 }

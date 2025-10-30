@@ -21,9 +21,11 @@ public class Servicios {
     @JoinColumn(name = "usuarios_idusuarios", referencedColumnName = "idusuarios")
     private Usuarios usuario;
 
+    // 🔹 Constructor vacío
     public Servicios() {
     }
 
+    // 🔹 Constructor con parámetros
     public Servicios(Integer idservicios, String nombre_servicios, String descripcion, Double precio_base,
                      String categoria, String estado, String imagen) {
         super();
@@ -36,6 +38,7 @@ public class Servicios {
         this.imagen = imagen;
     }
 
+    // 🔹 Getters y Setters
     public Integer getIdservicios() {
         return idservicios;
     }
@@ -92,7 +95,6 @@ public class Servicios {
         this.imagen = imagen;
     }
 
-    // 🔹 Getters y Setters del campo 'usuario'
     public Usuarios getUsuario() {
         return usuario;
     }
@@ -101,10 +103,19 @@ public class Servicios {
         this.usuario = usuario;
     }
 
+    // ✅ Alias estándar para compatibilidad con controladores y Thymeleaf
+    public Integer getId() {
+        return idservicios;
+    }
+
+    public void setId(Integer id) {
+        this.idservicios = id;
+    }
+
     @Override
     public String toString() {
-        return "Servicios [idservicios=" + idservicios + ", nombre_servicios=" + nombre_servicios + ", descripcion="
-                + descripcion + ", precio_base=" + precio_base + ", categoria=" + categoria + ", estado=" + estado
-                + ", imagen=" + imagen + "]";
+        return "Servicios [idservicios=" + idservicios + ", nombre_servicios=" + nombre_servicios + 
+               ", descripcion=" + descripcion + ", precio_base=" + precio_base + 
+               ", categoria=" + categoria + ", estado=" + estado + ", imagen=" + imagen + "]";
     }
 }

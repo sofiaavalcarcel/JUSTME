@@ -8,6 +8,8 @@
 	<link rel="stylesheet" th:href="@{/styles/profesional.css}">
 	<link rel="stylesheet" th:href="@{/styles/editar.css}">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<!-- SweetAlert2 -->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -43,10 +45,14 @@
 					<h2><i class="fas fa-edit"></i> Editar servicio</h2>
 					<p>Actualiza la información de tu servicio</p>
 				</div>
+
 				<!-- Formulario de edición -->
-				<!-- Formulario de edición -->
-				<form th:action="@{/servicios/editar/{id}(id=${servicio.idservicios})}" th:object="${servicio}"
-					method="post" enctype="multipart/form-data" class="edit-service-form">
+				<form id="editarServicioForm"
+					th:action="@{/servicios/editar/{id}(id=${servicio.idservicios})}"
+					th:object="${servicio}"
+					method="post"
+					enctype="multipart/form-data"
+					class="edit-service-form">
 
 					<!-- ID oculto -->
 					<input type="hidden" th:field="*{idservicios}" />
@@ -86,16 +92,11 @@
 
 					<!-- Contenedor centrado para imagen actual + input -->
 					<div class="form-group image-edit">
-					    
-					    
-					    <!-- Subir nueva imagen -->
-					    <div class="new-image">
-					        <label for="imagenFile"><i class="fas fa-upload"></i> Cambiar imagen</label>
-					        <input type="file" name="imagenFile" id="imagenFile" accept="image/*">
-					    </div>
-
+						<div class="new-image">
+							<label for="imagenFile"><i class="fas fa-upload"></i> Cambiar imagen</label>
+							<input type="file" name="imagenFile" id="imagenFile" accept="image/*">
+						</div>
 					</div>
-
 
 					<div class="form-actions">
 						<a th:href="@{/profesional}" class="btn-secondary">Cancelar</a>
@@ -104,12 +105,31 @@
 						</button>
 					</div>
 				</form>
-
-
-
 			</div>
 		</div>
 	</main>
+
+	<!-- SweetAlert confirmación -->
+	<script>
+		document.getElementById('editarServicioForm').addEventListener('submit', function (event) {
+			event.preventDefault(); // Evita el envío inmediato del formulario
+
+			Swal.fire({
+				title: '¿Guardar cambios?',
+				text: "Se actualizará la información del servicio.",
+				icon: 'question',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Sí, guardar',
+				cancelButtonText: 'Cancelar'
+			}).then((result) => {
+				if (result.isConfirmed) {
+					this.submit(); // Envía el formulario si el usuario confirma
+				}
+			});
+		});
+	</script>
 </body>
 
 </html>

@@ -3,47 +3,38 @@ package com.sena.JustMe.model;
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "citas_reservas")
 public class Citas_reservas {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-
 	private Integer idcitas_reservas;
-	
-	 @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
 	private Date fecha_hora;
+
 	private String direccion_servicio;
 	private String estado_cita;
 	private String precio;
 	private String observacionesCl;
 	private String observacionesLb;
 	private String fechaEdicion;
-	
-	
-	// 🔹 Relación con Servicios
-    @ManyToOne
-    @JoinColumn(name = "idservicio") // debe coincidir con tu FK en la base de datos
-    private Servicios servicio;
-	
 
-	// constructor vacio
+	// 🔹 Relación con Servicios (FK correcta)
+	@ManyToOne
+	@JoinColumn(name = "idservicio", referencedColumnName = "idservicios")
+	private Servicios servicio;
+
+	// 🔹 Constructor vacío
 	public Citas_reservas() {
 	}
 
-	// constructor con espacios
+	// 🔹 Constructor con parámetros
 	public Citas_reservas(Integer idcitas_reservas, Date fecha_hora, String direccion_servicio, String estado_cita,
-			String precio, String observacionesCl, String observacionesLb, String fechaEdicion) {
-		super();
+			String precio, String observacionesCl, String observacionesLb, String fechaEdicion, Servicios servicio) {
 		this.idcitas_reservas = idcitas_reservas;
 		this.fecha_hora = fecha_hora;
 		this.direccion_servicio = direccion_servicio;
@@ -52,9 +43,10 @@ public class Citas_reservas {
 		this.observacionesCl = observacionesCl;
 		this.observacionesLb = observacionesLb;
 		this.fechaEdicion = fechaEdicion;
+		this.servicio = servicio;
 	}
 
-//Getter and setters
+	// 🔹 Getters y Setters
 	public Integer getIdcitas_reservas() {
 		return idcitas_reservas;
 	}
@@ -119,12 +111,29 @@ public class Citas_reservas {
 		this.fechaEdicion = fechaEdicion;
 	}
 
+	// 🔹 Getter y Setter de la relación con Servicio
+	public Servicios getServicio() {
+		return servicio;
+	}
+
+	public void setServicio(Servicios servicio) {
+		this.servicio = servicio;
+	}
+
+	// ✅ Alias estándar para compatibilidad (por si en el controller se usa getId)
+	public Integer getId() {
+		return idcitas_reservas;
+	}
+
+	public void setId(Integer id) {
+		this.idcitas_reservas = id;
+	}
+
 	@Override
 	public String toString() {
 		return "Citas_reservas [idcitas_reservas=" + idcitas_reservas + ", fecha_hora=" + fecha_hora
 				+ ", direccion_servicio=" + direccion_servicio + ", estado_cita=" + estado_cita + ", precio=" + precio
 				+ ", observacionesCl=" + observacionesCl + ", observacionesLb=" + observacionesLb + ", fechaEdicion="
-				+ fechaEdicion + "]";
+				+ fechaEdicion + ", servicio=" + (servicio != null ? servicio.getId() : "null") + "]";
 	}
-
 }
