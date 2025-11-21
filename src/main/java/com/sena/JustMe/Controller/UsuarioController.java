@@ -11,6 +11,11 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +27,7 @@ import com.sena.JustMe.model.Usuarios;
 import com.sena.JustMe.model.Rol;
 import com.sena.JustMe.service.IUsuariosService;
 import com.sena.JustMe.service.IRolService;
+import com.sena.JustMe.security.CustomUserDetails;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -35,6 +41,9 @@ public class UsuarioController {
 
     @Autowired
     private IRolService rolService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     // =========================
     // Páginas públicas
@@ -82,56 +91,48 @@ public class UsuarioController {
     // Login y sesión
     // =========================
     @PostMapping("/acceder")
-    public String acceder(Usuarios usuario, HttpSession session, Model model) {
-        Optional<Usuarios> userEmail = usuarioService.findByEmail(usuario.getEmail());
+    public String acceder(Usuarios usuario, HttpSession session) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(usuario.getEmail(), usuario.getContrasena()));
 
-        if (userEmail.isPresent()) {
-            Usuarios user = userEmail.get();
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            // Validar contraseña
-            if (user.getContrasena() != null && user.getContrasena().equals(usuario.getContrasena())) {
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            Usuarios user = userDetails.getUsuario();
 
-                // Guardar datos en sesión
-                session.setAttribute("idUsuario", user.getId());
-                session.setAttribute("nombreUsuario", user.getNombre() + " " + user.getApellido());
-                session.setAttribute("emailUsuario", user.getEmail());
-                session.setAttribute("numeroUsuario", user.getNumero());
-                session.setAttribute("direccionUsuario", user.getDireccion());
-                session.setAttribute("biografiaUsuario", user.getBiografia());
-                session.setAttribute("fotoperfil", 
-                        (user.getFotoperfil() != null && !user.getFotoperfil().isEmpty()) 
-                        ? user.getFotoperfil() 
-                        : "defaultuser.jpg");
+            session.setAttribute("idUsuario", user.getId());
+            session.setAttribute("nombreUsuario", user.getNombre() + " " + user.getApellido());
+            session.setAttribute("emailUsuario", user.getEmail());
+            session.setAttribute("numeroUsuario", user.getNumero());
+            session.setAttribute("direccionUsuario", user.getDireccion());
+            session.setAttribute("biografiaUsuario", user.getBiografia());
+            session.setAttribute("fotoperfil",
+                    (user.getFotoperfil() != null && !user.getFotoperfil().isEmpty())
+                            ? user.getFotoperfil()
+                            : "defaultuser.jpg");
 
-                String rolNombre = (user.getRol() != null) ? user.getRol().getNombre() : "CLIENTE";
-                session.setAttribute("rolUsuario", rolNombre);
+            String rolNombre = (user.getRol() != null) ? user.getRol().getNombre() : "CLIENTE";
+            session.setAttribute("rolUsuario", rolNombre);
 
-                // Redirigir según rol
-                switch (rolNombre.toUpperCase()) {
-                    case "ADMIN":
-                        return "redirect:/administrador";
-                    case "PROFESIONAL":
-                        return "redirect:/profesional";
-                    case "CLIENTE":
-                    default:
-                        return "redirect:/inicio";
-                }
-
-            } else {
-                LOGGER.warn("Contraseña incorrecta para usuario {}", usuario.getEmail());
-                model.addAttribute("error", "Contraseña incorrecta");
-                return "redirect:/";
+            switch (rolNombre.toUpperCase()) {
+                case "ADMIN":
+                    return "redirect:/administrador";
+                case "PROFESIONAL":
+                    return "redirect:/profesional";
+                default:
+                    return "redirect:/inicio";
             }
 
-        } else {
-            LOGGER.warn("Usuario con email {} no existe en la DB", usuario.getEmail());
-            model.addAttribute("error", "Usuario no encontrado");
-            return "redirect:/";
+        } catch (AuthenticationException ex) {
+            LOGGER.warn("Error de autenticación para el usuario {}", usuario.getEmail());
+            return "redirect:/?error=true";
         }
     }
 
     @GetMapping("/cerrar")
     public String cerrarSesion(HttpSession session) {
+        SecurityContextHolder.clearContext();
         session.invalidate();
         return "redirect:/";
     }

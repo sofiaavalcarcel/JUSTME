@@ -5,6 +5,7 @@ import com.sena.JustMe.model.Usuarios;
 import com.sena.JustMe.repository.IUsuarioRepository;
 import com.sena.JustMe.repository.IRolRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +23,9 @@ public class UsuariosServiceImplement implements IUsuariosService {
     @Autowired
     private IRolRepository rolRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public Usuarios save(Usuarios usuario) {
         // Si el usuario no tiene rol, se asigna CLIENTE por defecto
@@ -29,6 +33,11 @@ public class UsuariosServiceImplement implements IUsuariosService {
             Rol rolCliente = rolRepository.findById(3)
                     .orElseThrow(() -> new RuntimeException("El rol con ID=3 no existe en la BD"));
             usuario.setRol(rolCliente);
+        }
+
+        if (usuario.getContrasena() != null && !usuario.getContrasena().isEmpty()
+                && !isPasswordEncoded(usuario.getContrasena())) {
+            usuario.setContrasena(passwordEncoder.encode(usuario.getContrasena()));
         }
 
         return usuarioRepository.save(usuario);
@@ -85,9 +94,18 @@ public class UsuariosServiceImplement implements IUsuariosService {
 
             usuario.setEstado("PROFESIONAL");
 
+            if (usuario.getContrasena() != null && !usuario.getContrasena().isEmpty()
+                    && !isPasswordEncoded(usuario.getContrasena())) {
+                usuario.setContrasena(passwordEncoder.encode(usuario.getContrasena()));
+            }
+
             usuarioRepository.save(usuario);
         } else {
             throw new RuntimeException("No se encontró el usuario con ID: " + idUsuario);
         }
+    }
+
+    private boolean isPasswordEncoded(String rawOrEncoded) {
+        return rawOrEncoded.startsWith("$2a$") || rawOrEncoded.startsWith("$2b$") || rawOrEncoded.startsWith("$2y$");
     }
 }
