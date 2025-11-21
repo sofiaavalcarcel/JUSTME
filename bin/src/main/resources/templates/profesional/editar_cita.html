@@ -8,6 +8,9 @@
 	<link rel="stylesheet" th:href="@{/styles/profesional.css}">
 	<link rel="stylesheet" th:href="@{/styles/editar.css}">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+	<!-- SweetAlert2 -->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -45,11 +48,15 @@
 				</div>
 
 				<!-- Formulario de edición -->
-				<form th:action="@{/citas/actualizar}" th:object="${cita}" 
-					  method="post" class="edit-service-form">
+				<form id="formEditarCita" th:action="@{/citas/actualizar}" th:object="${cita}" method="post"
+					class="edit-service-form">
 
-					<!-- ID oculto -->
+					<!-- ✅ ID de la cita -->
 					<input type="hidden" th:field="*{idcitas_reservas}" />
+
+					<!-- ✅ ID del servicio asociado -->
+					<input type="hidden" th:if="*{servicio != null}" th:field="*{servicio.idservicios}" />
+
 
 					<div class="form-row">
 						<div class="form-group">
@@ -107,5 +114,27 @@
 			</div>
 		</div>
 	</main>
+
+	<!-- SweetAlert Script -->
+	<script>
+		document.getElementById("formEditarCita").addEventListener("submit", function (event) {
+			event.preventDefault(); // evita que se envíe automáticamente
+
+			Swal.fire({
+				title: '¿Guardar cambios?',
+				text: "¿Deseas guardar los cambios realizados en esta cita?",
+				icon: 'question',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Sí, guardar',
+				cancelButtonText: 'Cancelar'
+			}).then((result) => {
+				if (result.isConfirmed) {
+					this.submit(); // envía el formulario
+				}
+			});
+		});
+	</script>
 </body>
 </html>

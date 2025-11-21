@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>JustMe - Cambio a Cuenta Profesional</title>
+
+	<!-- FontAwesome -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+	<!-- Estilos locales -->
+	<link rel="stylesheet" th:href="@{/styles/cambioprofesional.css}" />
+
+	<!-- SweetAlert2 -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
+</head>
+
+<body>
+	<div class="container">
+		<!-- Panel izquierdo -->
+		<div class="image-panel">
+			<div class="card">
+				<div class="loader">
+					<p>Just</p>
+					<div class="words">
+						<span class="word">Me</span>
+						<span class="word">Beauty</span>
+						<span class="word">Me</span>
+						<span class="word">Stylish</span>
+						<span class="word">Me</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="services">
+				<h3>Beneficios</h3>
+				<ul class="services-list">
+					<li>Más clientes fieles.</li>
+					<li>Más ingresos.</li>
+					<li>Menos estrés.</li>
+				</ul>
+			</div>
+
+			<div class="social">
+				<span>JustMe</span>
+				<span class="social-handle">hola@justme.com</span>
+			</div>
+		</div>
+
+		<!-- Panel derecho (formulario) -->
+		<div class="form-panel">
+			<div class="form-container">
+				<div class="form-header">
+					<h1>
+						Cambio a <span class="brand-highlight">Cuenta Profesional</span>
+					</h1>
+					<p>Completa tu información para acceder al panel profesional</p>
+				</div>
+
+				<form id="formulario-profesional" enctype="multipart/form-data" 
+					th:action="@{/profesional/cambio}" method="post">
+					
+					<!-- Biografía -->
+					<div class="form-group">
+						<label for="biografia">Biografía:</label>
+						<textarea id="biografia" name="biografia" rows="3"
+							placeholder="Escribe una breve biografía sobre tu experiencia profesional..."
+							required></textarea>
+					</div>
+
+					<!-- Portafolio -->
+					<div class="form-group">
+						<label for="portafolio">Sube tu portafolio:</label>
+						<div class="file-upload-container">
+							<button type="button" class="file-upload-btn">
+								<i class="fas fa-cloud-upload-alt"></i>
+								<span>Seleccionar archivos</span>
+							</button>
+							<input type="file" id="portafolio" name="portafolio" multiple
+							    accept="image/*,.pdf,.doc,.docx" class="file-input" />
+						</div>
+						<div class="file-info">
+							<strong>Formatos aceptados:</strong> JPG, PNG, PDF, DOC, DOCX
+							<div id="file-list-container" class="file-list"></div>
+						</div>
+						<small>Puedes seleccionar múltiples archivos manteniendo presionada la tecla Ctrl</small>
+					</div>
+
+					<!-- Disponibilidad -->
+					<div class="form-group">
+						<label for="disponibilidad">Disponibilidad:</label>
+						<div class="availability-compact">
+							<div class="availability-options">
+								<div class="availability-option" data-value="Mañana">
+									<i class="fas fa-sun"></i><span>Mañana</span><small>8:00-12:00</small>
+								</div>
+								<div class="availability-option" data-value="Tarde">
+									<i class="fas fa-sun"></i><span>Tarde</span><small>12:00-18:00</small>
+								</div>
+								<div class="availability-option" data-value="Noche">
+									<i class="fas fa-moon"></i><span>Noche</span><small>18:00-22:00</small>
+								</div>
+								<div class="availability-option" data-value="flexible">
+									<i class="fas fa-clock"></i><span>Flexible</span><small>Horario variable</small>
+								</div>
+								<div class="availability-option" data-value="Todo el dia">
+									<i class="fas fa-calendar-day"></i><span>Todo el día</span><small>8:00-22:00</small>
+								</div>
+								<div class="availability-option" data-value="Fin de Semana">
+									<i class="fas fa-calendar-week"></i><span>Fin de semana</span><small>Sáb-Dom</small>
+								</div>
+							</div>
+							<input type="hidden" id="availability-value" name="availability" value="" />
+						</div>
+					</div>
+
+					<!-- Botones -->
+					<div class="btn-container">
+						<button type="submit" class="btn btn-primary">
+							Cambiar a Profesional
+						</button>
+						<a th:href="@{/inicio}" class="btn btn-secondary">Cancelar</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<!-- SweetAlert2 JS -->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+	<!-- Script funcional -->
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			// ==== Selección de disponibilidad ====
+			const options = document.querySelectorAll(".availability-option");
+			const hiddenInput = document.getElementById("availability-value");
+
+			options.forEach(option => {
+				option.addEventListener("click", function () {
+					options.forEach(o => o.classList.remove("active"));
+					this.classList.add("active");
+					hiddenInput.value = this.getAttribute("data-value");
+				});
+			});
+			options[0].click(); // Selecciona la primera por defecto
+
+			// ==== Manejo de subida de archivos ====
+			const fileInput = document.getElementById("portafolio");
+			const fileListContainer = document.getElementById("file-list-container");
+			const fileUploadBtn = document.querySelector(".file-upload-btn");
+
+			fileUploadBtn.addEventListener("click", () => fileInput.click());
+
+			fileInput.addEventListener("change", function () {
+				fileListContainer.innerHTML = "";
+				const files = this.files;
+				if (files.length > 0) {
+					for (let file of files) {
+						const item = document.createElement("li");
+						item.innerHTML = `<i class="fas fa-file"></i> ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+						fileListContainer.appendChild(item);
+					}
+					fileUploadBtn.innerHTML = `<i class="fas fa-check-circle"></i><span>${files.length} archivo(s)</span>`;
+				} else {
+					fileUploadBtn.innerHTML = `<i class="fas fa-cloud-upload-alt"></i><span>Seleccionar archivos</span>`;
+				}
+			});
+
+			// ==== Validación + SweetAlert ====
+			document.getElementById("formulario-profesional").addEventListener("submit", function (e) {
+				e.preventDefault();
+				const bio = document.getElementById("biografia").value.trim();
+				const files = fileInput.files.length;
+
+				if (!bio) {
+					return Swal.fire("Biografía requerida", "Por favor completa tu biografía.", "warning");
+				}
+				if (files === 0) {
+					return Swal.fire("Portafolio requerido", "Sube al menos un archivo.", "warning");
+				}
+
+				Swal.fire({
+					title: "¿Confirmar cambio?",
+					text: "¿Deseas cambiar tu cuenta a profesional? Esta acción no se puede deshacer.",
+					icon: "question",
+					showCancelButton: true,
+					confirmButtonText: "Sí, continuar",
+					cancelButtonText: "Cancelar",
+					confirmButtonColor: "#e16bff",
+					cancelButtonColor: "#6c757d",
+				}).then(result => {
+					if (result.isConfirmed) {
+						Swal.fire({
+							title: "¡Éxito!",
+							text: "Tu cuenta ha sido actualizada. Serás redirigido al panel profesional.",
+							icon: "success",
+							confirmButtonColor: "#e16bff",
+							confirmButtonText: "Ir al panel"
+						}).then(() => {
+							document.getElementById("formulario-profesional").submit();
+						});
+					}
+				});
+			});
+		});
+	</script>
+	
+	<!-- SweetAlert2 -->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+	<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		// Verifica si el usuario viene justo después del cambio de rol
+		const urlParams = new URLSearchParams(window.location.search);
+		if (urlParams.get("nuevo") === "true") {
+			Swal.fire({
+				title: "¡Bienvenido al panel profesional! 🎉",
+				text: "Tu cuenta ha sido actualizada con éxito. Ya puedes gestionar tus servicios y clientes.",
+				icon: "success",
+				confirmButtonColor: "#e16bff",
+				confirmButtonText: "Comenzar"
+			});
+		}
+	});
+	</script>
+
+	
+</body>
+</html>

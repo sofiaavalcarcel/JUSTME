@@ -1,213 +1,406 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Pasarela de Pagos</title>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<link rel="stylesheet" href="styles/pasarela_pagos.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout Premium - Stripe</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{/styles/pasarela_pagos.css}"/>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+ 
 </head>
 
 <body>
-	<div class="layout">
-		<!-- CONTENIDO PRINCIPAL -->
-		<main class="checkout-wrapper">
-			<!-- COLUMNA IZQUIERDA -->
-			<section class="checkout-main">
-				<!-- ENCABEZADO -->
-				<header class="checkout-header">
-					<h1>Pasarela de Pagos</h1>
-					<p>Finaliza tu compra de forma segura</p>
-				</header>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
 
-				<!-- INFORMACIÓN DEL COMPRADOR -->
-				<section class="buyer-info">
-					<h2>Información de Contacto</h2>
-					<form>
-						<label>Nombre completo
-							<input type="text" name="nombre" placeholder="Nombre completo" required>
-						</label>
-						<label>Correo electrónico
-							<input type="email" name="correo" placeholder="correo@ejemplo.com" required>
-						</label>
-						<label>Teléfono
-							<input type="tel" name="telefono" placeholder="+57 300 000 0000" required>
-						</label>
-						<label>País
-							<select name="pais" required>
-								<option value="">Selecciona</option>
-								<option value="CO">Colombia</option>
-								<option value="MX">México</option>
-								<option value="AR">Argentina</option>
-								<option value="ES">España</option>
-							</select>
-						</label>
-						<label>Moneda
-							<select name="moneda" required>
-								<option value="COP">COP (Peso Colombiano)</option>
-								<option value="USD">USD (Dólar)</option>
-								<option value="EUR">EUR (Euro)</option>
-							</select>
-						</label>
-					</form>
-				</section>
+    <div class="checkout-container">
+        <!-- Columna izquierda - Formulario de pago -->
+        <div class="checkout-form">
+            <!-- Detalles de pago -->
+            <div class="form-section">
+                <h2 class="section-title">Detalles de Pago</h2>
+                
+                <!-- Vista previa de la tarjeta con efecto flip -->
+                <div class="card-preview-container" id="card-preview-container">
+                    <div class="card-inner">
+                        <!-- Frente de la tarjeta -->
+                        <div class="card-front" id="card-front">
+                            <div class="card-chip"></div>
+                            <div class="card-number" id="card-number-preview">•••• •••• •••• ••••</div>
+                            <div class="card-bottom">
+                                <div class="card-info">
+                                    <div class="card-label">VENCE</div>
+                                    <div class="card-expiry" id="card-expiry-preview">MM/AA</div>
+                                </div>
+                                <div class="card-logo">STRIPE</div>
+                            </div>
+                        </div>
 
-				<!-- MÉTODOS DE PAGO -->
-				<section class="payment-methods">
-					<h2>Método de Pago</h2>
+                        <!-- Reverso de la tarjeta -->
+                        <div class="card-back">
+                            <div class="card-magnetic-strip"></div>
+                            <div class="card-cvc-strip">
+                                <div class="card-cvc-display" id="card-cvc-back-preview">•••</div>
+                            </div>
+                            <div style="flex: 1;"></div>
+                            <div class="card-logo">STRIPE</div>
+                        </div>
+                    </div>
+                </div>
 
-					<!-- Tarjeta -->
-					<div class="payment-option">
-						<input type="radio" id="tarjeta" name="metodo" checked>
-						<label for="tarjeta">💳 Tarjeta de Crédito/Débito</label>
-						<div class="payment-fields">
-							<input type="text" placeholder="Número de tarjeta">
-							<div class="card-row">
-								<input type="text" placeholder="MM/AA">
-								<input type="text" placeholder="CVV">
-							</div>
-							<input type="text" placeholder="Nombre del titular">
-						</div>
-					</div>
+                <form id="payment-form">
+                    <!-- Número de tarjeta -->
+                    <div class="form-group">
+                        <label for="card-number-element">Número de Tarjeta</label>
+                        <div id="card-number-element" class="card-element"></div>
+                    </div>
 
-					<!-- PSE -->
-					<div class="payment-option">
-						<input type="radio" id="pse" name="metodo">
-						<label for="pse">🏦 Pago con PSE</label>
-						<div class="payment-fields">
-							<select>
-								<option>Selecciona tu banco</option>
-								<option>Bancolombia</option>
-								<option>Davivienda</option>
-								<option>Banco de Bogotá</option>
-								<option>BBVA</option>
-								<option>Banco AV Villas</option>
-							</select>
-							<p class="hint">Serás redirigido al portal de tu banco para completar el pago.</p>
-						</div>
-					</div>
+                    <!-- Fecha de vencimiento y CVC en la misma fila -->
+                    <div class="field-row">
+                        <div class="form-group">
+                            <label for="card-expiry-element">Fecha de Vencimiento</label>
+                            <div id="card-expiry-element" class="card-element"></div>
+                        </div>
+                        <div class="form-group cvc-field">
+                            <label for="card-cvc-element">CVC</label>
+                            <div id="card-cvc-element" class="card-element"></div>
+                        </div>
+                    </div>
 
-					<!-- Billeteras Digitales -->
-					<div class="payment-option">
-						<input type="radio" id="wallets" name="payment" />
-						<label for="wallets">🧾 Billeteras Digitales</label>
+                    <div class="button-container">
+                        <button id="submit" class="pay-button" type="submit">
+                            <span id="button-text">Pagar Ahora</span>
+                        </button>
 
-						<div class="payment-fields wallets">
-							<p>Selecciona tu billetera preferida:</p>
+                        <a th:href="@{/inicio}" class="cancel-button">
+                            <span>Cancelar</span>
+                        </a>
+                    </div>
 
-							<label>
-								<input type="radio" name="wallet" value="nequi" />
-								Nequi
-							</label>
+                    <p id="payment-message" class="hidden"></p>
+                </form>
 
-							<label>
-								<input type="radio" name="wallet" value="daviplata" />
-								Daviplata
-							</label>
+              
+            </div>
+        </div>
 
-							<label>
-								<input type="radio" name="wallet" value="paypal" />
-								PayPal
-							</label>
+        <!-- Columna derecha - Resumen -->
+        <div class="order-summary">
+            <h2 class="summary-title">Resumen del servicio</h2>
 
-							<label>
-								<input type="radio" name="wallet" value="binance" />
-								Binance Pay
-							</label>
+            <!-- Información del servicio desde el backend -->
+            <div class="summary-item">
+                <div class="item-details">
+                    <span class="item-code" th:text="${servicio.categoria}">Categoría</span>
+                    <span class="item-name" th:text="${servicio.nombre_servicios}">Nombre del Servicio</span>
+                </div>
+                <div class="item-price" th:text="${'$' + #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 2, 'COMMA')}">$0.00</div>
+            </div>
 
-							<input type="text" placeholder="Correo o número asociado" />
-						</div>
-					</div>
-				</section>
+            <div class="summary-item">
+                <div class="item-details">
+                    <span class="item-code">Descripción</span>
+                    <span class="item-name" th:text="${servicio.descripcion}">Descripción del servicio</span>
+                </div>
+            </div>
 
-				<!-- BOTÓN FINALIZAR -->
-				<footer class="checkout-footer">
-					<button type="submit" class="btn-pagar">
-						<span>Pagar ahora</span>
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 74 74" height="34" width="34">
-							<circle stroke-width="3" stroke="black" r="35.5" cy="37" cx="37"></circle>
-							<path fill="black"
-								d="M25 35.5C24.1716 35.5 23.5 36.1716 23.5 37C23.5 37.8284 24.1716 38.5 25 38.5V35.5ZM49.0607 38.0607C49.6464 37.4749 49.6464 36.5251 49.0607 35.9393L39.5147 26.3934C38.9289 25.8076 37.9792 25.8076 37.3934 26.3934C36.8076 26.9792 36.8076 27.9289 37.3934 28.5147L45.8787 37L37.3934 45.4853C36.8076 46.0711 36.8076 47.0208 37.3934 47.6066C37.9792 48.1924 38.9289 48.1924 39.5147 47.6066L49.0607 38.0607ZM25 38.5L48 38.5V35.5L25 35.5V38.5Z">
-							</path>
-						</svg>
+            <div class="coupon-section">
+                <label for="coupon">Cupón</label>
+                <div class="coupon-input">
+                    <input type="text" id="coupon" placeholder="Ingrese un cupón">
+                    <button class="apply-btn" type="button">Aplicar</button>
+                </div>
+            </div>
 
+            <div class="summary-total">
+                <div class="total-row">
+                    <span>Subtotal</span>
+                    <span th:text="${'$' + #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 2, 'COMMA')}">$0.00</span>
+                </div>
+                <div class="total-row">
+                    <span>Descuento</span>
+                    <span>$0</span>
+                </div>
+                <div class="total-row grand-total">
+                    <span>Total</span>
+                    <span th:text="${'$' + #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 2, 'COMMA')}">$0.00</span>
+                </div>
+            </div>
 
+            <div class="secure">
+                <img src="https://cdn-icons-png.flaticon.com/512/942/942799.png" alt="Seguridad" />
+                <p>Pago seguro procesado por <strong>Stripe</strong></p>
+            </div>
+        </div>
+    </div>
 
-					</button>
-				</footer>
-			</section>
+    <script th:inline="javascript">
+        const servicePrice = /*[[${servicio.precio_base}]]*/ 0;
+    </script>
 
-			<!-- COLUMNA DERECHA -->
-			<aside class="order-summary">
-				<h2>Resumen del Pedido</h2>
-				<ul>
-					<li>Producto A <span>$50.000</span></li>
-					<li>Producto B <span>$80.000</span></li>
-					<li class="total">Total <span>$130.000</span></li>
-				</ul>
-			</aside>
-		</main>
+    <script>
+        // Clave pública de prueba de Stripe
+        const stripe = Stripe("pk_test_51SO0JaPlW1idieMBuFaLL5AyDp3bSKgMj0KddfZd4yRRtB36wwJzIXWVgTPufftpFfT81ra2iDGkHtS8qA79ReOf00M4qhTfnE");
 
-		<!-- FOOTER GLOBAL -->
-		<footer class="footer">
-			<div class="container">
-				<div class="footer-content">
-					<div class="footer-section">
-						<h4>Just Me</h4>
-						<p>
-							Servicios de belleza a domicilio para hombres y mujeres en
-							cualquier lugar.
-						</p>
-						<div class="social-icons">
-							<a href="#"><i class="fab fa-facebook-f"></i></a>
-							<a href="#"><i class="fab fa-instagram"></i></a>
-							<a href="#"><i class="fab fa-tiktok"></i></a>
-							<a href="#"><i class="fab fa-whatsapp"></i></a>
-						</div>
-					</div>
+        // Configuración de elementos de Stripe
+        const elements = stripe.elements();
 
-					<div class="footer-section">
-						<h4>Enlaces</h4>
-						<ul>
-							<li><a href="#">Inicio</a></li>
-							<li><a href="#">Servicios</a></li>
-							<li><a href="#">Sobre Nosotros</a></li>
-							<li><a href="#">Contacto</a></li>
-						</ul>
-					</div>
+        // Estilos personalizados para los elementos
+        const elementStyles = {
+            base: {
+                color: '#32325d',
+                fontFamily: '"Inter", sans-serif',
+                fontSmoothing: 'antialiased',
+                fontSize: '16px',
+                '::placeholder': {
+                    color: '#aab7c4'
+                }
+            },
+            invalid: {
+                color: '#fa755a',
+                iconColor: '#fa755a'
+            }
+        };
 
-					<div class="footer-section">
-						<h4>Servicios</h4>
-						<ul>
-							<li><a href="#">Corte de Cabello</a></li>
-							<li><a href="#">Maquillaje</a></li>
-							<li><a href="#">Uñas</a></li>
-							<li><a href="#">Tratamientos Faciales</a></li>
-						</ul>
-					</div>
+        // Crear elementos de Stripe separados
+        const cardNumber = elements.create('cardNumber', {
+            style: elementStyles,
+            placeholder: '1234 1234 1234 1234'
+        });
 
-					<div class="footer-section">
-						<h4>Contacto</h4>
-						<ul>
-							<li><i class="fas fa-map-marker-alt"></i> Bogotá, Colombia</li>
-							<li><i class="fas fa-phone"></i> +57 123 456 7890</li>
-							<li><i class="fas fa-envelope"></i> hola@justme.com</li>
-						</ul>
-					</div>
-				</div>
+        const cardExpiry = elements.create('cardExpiry', {
+            style: elementStyles,
+            placeholder: 'MM/AA'
+        });
 
-				<div class="footer-bottom">
-					<p>&copy; 2025 Just Me. Todos los derechos reservados.</p>
-					<div class="legal-links">
-						<a href="#">Términos y Condiciones</a>
-						<a href="#">Política de Privacidad</a>
-					</div>
-				</div>
-			</div>
-		</footer>
-	</div>
+        const cardCvc = elements.create('cardCvc', {
+            style: elementStyles,
+            placeholder: 'CVC'
+        });
+
+        // Montar elementos
+        cardNumber.mount('#card-number-element');
+        cardExpiry.mount('#card-expiry-element');
+        cardCvc.mount('#card-cvc-element');
+
+        // Referencias a elementos de la vista previa
+        const cardPreviewContainer = document.getElementById('card-preview-container');
+        const cardFront = document.getElementById('card-front');
+        const cardNumberPreview = document.getElementById('card-number-preview');
+        const cardExpiryPreview = document.getElementById('card-expiry-preview');
+        const cardCvcPreview = document.getElementById('card-cvc-preview');
+        const cardCvcBackPreview = document.getElementById('card-cvc-back-preview');
+
+        // Función para formatear número de tarjeta con caracteres ocultos
+        function formatCardNumber(value) {
+            if (!value || value.length < 4) return '•••• •••• •••• ••••';
+
+            const visibleDigits = value.slice(-4);
+            const hiddenPart = '•••• •••• •••• ';
+            return hiddenPart + visibleDigits;
+        }
+
+        // Actualizar vista previa de la tarjeta con animaciones
+        cardNumber.on('change', (event) => {
+            if (event.empty) {
+                cardNumberPreview.textContent = '•••• •••• •••• ••••';
+            } else {
+                cardNumberPreview.textContent = formatCardNumber(event.value);
+            }
+
+            // Animación cuando se está escribiendo
+            if (event.empty || event.complete) {
+                cardFront.classList.remove('active');
+            } else {
+                cardFront.classList.add('active');
+            }
+        });
+
+        cardExpiry.on('change', (event) => {
+            const display = event.empty ? 'MM/AA' : event.value;
+            cardExpiryPreview.textContent = display;
+        });
+
+        cardCvc.on('change', (event) => {
+            const display = event.empty ? '•••' : '•'.repeat(event.value.length);
+            cardCvcPreview.textContent = display;
+            cardCvcBackPreview.textContent = display;
+        });
+
+        // Efectos de focus en los elementos - voltear tarjeta para CVC
+        cardNumber.on('focus', () => {
+            cardPreviewContainer.classList.remove('flipped');
+            cardFront.classList.add('active');
+        });
+
+        cardExpiry.on('focus', () => {
+            cardPreviewContainer.classList.remove('flipped');
+            cardFront.classList.add('active');
+        });
+
+        cardCvc.on('focus', () => {
+            cardPreviewContainer.classList.add('flipped');
+            cardFront.classList.remove('active');
+        });
+
+        cardNumber.on('blur', () => {
+            // No voltear automáticamente al perder el foco
+        });
+
+        cardExpiry.on('blur', () => {
+            // No voltear automáticamente al perder el foco
+        });
+
+        cardCvc.on('blur', () => {
+            // Voltear de nuevo al frente después de un breve delay
+            setTimeout(() => {
+                if (document.activeElement !== document.getElementById('card-cvc-element')) {
+                    cardPreviewContainer.classList.remove('flipped');
+                }
+            }, 500);
+        });
+
+        const form = document.getElementById("payment-form");
+        const message = document.getElementById("payment-message");
+        const button = document.getElementById("submit");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            button.disabled = true;
+            button.classList.add('loading');
+            button.innerHTML = '<span id="button-text">Procesando...</span>';
+
+            try {
+                // Primero crear el Payment Intent en el servidor
+                const res = await fetch("/api/stripe/create-payment-intent", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({
+                        amount: Math.round(servicePrice * 100), // Convertir a centavos
+                        currency: 'cop'
+                    })
+                });
+
+                if (!res.ok) {
+                    throw new Error('Error al crear el payment intent');
+                }
+
+                const {clientSecret} = await res.json();
+
+                // Confirmar el pago con los elementos de la tarjeta
+                const {error, paymentIntent} = await stripe.confirmCardPayment(clientSecret, {
+                    payment_method: {
+                        card: cardNumber,
+                        billing_details: {
+                            // Aquí puedes agregar detalles de facturación si los tienes
+                        }
+                    }
+                });
+
+                if (error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error en el pago',
+                        text: error.message,
+                        confirmButtonColor: '#8b5cf6',
+                        background: 'var(--card-bg)',
+                        color: 'var(--dark-color)'
+                    });
+                    button.disabled = false;
+                    button.classList.remove('loading');
+                    button.innerHTML = '<span id="button-text">Pagar Ahora</span>';
+                } else if (paymentIntent.status === "succeeded") {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Pago exitoso!',
+                        text: 'Tu pago se ha procesado correctamente. Serás redirigido en breve.',
+                        confirmButtonColor: '#8b5cf6',
+                        background: 'var(--card-bg)',
+                        color: 'var(--dark-color)',
+                        timer: 3000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        // Redirigir a /inicio después del pago exitoso
+                        window.location.href = '/inicio';
+                    });
+                }
+            } catch (err) {
+                console.error('Error:', err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Ha ocurrido un error inesperado. Inténtalo de nuevo.',
+                    confirmButtonColor: '#8b5cf6',
+                    background: 'var(--card-bg)',
+                    color: 'var(--dark-color)'
+                });
+                button.disabled = false;
+                button.classList.remove('loading');
+                button.innerHTML = '<span id="button-text">Pagar Ahora</span>';
+            }
+        });
+
+        // Manejar errores de validación en tiempo real
+        cardNumber.on('change', (event) => {
+            if (event.error) {
+                console.log('Error en número de tarjeta:', event.error.message);
+            }
+        });
+
+        cardExpiry.on('change', (event) => {
+            if (event.error) {
+                console.log('Error en fecha:', event.error.message);
+            }
+        });
+
+        cardCvc.on('change', (event) => {
+            if (event.error) {
+                console.log('Error en CVC:', event.error.message);
+            }
+        });
+
+        // Manejo del cupón
+        document.querySelector('.apply-btn').addEventListener('click', function (e) {
+            e.preventDefault();
+            const couponCode = document.getElementById('coupon').value;
+
+            if (couponCode) {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Cupón aplicado',
+                    text: 'El código de cupón ha sido aplicado correctamente.',
+                    confirmButtonColor: '#8b5cf6',
+                    background: 'var(--card-bg)',
+                    color: 'var(--dark-color)'
+                });
+            } else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Cupón vacío',
+                    text: 'Por favor ingresa un código de cupón válido.',
+                    confirmButtonColor: '#8b5cf6',
+                    background: 'var(--card-bg)',
+                    color: 'var(--dark-color)'
+                });
+            }
+        });
+
+        // Animación adicional para elementos al cargar
+        document.addEventListener('DOMContentLoaded', function () {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
 </body>
 
 </html>

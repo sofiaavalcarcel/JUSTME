@@ -9,11 +9,12 @@
 </head>
 
 <body>
+	<!-- Modal -->
 	<div class="modal glass" id="termsModal">
 		<div class="modal-content">
 			<h2>Términos y Condiciones</h2>
 			<div class="terms-text">
-
+				<p>
 				<p>
 					1. Aceptación de los Términos
 					Al crear una cuenta o utilizar los Servicios de Just Me, usted declara que tiene la edad legal para
@@ -116,7 +117,7 @@
 					Cualquier disputa relacionada con estos Términos se resolverá
 					primero mediante negociación y, si no se resuelve, sometiéndose a los correspondientes tribunales.
 				</p>
-
+				</p>
 			</div>
 
 			<div class="modal-actions">
@@ -125,6 +126,9 @@
 			</div>
 		</div>
 	</div>
+
+	<!-- Script externo -->
+	<script th:src="@{/js/terminos.js}"></script>
 </body>
 
 </html>

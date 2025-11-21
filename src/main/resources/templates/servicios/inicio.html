@@ -167,10 +167,11 @@
 									src="/img/default-user.jpg" alt="Usuario sin foto" class="profesional-foto">
 
 								<div class="profesional-detalles">
-									<span class="profesional-nombre"
-										th:text="${servicio.usuario.nombre + ' ' + servicio.usuario.apellido}">
-										Nombre del profesional
+									<span th:text="${servicio.usuario != null} ?
+									                  ${servicio.usuario.nombre + ' ' + servicio.usuario.apellido} :
+									                  'Sin asignar'">
 									</span>
+
 									<small class="profesional-email" th:text="${servicio.usuario.email}">
 										email@ejemplo.com
 									</small>

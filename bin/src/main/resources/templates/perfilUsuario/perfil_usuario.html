@@ -1,123 +1,122 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Just Me - Perfil de Usuario</title>
-    <link rel="stylesheet" href="styles/perfil_usuario.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Just Me - Perfil de Usuario</title>
+	<link rel="stylesheet" href="styles/perfil_usuario.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <div class="logo">
-                <h1>Just Me</h1>
-            </div>
+	<!-- Header -->
+	<header class="header">
+		<div class="container">
+			<div class="card">
+				<div class="loader">
+					<p>Just</p>
+					<div class="words">
+						<span class="word">Me</span>
+						<span class="word">Beauty</span>
+						<span class="word">Me</span>
+						<span class="word">Stylish</span>
+						<span class="word">Me</span>
+					</div>
+				</div>
+			</div>
 
-            <nav class="nav">
-                <ul>
-                    <li>
-                        <a href="inicio.html"><i class="fas fa-home"></i> Inicio</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fas fa-search"></i> Buscar Servicios</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fas fa-calendar-alt"></i> Mis Citas</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fas fa-comments"></i> Comentarios</a>
-                    </li>
-                </ul>
-            </nav>
 
-            <div class="user-menu">
-                <a th:href="@{/inicio}" class="btn-custom"> Volver al inicio</a>
-            </div>
-    </header>
 
-    <!-- Main Content -->
-    <main class="main">
-        <section class="profile-section">
-            <div class="container">
-                <div class="profile-header">
+			<div class="user-menu">
+				<a th:href="@{/inicio}" class="btn-custom"> Volver al inicio</a>
+			</div>
+	</header>
 
-                    <!-- ✅ Un solo form -->
-                    <form th:action="@{/usuario/actualizar}" method="post" enctype="multipart/form-data" class="profile-form">
-                        <div class="profile-header">
-                            <div class="profile-image-container">
-                                <!-- ✅ Sintaxis de imagen corregida -->
-                                <img th:src="${session.fotoperfil != null} ? @{/uploads/{foto}(foto=${session.fotoperfil})} : @{/img/default.jpg}"
-                                     alt="Foto de perfil"
-                                     id="profileImageDisplay"
-                                     class="profile-image">
+	<!-- Main Content -->
+	<main class="main">
+		<section class="profile-section">
+			<div class="container">
+				<div class="profile-header">
 
-                                <div class="image-upload">
-                                    <label for="fileInput" class="upload-btn">
-                                        <i class="fas fa-camera"></i> Cambiar foto
-                                    </label>
-                                    <input type="file" id="fileInput" name="foto" accept="image/*">
-                                </div>
-                            </div>
+					<!-- ✅ Un solo form -->
+					<form th:action="@{/usuario/actualizar}" method="post" enctype="multipart/form-data"
+						class="profile-form">
+						<div class="profile-header">
+							<div class="profile-image-container">
+								<!-- ✅ Sintaxis de imagen corregida -->
+								<img th:src="${session.fotoperfil != null} ? @{/uploads/{foto}(foto=${session.fotoperfil})} : @{/img/default.jpg}"
+									alt="Foto de perfil" id="profileImageDisplay" class="profile-image">
 
-                            <div class="profile-info">
-                                <h2 th:text="${session.nombreUsuario}">Usuario</h2>
-                                <div class="rating">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                    <span>4.8</span>
-                                </div>
-                                <p class="member-since">Miembro desde: Enero 2023</p>
-                            </div>
-                        </div>
+								<div class="image-upload">
+									<label for="fileInput" class="upload-btn">
+										<i class="fas fa-camera"></i> Cambiar foto
+									</label>
+									<input type="file" id="fileInput" name="foto" accept="image/*">
+								</div>
+							</div>
 
-                        <!-- Campos editables -->
-                        <div class="profile-content">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="fullName"><i class="fas fa-user"></i> Nombre completo</label>
-                                    <input type="text" id="fullName" name="nombre" th:value="${session.nombreUsuario}" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="email"><i class="fas fa-envelope"></i> Correo electrónico</label>
-                                    <input type="email" id="email" name="email" th:value="${session.emailUsuario}" required>
-                                </div>
-                            </div>
+							<div class="profile-info">
+								<h2 th:text="${session.nombreUsuario}">Usuario</h2>
+								<div class="rating">
+									<i class="fas fa-star"></i>
+									<i class="fas fa-star"></i>
+									<i class="fas fa-star"></i>
+									<i class="fas fa-star"></i>
+									<i class="fas fa-star-half-alt"></i>
+									<span>4.8</span>
+								</div>
+								<p class="member-since">Miembro desde: Enero 2023</p>
+							</div>
+						</div>
 
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="numero"><i class="fas fa-phone"></i> Teléfono</label>
-                                    <input type="text" id="numero" name="numero" th:value="${session.numeroUsuario}" required>
-                                </div>
-                            </div>
+						<!-- Campos editables -->
+						<div class="profile-content">
+							<div class="form-row">
+								<div class="form-group">
+									<label for="fullName"><i class="fas fa-user"></i> Nombre completo</label>
+									<input type="text" id="fullName" name="nombre" th:value="${session.nombreUsuario}"
+										required>
+								</div>
+								<div class="form-group">
+									<label for="email"><i class="fas fa-envelope"></i> Correo electrónico</label>
+									<input type="email" id="email" name="email" th:value="${session.emailUsuario}"
+										required>
+								</div>
+							</div>
 
-                            <div class="form-group">
-                                <label for="address"><i class="fas fa-map-marker-alt"></i> Dirección</label>
-                                <input type="text" id="address" name="direccion" th:value="${session.direccionUsuario}">
-                            </div>
+							<div class="form-row">
+								<div class="form-group">
+									<label for="numero"><i class="fas fa-phone"></i> Teléfono</label>
+									<input type="text" id="numero" name="numero" th:value="${session.numeroUsuario}"
+										required>
+								</div>
+							</div>
 
-                            <div class="form-group">
-                                <label for="about"><i class="fas fa-info-circle"></i> Biografía</label>
-                                <textarea id="about" name="biografia" rows="4" th:text="${session.biografiaUsuario}"></textarea>
-                            </div>
+							<div class="form-group">
+								<label for="about"><i class="fas fa-info-circle"></i> Biografía</label>
+								<textarea id="about" name="biografia" rows="4"
+									th:text="${session.biografiaUsuario}"></textarea>
+							</div>
 
-                            <div class="form-actions">
-                                <button type="button" class="cancel-btn" id="cancelBtn">Cancelar</button>
-                                <button type="submit" class="save-btn">Guardar cambios</button>
-                            </div>
-                        </div>
-                    </form>
 
-                </div>
-            </div>
-        </section>
-    </main>
+							<div class="form-group">
+								<label for="address"><i class="fas fa-map-marker-alt"></i> Dirección</label>
+								<input type="text" id="address" name="direccion" th:value="${session.direccionUsuario}">
+							</div>
+
+
+							<div class="form-actions">
+								
+								<button type="submit" class="save-btn">Guardar cambios</button>
+							</div>
+						</div>
+					</form>
+
+				</div>
+			</div>
+		</section>
+	</main>
 
 
 
@@ -170,7 +169,7 @@
 			</div>
 
 			<div class="footer-bottom">
-				<p>&copy; 2023 Just Me. Todos los derechos reservados.</p>
+				<p>&copy; 2025 Just Me. Todos los derechos reservados.</p>
 				<div class="legal-links">
 					<a href="#">Términos y Condiciones</a>
 					<a href="#">Política de Privacidad</a>
@@ -180,6 +179,7 @@
 	</footer>
 
 	<script src="scripts/perfil_usuario.js"></script>
+
 </body>
 
 </html>

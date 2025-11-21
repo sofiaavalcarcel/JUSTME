@@ -1,137 +1,223 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrar</title>
-    <link rel="stylesheet" href="styles/registrar.css" />
+    <title>Registrarse | JustMe</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/styles/registrar.css}">
 </head>
 
 <body>
-    <header>
-        <nav>
-            <div class="card">
-                <div class="loader">
-                    <p>Just</p>
-                    <div class="words">
-                        <span class="word">Me</span>
-                        <span class="word">Beauty</span>
-                        <span class="word">Me</span>
-                        <span class="word">Stylish</span>
-                        <span class="word">Me</span>
+    <div class="main-container">
+
+        <!-- Formulario Horizontal -->
+        <div class="form-container">
+            <div class="form-header">
+                <h2>Crear Cuenta</h2>
+                <p>Comienza tu experiencia en JustMe</p>
+            </div>
+
+            <form th:action="@{/save}" th:object="${usuario}" method="post" id="registerForm">
+                <div class="form-grid">
+                    <!-- Columna Izquierda -->
+                    <div class="form-column">
+                        <div class="form-group">
+                            <input type="text" th:field="*{nombre}" placeholder="Nombre" required />
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="number" th:field="*{numero}" placeholder="Número telefónico" required />
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="text" th:field="*{direccion}" placeholder="Dirección" required />
+                        </div>
+                    </div>
+
+                    <!-- Columna Derecha -->
+                    <div class="form-column">
+                        <div class="form-group">
+                            <input type="text" th:field="*{apellido}" placeholder="Apellido" required />
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="email" th:field="*{email}" placeholder="Correo electrónico" required />
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="text" th:field="*{documentos}" placeholder="Documento de identidad" required />
+                        </div>
+                    </div>
+
+                    <!-- Campo Acerca de ti que ocupa las 2 columnas -->
+                    <div class="form-group full-width">
+                        <input type="text" th:field="*{biografia}" placeholder="Acerca de ti (opcional)" />
+                    </div>
+
+                    <!-- Contraseñas en misma fila -->
+                    <div class="password-row">
+                        <div class="form-group password-group">
+                            <input type="password" th:field="*{contrasena}" id="contrasena" placeholder="Contraseña" required />
+                            <button type="button" class="toggle-password" onclick="togglePassword('contrasena')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="form-group password-group">
+                            <input type="password" id="confirmarContrasena" placeholder="Confirmar contraseña" required />
+                            <button type="button" class="toggle-password" onclick="togglePassword('confirmarContrasena')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Indicador de contraseñas -->
+                    <div class="password-match" id="passwordMatch">
+                        <i class="fas fa-check"></i>
+                        <span>Las contraseñas coinciden</span>
+                    </div>
+
+                    <!-- Mensaje de error para términos -->
+                    <div class="error-message" id="termsError">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>Debes aceptar los Términos y Condiciones</span>
+                    </div>
+
+                    <!-- Mensaje de error para contraseñas -->
+                    <div class="error-message" id="passwordError">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>Las contraseñas no coinciden</span>
+                    </div>
+
+                    <!-- Checkboxes -->
+                    <div class="checkbox-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="terms" required />
+                            <span class="checkmark"></span>
+                            Acepto los <a th:href="@{/terminosycondiciones}" class="terms-link">Términos y Condiciones</a> 
+                        </label>
+                    </div>
+
+                    <!-- Acciones -->
+                    <div class="form-actions">
+                        <div class="button-group">
+                            <button type="submit" class="submit-button">
+                                <span>Crear Cuenta</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                            <a href="/" class="cancel-button">
+                                <span>Cancelar</span>
+                            </a>
+                        </div>
+                        
+                        <div class="login-redirect">
+                            ¿Ya tienes cuenta? <a th:href="@{/}" class="login-link">Iniciar Sesión</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </nav>
-    </header>
-    <div class="main-content">
-        <div class="register-container">
-            <h2>Crear Cuenta</h2>
-            <form id="registerForm">
-                <div class="form-group">
-                    <label for="registerName">Nombre</label>
-                    <input type="text" id="nombre" required />
-                </div>
-                <div class="form-group">
-                    <label for="registerLastName">Apellido</label>
-                    <input type="text" id="apellido" required />
-                </div>
-
-                <div class="form-group">
-                    <label for="registerEmail">Correo Electrónico</label>
-                    <input type="email" id="correo" required />
-                </div>
-
-                <div class="form-group">
-                    <label for="registerPhone">Teléfono</label>
-                    <input type="tel" id="numero" required />
-                </div>
-
-                <div class="form-group">
-                    <label for="registerAddress">Dirección</label>
-                    <input type="text" id="direccion" required />
-                </div>
-
-                <div class="form-group">
-                    <label for="registerDocument">Documento de Identidad</label>
-                    <input type="text" id="documento" required />
-                </div>
-
-                <div class="form-group">
-                    <label for="registerPassword">Contraseña</label>
-                    <input type="password" id="registerPassword" required />
-                </div>
-
-                <div class="form-group">
-                    <label for="registerConfirm">Confirmar Contraseña</label>
-                    <input type="password" id="registerConfirm" required />
-                </div>
-                <br>
             </form>
-            <button type="submit" class="animated-button">Registrarse</button>
         </div>
     </div>
 
+    <script>
+        // Función para mostrar/ocultar contraseña
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = input.nextElementSibling.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h4>Just Me</h4>
-                    <p>
-                        Servicios de belleza a domicilio para hombres y mujeres en
-                        cualquier lugar.
-                    </p>
-                    <div class="social-icons">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-tiktok"></i></a>
-                        <a href="#"><i class="fab fa-whatsapp"></i></a>
-                    </div>
-                </div>
-
-                <div class="footer-section">
-                    <h4>Enlaces</h4>
-                    <ul>
-                        <li><a href="#">Inicio</a></li>
-                        <li><a href="#">Servicios</a></li>
-                        <li><a href="#">Sobre Nosotros</a></li>
-                        <li><a href="#">Contacto</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-section">
-                    <h4>Servicios</h4>
-                    <ul>
-                        <li><a href="#">Corte de Cabello</a></li>
-                        <li><a href="#">Maquillaje</a></li>
-                        <li><a href="#">Uñas</a></li>
-                        <li><a href="#">Tratamientos Faciales</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-section">
-                    <h4>Contacto</h4>
-                    <ul>
-                        <li><i class="fas fa-map-marker-alt"></i> Bogotá, Colombia</li>
-                        <li><i class="fas fa-phone"></i> +57 123 456 7890</li>
-                        <li><i class="fas fa-envelope"></i> hola@justme.com</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="footer-bottom">
-                <p>&copy; 2025 Just Me. Todos los derechos reservados.</p>
-                <div class="legal-links">
-                    <a href="#">Términos y Condiciones</a>
-                    <a href="#">Política de Privacidad</a>
-                </div>
-            </div>
-        </div>
-    </footer>
+        // Validación cuando el DOM esté completamente cargado
+        document.addEventListener('DOMContentLoaded', function() {
+            const password = document.getElementById('contrasena');
+            const confirmPassword = document.getElementById('confirmarContrasena');
+            const passwordMatch = document.getElementById('passwordMatch');
+            const termsError = document.getElementById('termsError');
+            const passwordError = document.getElementById('passwordError');
+            const termsCheckbox = document.getElementById('terms');
+            
+            function validatePasswords() {
+                if (password.value && confirmPassword.value) {
+                    if (password.value === confirmPassword.value) {
+                        // Contraseñas coinciden
+                        passwordMatch.innerHTML = '<i class="fas fa-check"></i><span>Las contraseñas coinciden</span>';
+                        passwordMatch.className = 'password-match success show';
+                        confirmPassword.style.borderColor = 'var(--success-color)';
+                        passwordError.classList.remove('show');
+                    } else {
+                        // Contraseñas no coinciden
+                        passwordMatch.innerHTML = '<i class="fas fa-times"></i><span>Las contraseñas no coinciden</span>';
+                        passwordMatch.className = 'password-match error show';
+                        confirmPassword.style.borderColor = 'var(--error-color)';
+                    }
+                } else {
+                    // Campos vacíos
+                    passwordMatch.className = 'password-match';
+                    confirmPassword.style.borderColor = '';
+                }
+            }
+            
+            // Validar en tiempo real mientras el usuario escribe
+            if (password && confirmPassword) {
+                password.addEventListener('input', validatePasswords);
+                confirmPassword.addEventListener('input', validatePasswords);
+            }
+            
+            // Manejar el envío del formulario
+            const registerForm = document.getElementById('registerForm');
+            if (registerForm) {
+                registerForm.addEventListener('submit', function(e) {
+                    let hasError = false;
+                    
+                    // Ocultar mensajes de error previos
+                    if (termsError) termsError.classList.remove('show');
+                    if (passwordError) passwordError.classList.remove('show');
+                    
+                    // Validación de términos - CON ALERTA
+                    if (termsCheckbox && !termsCheckbox.checked) {
+                        if (termsError) termsError.classList.add('show');
+                        hasError = true;
+                        // Mostrar alerta específica para términos
+                        alert('⚠️ Debes aceptar los Términos y Condiciones para continuar.');
+                        e.preventDefault();
+                        return false; // Detener inmediatamente
+                    }
+                    
+                    // Validación de contraseñas
+                    if (password && confirmPassword && password.value !== confirmPassword.value) {
+                        if (passwordError) passwordError.classList.add('show');
+                        hasError = true;
+                    }
+                    
+                    // Si hay errores, prevenir el envío
+                    if (hasError) {
+                        e.preventDefault();
+                        
+                        // Hacer scroll al primer error
+                        const firstError = document.querySelector('.error-message.show');
+                        if (firstError) {
+                            firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }
+                    
+                    // Si todo está correcto, el formulario se envía normalmente
+                });
+            }
+        });
+    </script>
 </body>
-
 </html>

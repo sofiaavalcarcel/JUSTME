@@ -11,13 +11,11 @@
 	<!-- =======================================================
 	    * Template Name: JusteMe
 	    * Template URL: 
-	    * Updated: Jul 25 2025 with Bootstrap v5.3.3
-	    * Author: Haruto Tsukasa
+	    * Updated: Oct 03 2025 with Bootstrap v5.3.3
+	    * Author: JustMe
 	    * License: Este proyecto está bajo la [Licencia MIT](LICENSE). Siéntete libre de usarlo y modificarlo.
 	    * Características:
 	    *   - Navbar con menú desplegable.
-	    *   - Input de búsqueda.
-	    *   - Carrusel de imágenes.
 	    *   - Cards de productos.
 	    *   - Tabla interactiva con DataTables.
 	    *   - Formulario de contácto
@@ -30,7 +28,7 @@
 
 <body>
 
-		<!--<div class="preloader" id="preloader">
+	<div class="preloader" id="preloader">
 		<div class="preloader-content">
 			<div class="preloader-card">
 				<div class="preloader-loader">
@@ -48,7 +46,7 @@
 				</div>
 			</div>
 		</div>
-	</div>-->
+	</div>
 
 	<header>
 		<nav>
@@ -68,12 +66,12 @@
 				<li><a href="#home">Inicio</a></li>
 				<li><a href="#services">Servicios</a></li>
 				<li><a href="#about">Nosotros</a></li>
-				<li><a href="#contact" id="contactLink">Contacto</a></li>
+				<li><a th:href="@{/contactanos}">Contactanos</a></li>
 
 			</ul>
 			<div class="auth-buttons">
 				<button class="login">Iniciar Sesión</button>
-				<a th:href="@{/registro}" class="signup">Registrarse</a>
+				<a th:href="@{/registro}" class="btn-custom">Regístrate</a>
 			</div>
 		</nav>
 	</header>
@@ -146,13 +144,13 @@
 	<section class="services" id="services">
 		<h2>Lo que ofrecemos</h2>
 		<div class="services-grid">
+			<!-- Las cards se generan con JS -->
 		</div>
 	</section>
+
 	<div class="modal-overlay" id="modalOverlay"></div>
 
-
-
-
+	<!-- Modal Login -->
 	<div class="modal glass" id="loginModal">
 		<button class="close-modal">&times;</button>
 		<div class="modal-content">
@@ -166,51 +164,148 @@
 					<label for="loginPassword">Contraseña</label>
 					<input type="password" id="loginPassword" name="contrasena" required />
 				</div>
-				<div class="form-group checklist">
-					<input type="checkbox" id="terms" />
-					<label for="terms">
-						Acepto los <a th:href="@{/terminosycondiciones}" target="_blank">Términos y Condiciones</a>
-					</label>
-
-
-
-				</div>
+				<p id="errorMessage" class="error-message" th:if="${param.error}" th:text="'Credenciales incorrectas'">
+				</p>
 				<button type="submit" class="modal-btn">Ingresar</button>
+
+				<p class="signup-link">
+					No tienes cuenta?
+					<a th:href="@{/registro}" class="signup-link link"> Registrate ahora</a>
+				</p>
+
 			</form>
 		</div>
 	</div>
 
 
 
+	<!-- Modal Términos y Condiciones -->
+	<div class="modal terminos" id="termsModal">
+		<div class="terminos-content"> <button class="close-modal">&times;</button>
+			<h2>Términos y Condiciones</h2> <!-- Contenedor scrollable -->
+			<div class="terms-scroll">
+				<p>
+					1. Aceptación de los Términos
+					Al crear una cuenta o utilizar los Servicios de Just Me, usted declara que tiene la edad legal para
+					consentir en su jurisdicción (generalmente 18 años o más) y que acepta cumplir con estos Términos.
+					El uso de la App está también sujeto a nuestra Política de Privacidad, que explica cómo recopilamos,
+					usamos y protegemos su información.
+				</p>
 
-	<div class="modal glass" id="loginModal">
-		<button class="close-modal">&times;</button>
-		<div class="modal-content">
-			<h2>Iniciar Sesión</h2>
-			<form th:action="@{/acceder}" method="post" id="loginForm">
-				<div class="form-group">
-					<label for="loginEmail">Correo Electrónico</label>
-					<input type="email" id="loginEmail" name="email" required />
-				</div>
-				<div class="form-group">
-					<label for="loginPassword">Contraseña</label>
-					<input type="password" id="loginPassword" name="contrasena" required />
-				</div>
-				<div class="form-group checklist">
-					<input type="checkbox" id="terms" name="terms" required />
-					<label for="terms">
-						Acepto los
-						<a th:href="@{/terminosycondiciones}" target="_blank">Términos y Condiciones</a>
-					</label>
-				</div>
-				<p id="errorMessage" class="error-message" th:if="${param.error}" th:text="'Credenciales incorrectas'">
+				<p>
+					2. Descripción del Servicio
+					Just Me es una aplicación que ofrece servicios de belleza y bienestar en línea, que pueden incluir,
+					entre otros:
+
+					Prueba virtual de productos de belleza (maquillaje, color de cabello, etc.) mediante herramientas
+					audiovisuales.
+
+					Recomendaciones personalizadas de productos y rutinas.
+
+					Una comunidad para compartir looks y experiencias. </p>
+
+				<p>
+					3. Registro y Cuenta
+
+					Exactitud de la Información: Usted se compromete a proporcionar información veraz, exacta y completa
+					durante el registro y a actualizarla para mantener su precisión.
+
+					Confidencialidad de la Cuenta: Usted es responsable de mantener la confidencialidad de su contraseña
+					y de toda actividad que ocurra bajo su cuenta. Notifique inmediatamente a Just Me cualquier uso no
+					autorizado de su cuenta.
+
+					Cuenta Personal: Su cuenta es personal e intransferible
 				</p>
-				<button type="submit" class="modal-btn">Ingresar</button>
-				<p class="modal-text">
-					¿No tienes cuenta?
-					<a th:href="@{/registro}" >Regístrate</a>
+
+				<p>
+					4. Contenido Generado por el Usuario
+
+					Definición: "Contenido" incluye cualquier foto, imagen, video, texto, comentario, dato de belleza
+					(como tono de piel o tipo de cabello) u otro material que usted comparta, suba o publique en la App.
+
+					Licencia que Usted Concede: Al publicar Contenido en Just Me, usted nos concede una licencia
+					mundial, no exclusiva, libre de regalías, sublicenciable y transferible para usar, modificar,
+					ejecutar, copiar, distribuir y mostrar dicho Contenido en relación con la operación y promoción de
+					los Servicios. Esta licencia termina si usted elimina su Contenido de la App.
+
+					Sus Garantías: Usted declara y garantiza que: (i) es el dueño del Contenido que publica o tiene
+					derecho a conceder la licencia; (ii) la publicación de su Contenido no viola los derechos de
+					privacidad, publicidad, copyright, contractuales o cualquier otro derecho de ninguna persona; y
+					(iii) su Contenido no es difamatorio, obsceno, fraudulento o ilegal.
+
+					Responsabilidad: Usted es el único responsable del Contenido que publique y de las consecuencias de
+					su publicación.
 				</p>
-			</form>
+
+
+				<p>
+					5. ropiedad Intelectual
+
+					Derechos de Just Me: Todos los derechos de propiedad intelectual de la App, su contenido (excepto el
+					Contenido generado por usuarios), diseño, software, código, logotipos, marcas registradas ("Just
+					Me") y recomendaciones son propiedad exclusiva de Just Me o de sus licenciantes. Está prohibida su
+					reproducción, distribución o modificación sin autorización expresa por escrito.
+
+					Reconocimiento Facial y de Imagen: Si la App utiliza tecnología de realidad aumentada o
+					reconocimiento de imagen para probar productos, usted nos concede el derecho a utilizar sus datos
+					faciales o de imagen (de forma anónima y agregada cuando sea posible) únicamente para proporcionar y
+					mejorar el servicio de prueba virtual y recomendaciones.
+
+				</p>
+
+				<p>
+					6. Compras y Pagos
+
+					Los precios y la disponibilidad están sujetos a cambio.
+
+					Usted se compromete a proporcionar información de pago exacta y completa.
+
+					El procesamiento de pagos está a cargo de proveedores de terceros seguros. Just Me no almacena los
+					detalles completos de su tarjeta de crédito.
+
+					Las transacciones están sujetas a términos de venta adicionales que se le presentarán en el momento
+					de la compra.
+				</p>
+
+				<p>
+					7. Limitación de Responsabilidad
+
+					Uso Informativo: Los Servicios, incluidas las recomendaciones y pruebas virtuales, se proporcionan
+					"TAL CUAL" y "SEGÚN DISPONIBILIDAD". Las pruebas virtuales son una simulación y pueden no
+					representar con absoluta precisión el resultado real de un producto en persona debido a factores
+					como la calidad de la cámara, la iluminación o las calibraciones de pantalla. Just Me no garantiza
+					la exactitud absoluta de estas herramientas.
+
+					No Responsabilidad Médica: La App no proporciona consejo médico. Las recomendaciones de productos
+					son de naturaleza estética y de bienestar general. Siempre consulte con un dermatólogo o profesional
+					de la salud antes de usar un nuevo producto si tiene alergias, condiciones de la piel sensibles o
+					preocupaciones médicas.
+
+					Límite de Responsabilidad: En la máxima medida permitida por la ley, Just Me y sus afiliados no
+					serán responsables por daños indirectos, incidentales, especiales, consecuentes o punitivos
+					resultantes de su uso o incapacidad de usar los Servicios.
+				</p>
+
+				<p>
+					8. Terminación
+					Just Me se reserva el derecho de suspender o terminar su acceso a los Servicios, sin previo aviso,
+					por cualquier motivo, incluido, entre otros, el incumplimiento de estos Términos.
+				</p>
+
+				<p>
+					9. Modificaciones de los Términos
+					Nos reservamos el derecho de modificar estos Términos en cualquier momento. Le notificaremos sobre
+					cambios materiales publicando la versión actualizada en la App. Su uso continuado de los Servicios
+					después de dichos cambios constituye su aceptación de los nuevos Términos.
+				</p>
+
+				<p>
+					10. Ley Aplicable y Resolución de Conflictos
+					Estos Términos se regirán e interpretarán de acuerdo con las leyes reglamentadas de Colombia.
+					Cualquier disputa relacionada con estos Términos se resolverá
+					primero mediante negociación y, si no se resuelve, sometiéndose a los correspondientes tribunales.
+				</p>
+			</div>
 		</div>
 	</div>
 
@@ -222,44 +317,12 @@
 			<div class="quesomos-imagen"></div>
 			<div class="quesomos-contenido">
 				<p class="quesomos-descripcion">Somos tu aliado digital de belleza y bienestar. Nuestra innovadora
-					plataforma conecta a los mejores enprendedores de estética directamente con tu hogar, ofreciendo
+					plataforma conecta a los mejores emprendedores de estética directamente con tu hogar, ofreciendo
 					servicios de uñas, maquillaje, tratamientos faciales, depilación y más.</p>
 			</div>
 		</div>
 	</section>
-
-	<!-- Modal de Contacto -->
-	<div id="contactModal">
-		<div id="modalContent">
-			<span id="closeModal">&times;</span>
-
-			<div id="modalHeader">
-				<h2>Contáctanos</h2>
-			</div>
-
-			<form id="contactForm">
-				<div class="formGroup">
-					<label for="userName">Nombre</label>
-					<input type="text" id="userName">
-				</div>
-
-				<div class="formGroup">
-					<label for="userEmail">Email</label>
-					<input type="email" id="userEmail">
-				</div>
-
-				<div class="formGroup">
-					<label for="userMessage">Mensaje</label>
-					<textarea id="userMessage"></textarea>
-				</div>
-
-				<button type="submit" id="submitBtn">ENVIAR</button>
-			</form>
-
-
-		</div>
-	</div>
-
+	
 	<!-- Footer -->
 	<footer class="footer">
 		<div class="container">
@@ -311,7 +374,7 @@
 			<div class="footer-bottom">
 				<p>&copy; 2025 Just Me. Todos los derechos reservados.</p>
 				<div class="legal-links">
-					<a href="#">Términos y Condiciones</a>
+					<a href="#" class="open-terms">Términos y Condiciones</a>
 					<a href="#">Política de Privacidad</a>
 				</div>
 			</div>
