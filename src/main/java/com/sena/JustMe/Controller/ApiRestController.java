@@ -21,6 +21,7 @@ import com.sena.JustMe.model.Citas_reservas;
 import com.sena.JustMe.service.IUsuariosService;
 import com.sena.JustMe.service.IServiciosService;
 import com.sena.JustMe.service.ICitas_reservasService;
+import com.sena.JustMe.service.EmailService;
 
 @RestController
 @RequestMapping("/api")
@@ -28,6 +29,9 @@ public class ApiRestController {
 
     @Autowired
     private IUsuariosService usuariosService;
+
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     private IServiciosService serviciosService;
@@ -54,6 +58,9 @@ public class ApiRestController {
     @PostMapping("/usuarios")
     public ResponseEntity<Usuarios> crearUsuario(@RequestBody Usuarios usuario) {
         Usuarios creado = usuariosService.save(usuario);
+
+        emailService.enviarCorreoBienvenida(creado.getEmail(), creado.getNombre());
+
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 

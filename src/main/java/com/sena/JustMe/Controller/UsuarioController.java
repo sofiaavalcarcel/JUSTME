@@ -28,6 +28,7 @@ import com.sena.JustMe.model.Rol;
 import com.sena.JustMe.service.IUsuariosService;
 import com.sena.JustMe.service.IRolService;
 import com.sena.JustMe.security.CustomUserDetails;
+import com.sena.JustMe.service.EmailService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -44,6 +45,9 @@ public class UsuarioController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private EmailService emailService;
 
     // =========================
     // Páginas públicas
@@ -81,7 +85,9 @@ public class UsuarioController {
             usuario.setFotoperfil("defaultuser.jpg");
         }
 
-        usuarioService.save(usuario);
+        Usuarios creado = usuarioService.save(usuario);
+
+        emailService.enviarCorreoBienvenida(creado.getEmail(), creado.getNombre());
         return "redirect:/";
     }
     
