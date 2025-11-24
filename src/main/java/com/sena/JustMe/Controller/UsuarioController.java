@@ -222,82 +222,100 @@ public class UsuarioController {
 
         return "redirect:/perfil_usuario";
     }
- // =========================
- // Cambio a cuenta profesional
- // =========================
- @PostMapping("/profesional/cambio")
- public String cambioAProfesional(
-         @RequestParam("biografia") String biografia,
-         @RequestParam("availability") String disponibilidad,
-         @RequestParam(value = "portafolio", required = false) MultipartFile[] portafolioFiles,
-         HttpSession session,
-         Model model) {
 
-     Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+    // =========================
+    // Cambio a cuenta profesional
+    // =========================
+    @PostMapping("/profesional/cambio")
+    public String cambioAProfesional(
+            @RequestParam("biografia") String biografia,
+            @RequestParam("availability") String disponibilidad,
+            @RequestParam(value = "portafolio", required = false) MultipartFile[] portafolioFiles,
+            HttpSession session,
+            Model model) {
 
-     if (idUsuario == null) {
-         model.addAttribute("error", "No hay sesión activa.");
-         return "redirect:/";
-     }
+        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
 
-     Optional<Usuarios> optionalUsuario = usuarioService.findById(idUsuario);
-     if (optionalUsuario.isEmpty()) {
-         model.addAttribute("error", "Usuario no encontrado.");
-         return "redirect:/";
-     }
+        if (idUsuario == null) {
+            model.addAttribute("error", "No hay sesión activa.");
+            return "redirect:/";
+        }
 
-     try {
-         Usuarios usuario = optionalUsuario.get();
-         usuario.setBiografia(biografia);
-         usuario.setDisponibilidad(disponibilidad);
+        Optional<Usuarios> optionalUsuario = usuarioService.findById(idUsuario);
+        if (optionalUsuario.isEmpty()) {
+            model.addAttribute("error", "Usuario no encontrado.");
+            return "redirect:/";
+        }
 
-         // 📁 Guardar portafolio en carpeta uploads y almacenar nombres en la BD
-         if (portafolioFiles != null && portafolioFiles.length > 0) {
-             StringBuilder sb = new StringBuilder();
-             Path uploadPath = Paths.get("uploads");
+        try {
+            Usuarios usuario = optionalUsuario.get();
+            usuario.setBiografia(biografia);
+            usuario.setDisponibilidad(disponibilidad);
 
-             // Crear carpeta si no existe
-             if (!Files.exists(uploadPath)) {
-                 Files.createDirectories(uploadPath);
-             }
+            if (portafolioFiles != null && portafolioFiles.length > 0) {
+                StringBuilder sb = new StringBuilder();
+                Path uploadPath = Paths.get("uploads");
 
-             for (MultipartFile file : portafolioFiles) {
-                 if (!file.isEmpty()) {
-                     String nombreArchivo = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-                     Path destino = uploadPath.resolve(nombreArchivo);
-                     Files.copy(file.getInputStream(), destino, StandardCopyOption.REPLACE_EXISTING);
-                     sb.append(nombreArchivo).append(",");
-                 }
-             }
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
 
-             usuario.setPortafolio(sb.toString());
-         }
+                for (MultipartFile file : portafolioFiles) {
+                    if (!file.isEmpty()) {
+                        String nombreArchivo = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+                        Path destino = uploadPath.resolve(nombreArchivo);
+                        Files.copy(file.getInputStream(), destino, StandardCopyOption.REPLACE_EXISTING);
+                        sb.append(nombreArchivo).append(",");
+                    }
+                }
 
-         // 🔄 Cambiar rol a profesional (ID = 2)
-         Optional<Rol> rolProfesional = rolService.findById(2);
-         rolProfesional.ifPresent(usuario::setRol);
+                usuario.setPortafolio(sb.toString());
+            }
 
-         usuario.setEstado("Activo");
-         usuarioService.save(usuario);
+            Optional<Rol> rolProfesional = rolService.findById(2);
+            rolProfesional.ifPresent(usuario::setRol);
 
-         // 🔁 Refrescar datos de sesión
-         session.setAttribute("biografiaUsuario", usuario.getBiografia());
-         session.setAttribute("rolUsuario", "PROFESIONAL");
-         session.setAttribute("portafolioUsuario", usuario.getPortafolio());
+            usuario.setEstado("Activo");
+            usuarioService.save(usuario);
 
-         return "redirect:/profesional"; // Redirige a la vista de profesional
+            session.setAttribute("biografiaUsuario", usuario.getBiografia());
+            session.setAttribute("rolUsuario", "PROFESIONAL");
+            session.setAttribute("portafolioUsuario", usuario.getPortafolio());
 
-     } catch (IOException e) {
-         e.printStackTrace();
-         model.addAttribute("error", "Error al procesar los archivos: " + e.getMessage());
-         return "redirect:/perfil_usuario";
-     }
- }
- 
- 
+            return "redirect:/profesional";
 
+        } catch (IOException e) {
+            e.printStackTrace();
+            model.addAttribute("error", "Error al procesar los archivos: " + e.getMessage());
+            return "redirect:/perfil_usuario";
+        }
+    }
 
+    // =========================
+    // Cambio de contraseña
+    // =========================
+    @PostMapping("/usuario/cambiar-contrasena")
+    public String cambiarContrasena(
+            @RequestParam("contrasenaActual") String contrasenaActual,
+            @RequestParam("nuevaContrasena") String nuevaContrasena,
+            @RequestParam("confirmarContrasena") String confirmarContrasena,
+            HttpSession session) {
 
+        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+        if (idUsuario == null) {
+            return "redirect:/?error=true";
+        }
 
+        if (!nuevaContrasena.equals(confirmarContrasena)) {
+            return "redirect:/perfil_usuario?error=contrasena_nueva";
+        }
 
+        try {
+            usuarioService.changePassword(idUsuario, contrasenaActual, nuevaContrasena);
+        } catch (RuntimeException ex) {
+            return "redirect:/perfil_usuario?error=contrasena_actual";
+        }
+
+        return "redirect:/perfil_usuario?success=true";
+    }
 }

@@ -1,6 +1,5 @@
 package com.sena.JustMe.service;
 
-
 import com.sena.JustMe.model.Usuarios;
 
 import java.util.List;
@@ -17,4 +16,6 @@ public interface IUsuariosService {
     Optional<Usuarios> findByEmail(String email);
 
     List<Usuarios> findAll();
+
+    void changePassword(Integer id, String currentPassword, String newPassword);
 }

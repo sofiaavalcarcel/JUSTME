@@ -131,24 +131,40 @@ public class ProfesionalController {
 	                session.setAttribute("biografiaUsuario", user.getBiografia());
 	                session.setAttribute("fotoperfil", user.getFotoperfil());
 	                session.setAttribute("estadoUsuario", user.getEstado());
-	                session.setAttribute("disponibilidadUsuario", user.getDisponibilidad()); // 👈 nuevo
+	                session.setAttribute("disponibilidadUsuario", user.getDisponibilidad()); // 
 	            }
 	        }
 	    } catch (IOException e) {
 	        e.printStackTrace();
 	    }
 
-	    // ✅ Redirige al home del profesional
+	    // Redirige al home del profesional
 	    return "redirect:/perfilProfesional";
 	}
-	
-	
 
-    }
+	@PostMapping("/cambiar-contrasena")
+	public String cambiarContrasena(
+			@RequestParam("contrasenaActual") String contrasenaActual,
+			@RequestParam("nuevaContrasena") String nuevaContrasena,
+			@RequestParam("confirmarContrasena") String confirmarContrasena,
+			HttpSession session) {
 
+		Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+		if (idUsuario == null) {
+			return "redirect:/?error=true";
+		}
 
+		if (!nuevaContrasena.equals(confirmarContrasena)) {
+			return "redirect:/perfilProfesional?error=contrasenasNoCoinciden";
+		}
 
-	
+		try {
+			usuarioService.changePassword(idUsuario, contrasenaActual, nuevaContrasena);
+		} catch (RuntimeException ex) {
+			return "redirect:/perfilProfesional?error=contrasenaActualIncorrecta";
+		}
 
-
+		return "redirect:/perfilProfesional";
+	}
+}
 

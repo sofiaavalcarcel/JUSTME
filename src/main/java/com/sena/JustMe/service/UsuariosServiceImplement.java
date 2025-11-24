@@ -105,6 +105,24 @@ public class UsuariosServiceImplement implements IUsuariosService {
         }
     }
 
+    @Override
+    public void changePassword(Integer id, String currentPassword, String newPassword) {
+        Optional<Usuarios> optionalUsuario = usuarioRepository.findById(id);
+
+        if (optionalUsuario.isPresent()) {
+            Usuarios usuario = optionalUsuario.get();
+
+            if (passwordEncoder.matches(currentPassword, usuario.getContrasena())) {
+                usuario.setContrasena(passwordEncoder.encode(newPassword));
+                usuarioRepository.save(usuario);
+            } else {
+                throw new RuntimeException("La contraseña actual es incorrecta");
+            }
+        } else {
+            throw new RuntimeException("No se encontró el usuario con ID: " + id);
+        }
+    }
+
     private boolean isPasswordEncoded(String rawOrEncoded) {
         return rawOrEncoded.startsWith("$2a$") || rawOrEncoded.startsWith("$2b$") || rawOrEncoded.startsWith("$2y$");
     }

@@ -7,6 +7,40 @@
 	<link rel="stylesheet" href="styles/perfil_usuario.css" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<style>
+		.password-group {
+			margin-top: 1rem;
+		}
+
+		.password-wrapper {
+			position: relative;
+			display: flex;
+			align-items: center;
+		}
+
+		.password-wrapper input[type="password"],
+		.password-wrapper input[type="text"] {
+			flex: 1;
+			padding-right: 2.5rem;
+		}
+
+		.password-wrapper .toggle-password {
+			position: absolute;
+			right: 0.75rem;
+			background: transparent;
+			border: none;
+			color: #888;
+			cursor: pointer;
+			font-size: 1rem;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.password-wrapper .toggle-password:hover {
+			color: #e16bff;
+		}
+	</style>
 </head>
 
 <body>
@@ -26,8 +60,6 @@
 				</div>
 			</div>
 
-
-
 			<div class="user-menu">
 				<a th:href="@{/inicio}" class="btn-custom"> Volver al inicio</a>
 			</div>
@@ -39,12 +71,12 @@
 			<div class="container">
 				<div class="profile-header">
 
-					<!-- ✅ Un solo form -->
+					<!-- Un solo form -->
 					<form th:action="@{/usuario/actualizar}" method="post" enctype="multipart/form-data"
 						class="profile-form">
 						<div class="profile-header">
 							<div class="profile-image-container">
-								<!-- ✅ Sintaxis de imagen corregida -->
+								<!-- Sintaxis de imagen corregida -->
 								<img th:src="${session.fotoperfil != null} ? @{/uploads/{foto}(foto=${session.fotoperfil})} : @{/img/default.jpg}"
 									alt="Foto de perfil" id="profileImageDisplay" class="profile-image">
 
@@ -99,26 +131,58 @@
 									th:text="${session.biografiaUsuario}"></textarea>
 							</div>
 
-
 							<div class="form-group">
 								<label for="address"><i class="fas fa-map-marker-alt"></i> Dirección</label>
 								<input type="text" id="address" name="direccion" th:value="${session.direccionUsuario}">
 							</div>
 
-
 							<div class="form-actions">
-								
 								<button type="submit" class="save-btn">Guardar cambios</button>
 							</div>
 						</div>
 					</form>
 
+					<!-- Cambio de contraseña -->
+					<form th:action="@{/usuario/cambiar-contrasena}" method="post" class="profile-form" style="margin-top: 2rem;">
+						<div class="profile-content">
+							<div class="form-row">
+								<div class="form-group password-group">
+									<label for="currentPassword"><i class="fas fa-lock"></i> Contraseña actual</label>
+									<div class="password-wrapper">
+										<input type="password" id="currentPassword" name="contrasenaActual" required>
+										<button type="button" class="toggle-password" data-target="currentPassword">
+											<i class="fas fa-eye"></i>
+										</button>
+									</div>
+								</div>
+								<div class="form-group password-group">
+									<label for="newPassword"><i class="fas fa-lock"></i> Nueva contraseña</label>
+									<div class="password-wrapper">
+										<input type="password" id="newPassword" name="nuevaContrasena" required>
+										<button type="button" class="toggle-password" data-target="newPassword">
+											<i class="fas fa-eye"></i>
+										</button>
+									</div>
+								</div>
+								<div class="form-group password-group">
+									<label for="confirmPassword"><i class="fas fa-lock"></i> Confirmar contraseña</label>
+									<div class="password-wrapper">
+										<input type="password" id="confirmPassword" name="confirmarContrasena" required>
+										<button type="button" class="toggle-password" data-target="confirmPassword">
+											<i class="fas fa-eye"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+							<div class="form-actions">
+								<button type="submit" class="save-btn">Cambiar contraseña</button>
+							</div>
+						</div>
+					</form>
 				</div>
 			</div>
 		</section>
 	</main>
-
-
 
 	<!-- Footer -->
 	<footer class="footer">
@@ -176,9 +240,243 @@
 				</div>
 			</div>
 		</div>
-	</footer>
 
-	<script src="scripts/perfil_usuario.js"></script>
+		<div class="user-menu">
+			<a th:href="@{/inicio}" class="btn-custom"> Volver al inicio</a>
+		</div>
+</header>
+
+<!-- Main Content -->
+<main class="main">
+	<section class="profile-section">
+		<div class="container">
+			<div class="profile-header">
+
+				<!-- Un solo form -->
+				<form th:action="@{/usuario/actualizar}" method="post" enctype="multipart/form-data"
+					class="profile-form">
+					<div class="profile-header">
+						<div class="profile-image-container">
+							<!-- Sintaxis de imagen corregida -->
+							<img th:src="${session.fotoperfil != null} ? @{/uploads/{foto}(foto=${session.fotoperfil})} : @{/img/default.jpg}"
+								alt="Foto de perfil" id="profileImageDisplay" class="profile-image">
+
+							<div class="image-upload">
+								<label for="fileInput" class="upload-btn">
+									<i class="fas fa-camera"></i> Cambiar foto
+								</label>
+								<input type="file" id="fileInput" name="foto" accept="image/*">
+							</div>
+						</div>
+
+						<div class="profile-info">
+							<h2 th:text="${session.nombreUsuario}">Usuario</h2>
+							<div class="rating">
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star-half-alt"></i>
+								<span>4.8</span>
+							</div>
+							<p class="member-since">Miembro desde: Enero 2023</p>
+						</div>
+					</div>
+
+					<!-- Campos editables -->
+					<div class="profile-content">
+						<div class="form-row">
+							<div class="form-group">
+								<label for="fullName"><i class="fas fa-user"></i> Nombre completo</label>
+								<input type="text" id="fullName" name="nombre" th:value="${session.nombreUsuario}"
+									required>
+							</div>
+							<div class="form-group">
+								<label for="email"><i class="fas fa-envelope"></i> Correo electrónico</label>
+								<input type="email" id="email" name="email" th:value="${session.emailUsuario}"
+									required>
+							</div>
+						</div>
+
+						<div class="form-row">
+							<div class="form-group">
+								<label for="numero"><i class="fas fa-phone"></i> Teléfono</label>
+								<input type="text" id="numero" name="numero" th:value="${session.numeroUsuario}"
+									required>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="about"><i class="fas fa-info-circle"></i> Biografía</label>
+							<textarea id="about" name="biografia" rows="4"
+								th:text="${session.biografiaUsuario}"></textarea>
+						</div>
+
+						<div class="form-group">
+							<label for="address"><i class="fas fa-map-marker-alt"></i> Dirección</label>
+							<input type="text" id="address" name="direccion" th:value="${session.direccionUsuario}">
+						</div>
+
+						<div class="form-actions">
+							<button type="submit" class="save-btn">Guardar cambios</button>
+						</div>
+					</div>
+				</form>
+
+				<!-- Cambio de contraseña -->
+				<form th:action="@{/usuario/cambiar-contrasena}" method="post" class="profile-form" style="margin-top: 2rem;">
+					<div class="profile-content">
+						<div class="form-row">
+							<div class="form-group password-group">
+								<label for="currentPassword"><i class="fas fa-lock"></i> Contraseña actual</label>
+								<div class="password-wrapper">
+									<input type="password" id="currentPassword" name="contrasenaActual" required>
+									<button type="button" class="toggle-password" data-target="currentPassword">
+										<i class="fas fa-eye"></i>
+									</button>
+								</div>
+							</div>
+							<div class="form-group password-group">
+								<label for="newPassword"><i class="fas fa-lock"></i> Nueva contraseña</label>
+								<div class="password-wrapper">
+									<input type="password" id="newPassword" name="nuevaContrasena" required>
+									<button type="button" class="toggle-password" data-target="newPassword">
+										<i class="fas fa-eye"></i>
+									</button>
+								</div>
+							</div>
+							<div class="form-group password-group">
+								<label for="confirmPassword"><i class="fas fa-lock"></i> Confirmar contraseña</label>
+								<div class="password-wrapper">
+									<input type="password" id="confirmPassword" name="confirmarContrasena" required>
+									<button type="button" class="toggle-password" data-target="confirmPassword">
+										<i class="fas fa-eye"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+						<div class="form-actions">
+							<button type="submit" class="save-btn">Cambiar contraseña</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+	<div class="container">
+		<div class="footer-content">
+			<div class="footer-section">
+				<h4>Just Me</h4>
+				<p>
+					Servicios de belleza a domicilio para hombres y mujeres en
+					cualquier lugar.
+				</p>
+				<div class="social-icons">
+					<a href="#"><i class="fab fa-facebook-f"></i></a>
+					<a href="#"><i class="fab fa-instagram"></i></a>
+					<a href="#"><i class="fab fa-tiktok"></i></a>
+					<a href="#"><i class="fab fa-whatsapp"></i></a>
+				</div>
+			</div>
+
+			<div class="footer-section">
+				<h4>Enlaces</h4>
+				<ul>
+					<li><a href="#">Inicio</a></li>
+					<li><a href="#">Servicios</a></li>
+					<li><a href="#">Sobre Nosotros</a></li>
+					<li><a href="#">Contacto</a></li>
+				</ul>
+			</div>
+
+			<div class="footer-section">
+				<h4>Servicios</h4>
+				<ul>
+					<li><a href="#">Corte de Cabello</a></li>
+					<li><a href="#">Maquillaje</a></li>
+					<li><a href="#">Uñas</a></li>
+					<li><a href="#">Tratamientos Faciales</a></li>
+				</ul>
+			</div>
+
+			<div class="footer-section">
+				<h4>Contacto</h4>
+				<ul>
+					<li><i class="fas fa-map-marker-alt"></i> Bogotá, Colombia</li>
+					<li><i class="fas fa-phone"></i> +57 123 456 7890</li>
+					<li><i class="fas fa-envelope"></i> hola@justme.com</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="footer-bottom">
+			<p>&copy; 2025 Just Me. Todos los derechos reservados.</p>
+			<div class="legal-links">
+				<a href="#">Términos y Condiciones</a>
+				<a href="#">Política de Privacidad</a>
+			</div>
+		</div>
+	</div>
+</footer>
+
+<script src="scripts/perfil_usuario.js"></script>
+
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+		const toggleButtons = document.querySelectorAll('.toggle-password');
+		toggleButtons.forEach(btn => {
+
+			btn.addEventListener('click', function () {
+				const targetId = this.getAttribute('data-target');
+				const input = document.getElementById(targetId);
+				if (!input) return;
+
+				const isPassword = input.type === 'password';
+				input.type = isPassword ? 'text' : 'password';
+
+				const icon = this.querySelector('i');
+				if (icon) {
+					icon.classList.toggle('fa-eye');
+					icon.classList.toggle('fa-eye-slash');
+				}
+			});
+		});
+
+		// SweetAlert2 para mensajes de cambio de contraseña
+		const params = new URLSearchParams(window.location.search);
+		const error = params.get('error');
+		const success = params.get('success');
+
+		if (error === 'contrasena_actual') {
+			Swal.fire({
+				title: 'Contraseña actual incorrecta',
+				text: 'La contraseña que ingresaste no coincide con la actual.',
+				icon: 'error',
+				confirmButtonColor: '#e16bff'
+			});
+		} else if (error === 'contrasena_nueva') {
+			Swal.fire({
+				title: 'Las nuevas contraseñas no coinciden',
+				text: 'Verifica que la nueva contraseña y su confirmación sean iguales.',
+				icon: 'warning',
+				confirmButtonColor: '#e16bff'
+			});
+		}
+
+		if (success === 'true') {
+			Swal.fire({
+				title: 'Contraseña actualizada',
+				text: 'Tu contraseña se cambió correctamente.',
+				icon: 'success',
+				confirmButtonColor: '#e16bff'
+			});
+		}
+	});
+</script>
 
 </body>
 
