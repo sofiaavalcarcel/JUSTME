@@ -70,6 +70,10 @@ public class UsuarioController {
     @PostMapping("/save")
     public String save(Usuarios usuario) {
         LOGGER.info("Registrando usuario: {}", usuario);
+        // Validar si ya existe un usuario con el mismo correo
+        if (usuarioService.findByEmail(usuario.getEmail()).isPresent()) {
+            return "redirect:/registro?error=email";
+        }
 
         // Rol por defecto: CLIENTE (id=3)
         Optional<Rol> rolCliente = rolService.findById(3);
