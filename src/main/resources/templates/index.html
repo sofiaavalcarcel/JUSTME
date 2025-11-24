@@ -157,9 +157,10 @@
 			<h2>Iniciar Sesión</h2>
 			<form th:action="@{/acceder}" method="post" id="loginForm">
 				<div class="form-group">
-					<label for="loginEmail">Correo Electrónico</label>
-					<input type="email" id="loginEmail" name="email" required />
+					<label for="loginEmail">Correo electrónico o número de teléfono</label>
+					<input type="text" id="loginEmail" name="email" placeholder="Ingresa tu correo o número" required />
 				</div>
+
 				<div class="form-group">
 					<label for="loginPassword">Contraseña</label>
 					<input type="password" id="loginPassword" name="contrasena" required />
