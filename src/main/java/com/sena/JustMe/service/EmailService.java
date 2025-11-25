@@ -31,4 +31,33 @@ public class EmailService {
 
         mailSender.send(mensaje);
     }
+
+    public void enviarCorreoConfirmacionPago(String destinatario, String nombre, String nombreServicio,
+            Double monto, String moneda, String estado) {
+        if (destinatario == null || destinatario.isEmpty()) {
+            return;
+        }
+
+        SimpleMailMessage mensaje = new SimpleMailMessage();
+        mensaje.setTo(destinatario);
+        mensaje.setSubject("Gracias por agendar tu servicio - JUSTME");
+
+        String nombreMostrado = (nombre != null && !nombre.isEmpty()) ? nombre : "";
+        String servicioMostrado = (nombreServicio != null && !nombreServicio.isEmpty()) ? nombreServicio : "tu servicio";
+        String montoTexto = (monto != null ? monto : 0.0) + " " + (moneda != null ? moneda : "");
+        String estadoTexto = (estado != null && !estado.isEmpty()) ? estado : "procesado";
+
+        String cuerpo = "Hola " + nombreMostrado + "\n\n" +
+                "Gracias por agendar tu servicio en JUSTME.\n\n" +
+                "Detalles del servicio:\n" +
+                "- Servicio: " + servicioMostrado + "\n" +
+                "- Monto pagado: " + montoTexto + "\n" +
+                "- Estado del pago: " + estadoTexto + "\n\n" +
+                "En breve uno de nuestros profesionales se pondrá en contacto contigo para coordinar los detalles.\n\n" +
+                "Gracias por confiar en JUSTME.";
+
+        mensaje.setText(cuerpo);
+
+        mailSender.send(mensaje);
+    }
 }

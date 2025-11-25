@@ -144,6 +144,7 @@
 
     <script th:inline="javascript">
         const servicePrice = /*[[${servicio.precio_base}]]*/ 0;
+        const serviceId = /*[[${servicio.id}]]*/ 0;
     </script>
 
     <script>
@@ -318,6 +319,22 @@
                     button.classList.remove('loading');
                     button.innerHTML = '<span id="button-text">Pagar Ahora</span>';
                 } else if (paymentIntent.status === "succeeded") {
+                    try {
+                        await fetch("/api/stripe/registrar-pago", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                servicioId: serviceId,
+                                amount: servicePrice,
+                                currency: 'cop',
+                                paymentIntentId: paymentIntent.id,
+                                status: paymentIntent.status
+                            })
+                        });
+                    } catch (e) {
+                        console.error('Error registrando el pago en el backend', e);
+                    }
+
                     Swal.fire({
                         icon: 'success',
                         title: '¡Pago exitoso!',
