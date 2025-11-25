@@ -111,6 +111,32 @@
 							</button>
 						</div>
 					</form>
+					<h2 class="section-title">Subida Masiva de Servicios</h2>
+
+					<div class="mass-upload-container">
+
+					    <a th:href="@{/servicios/descargar-plantilla}" class="btn-download">
+					        <i class="fas fa-file-excel"></i> Descargar Plantilla Excel
+					    </a>
+
+					    <p class="note">
+					        Usa esta plantilla para cargar servicios masivamente.<br>
+					        Se validarán duplicados, precios, campos vacíos y usuarios existentes.
+					    </p>
+
+					    <form th:action="@{/servicios/subir-excel}" method="post" enctype="multipart/form-data" class="excel-form">
+					        <div class="form-group">
+					            <label for="file"><i class="fas fa-upload"></i> Seleccionar archivo Excel:</label>
+					            <input type="file" id="file" name="file" accept=".xlsx" required>
+					        </div>
+
+					        <button class="btn-upload" type="submit">
+					            <i class="fas fa-cloud-upload-alt"></i> Subir Archivo
+					        </button>
+					    </form>
+					</div>
+
+
 				</div>
 			</div>
 		</section>

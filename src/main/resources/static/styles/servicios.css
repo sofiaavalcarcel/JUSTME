@@ -532,3 +532,120 @@ ul {
         text-align: center;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Título */
+.section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    color: var(--primary-dark);
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}
+
+/* Contenedor general */
+.mass-upload-container {
+    max-width: 600px;
+    margin: auto;
+    padding: 25px;
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--primary-color);
+    box-shadow: 0 0 25px rgba(225,107,255,0.25);
+}
+
+/* Nota explicativa */
+.note {
+    color: var(--secondary-color);
+    text-align: center;
+    font-size: 0.95rem;
+    margin: 15px 0;
+}
+
+/* Botón Descargar */
+.btn-download {
+    display: inline-block;
+    background: var(--primary-color);
+    color: var(--white);
+    font-weight: 600;
+    padding: 12px 20px;
+    border-radius: 30px;
+    text-decoration: none;
+    transition: 0.3s;
+    box-shadow: 0 0 10px rgba(225,107,255,0.6);
+}
+
+.btn-download i {
+    margin-right: 8px;
+}
+
+.btn-download:hover {
+    background: var(--primary-dark);
+    transform: scale(1.05);
+}
+
+/* Formulario */
+.excel-form {
+    margin-top: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 6px;
+}
+
+.form-group input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.1);
+    color: var(--white);
+    border: 1px solid var(--primary-color);
+    cursor: pointer;
+}
+
+/* Botón subir */
+.btn-upload {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 30px;
+    background: var(--primary-dark);
+    color: var(--white);
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    text-transform: uppercase;
+}
+
+.btn-upload i {
+    margin-right: 8px;
+}
+
+.btn-upload:hover {
+    background: var(--primary-color);
+    box-shadow: 0 0 15px rgba(225,107,255,0.9);
+    transform: translateY(-3px);
+}

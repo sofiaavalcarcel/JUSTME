@@ -1,12 +1,24 @@
 package com.sena.JustMe.Controller;
 
 import com.sena.JustMe.model.Servicios;
+import com.sena.JustMe.service.ExcelServiciosService;
 import com.sena.JustMe.service.ServiciosServiceImplement;
+
 import jakarta.servlet.http.HttpSession;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,192 +26,220 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.UUID;
-import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/servicios")
 public class IServiciosController {
 
-	private final ServiciosServiceImplement serviciosService;
+    private final ServiciosServiceImplement serviciosService;
+    private final ExcelServiciosService excelServiciosService;
 
-	public IServiciosController(ServiciosServiceImplement serviciosService) {
-		this.serviciosService = serviciosService;
-	}
+    // Constructor claro y limpio
+    public IServiciosController(ServiciosServiceImplement serviciosService,
+                                ExcelServiciosService excelServiciosService) {
+        this.serviciosService = serviciosService;
+        this.excelServiciosService = excelServiciosService;
+    }
 
-	// ============================================================
-	// 1️⃣ LISTAR SERVICIOS (Vista general de todos los servicios)
-	// ============================================================
-	@GetMapping
-	public String listarServicios(Model model) {
-		List<Servicios> listaServicios = serviciosService.listarServicios();
-		model.addAttribute("servicios", listaServicios);
-		return "servicios/lista"; // 👈 Vista donde se muestran los servicios
-	}
+    // ============================================================
+    // 1️⃣ LISTAR SERVICIOS
+    // ============================================================
+    @GetMapping
+    public String listarServicios(Model model) {
+        model.addAttribute("servicios", serviciosService.listarServicios());
+        return "servicios/lista";
+    }
 
-	// ============================================================
-	// 2️⃣ MOSTRAR FORMULARIO PARA CREAR UN NUEVO SERVICIO
-	// ============================================================
-	@GetMapping("/profesional/servicios")
-	public String mostrarFormularioNuevo(Model model) {
-		model.addAttribute("servicio", new Servicios()); // 👈 Se envía un objeto vacío al formulario
-		return "profesional/servicios"; // 👈 Vista del formulario de creación
-	}
+    // ============================================================
+    // 2️⃣ FORMULARIO NUEVO SERVICIO
+    // ============================================================
+    @GetMapping("/profesional/servicios")
+    public String mostrarFormularioNuevo(Model model) {
+        model.addAttribute("servicio", new Servicios());
+        return "profesional/servicios";
+    }
 
-	// ============================================================
-	// 3️⃣ GUARDAR NUEVO SERVICIO
-	// ============================================================
-	// ============================================================
-	// 3️⃣ GUARDAR NUEVO SERVICIO (con usuario logueado)
-	// ============================================================
-	@PostMapping("/guardar")
-	public String guardarServicio(
-	        @ModelAttribute Servicios servicio,
-	        @RequestParam("imagenFile") MultipartFile file,
-	        HttpSession session) { // 👈 Se usa la sesión para identificar al usuario logueado
+    // ============================================================
+    // 3️⃣ GUARDAR SERVICIO INDIVIDUAL
+    // ============================================================
+    @PostMapping("/guardar")
+    public String guardarServicio(
+            @ModelAttribute Servicios servicio,
+            @RequestParam("imagenFile") MultipartFile file,
+            HttpSession session
+    ) {
 
-	    try {
-	        // 🔹 1. Obtener el ID del usuario desde la sesión (OJO: nombre correcto del atributo)
-	        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
-	        System.out.println("🟢 ID del usuario en sesión: " + idUsuario);
+        try {
+            // Asignar usuario desde sesión
+            Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+            if (idUsuario != null) {
+                var usuario = serviciosService.getUsuarioById(idUsuario);
+                if (usuario != null) servicio.setUsuario(usuario);
+            }
 
-	        // 🔹 2. Verificar que sí haya usuario en sesión
-	        if (idUsuario != null) {
-	            // Buscar el usuario en la base de datos
-	            com.sena.JustMe.model.Usuarios usuario = serviciosService.getUsuarioById(idUsuario);
+            // Guardar imagen
+            if (!file.isEmpty()) {
+                File uploadFolder = new File("uploads");
+                if (!uploadFolder.exists()) uploadFolder.mkdirs();
 
-	            if (usuario != null) {
-	                // Asignar el usuario logueado al nuevo servicio
-	                servicio.setUsuario(usuario);
-	                System.out.println("✅ Usuario asignado al servicio: " + usuario.getNombre());
-	            } else {
-	                System.out.println("⚠️ No se encontró el usuario con ID " + idUsuario);
-	            }
-	        } else {
-	            System.out.println("⚠️ No hay usuario guardado en la sesión (idUsuario es null)");
-	        }
+                String extension = file.getOriginalFilename()
+                        .substring(file.getOriginalFilename().lastIndexOf("."));
+                String fileName = UUID.randomUUID() + extension;
 
-	        // 🔹 3. Manejar la imagen del servicio
-	        if (!file.isEmpty()) {
-	            File uploadFolder = new File("uploads");
-	            if (!uploadFolder.exists()) {
-	                uploadFolder.mkdirs(); // Crear carpeta si no existe
-	            }
+                Path filePath = Paths.get(uploadFolder.getAbsolutePath(), fileName);
+                Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-	            // Crear un nombre único para el archivo
-	            String extension = file.getOriginalFilename()
-	                    .substring(file.getOriginalFilename().lastIndexOf("."));
-	            String fileName = UUID.randomUUID().toString() + extension;
+                servicio.setImagen(fileName);
+            } else {
+                servicio.setImagen("default.jpg");
+            }
 
-	            // Guardar el archivo físicamente
-	            Path filePath = Paths.get(uploadFolder.getAbsolutePath(), fileName);
-	            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+            serviciosService.guardar(servicio);
 
-	            // Guardar el nombre en la BD
-	            servicio.setImagen(fileName);
-	        } else {
-	            servicio.setImagen("default.jpg"); // Imagen por defecto
-	        }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-	        // 🔹 4. Guardar el servicio en la BD con el usuario asociado
-	        serviciosService.guardar(servicio);
-	        System.out.println("💾 Servicio guardado correctamente con usuario ID: " + idUsuario);
+        return "redirect:/profesional";
+    }
 
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	        System.out.println("❌ Error al guardar el servicio o la imagen.");
-	    }
+ // 4️⃣ SUBIDA MASIVA DESDE EXCEL  ✔ FIX ENDPOINT
+    @PostMapping("/subir-excel")
+    public String subirExcelServicios(
+            @RequestParam("file") MultipartFile file,
+            RedirectAttributes redirectAttrs,
+            HttpSession session
+    ) {
+        if (file.isEmpty()) {
+            redirectAttrs.addFlashAttribute("error", "Debes seleccionar un archivo Excel.");
+            return "redirect:/servicios/profesional/servicios";
+        }
 
-	    // 🔹 5. Redirigir al panel del profesional
-	    return "redirect:/profesional";
-	}
+        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+        if (idUsuario == null) {
+            redirectAttrs.addFlashAttribute("error", "No se encontró un usuario en sesión. Inicia sesión nuevamente.");
+            return "redirect:/login";
+        }
+
+        try {
+            int registros = excelServiciosService.leerExcelServicios(file, idUsuario);
+            redirectAttrs.addFlashAttribute("success",
+                    "Se cargaron " + registros + " servicios correctamente.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttrs.addFlashAttribute("error",
+                    "Error al procesar el archivo: " + e.getMessage());
+        }
+
+        return "redirect:/servicios/profesional/servicios";
+    }
 
 
-	// ============================================================
-	// 4️⃣ MOSTRAR FORMULARIO DE EDICIÓN
-	// ============================================================
-	@GetMapping("/editar/{id}")
-	public String mostrarFormularioEdicion(@PathVariable Integer id, Model model) {
-		Servicios servicio = serviciosService.buscarPorId(id)
-				.orElseThrow(() -> new RuntimeException("Servicio no encontrado con id: " + id));
+    // ============================================================
+    // 5️⃣ DESCARGAR PLANTILLA EXCEL
+    // ============================================================
+    @GetMapping("/descargar-plantilla")
+    public ResponseEntity<Resource> descargarPlantilla() {
 
-		model.addAttribute("servicio", servicio);
-		return "profesional/editar"; // 👈 Vista del formulario de edición
-	}
+        try {
+            ClassPathResource plantillaResource = new ClassPathResource("plantillas/plantilla_servicios.xlsx");
 
-	// ============================================================
-	// 5️⃣ GUARDAR CAMBIOS AL EDITAR UN SERVICIO
-	// ============================================================
-	@PostMapping("/editar/{id}")
-	public String editarServicio(
-			@PathVariable Integer id,
-			@ModelAttribute Servicios servicio,
-			@RequestParam("imagenFile") MultipartFile file) {
+            if (!plantillaResource.exists()) {
+                return ResponseEntity.notFound().build();
+            }
 
-		try {
-			// Buscar el servicio existente
-			Servicios existente = serviciosService.buscarPorId(id)
-					.orElseThrow(() -> new RuntimeException("Servicio no encontrado con id: " + id));
+            InputStreamResource resource = new InputStreamResource(plantillaResource.getInputStream());
 
-			// Actualizar los campos editables
-			existente.setNombre_servicios(servicio.getNombre_servicios());
-			existente.setCategoria(servicio.getCategoria());
-			existente.setPrecio_base(servicio.getPrecio_base());
-			existente.setEstado(servicio.getEstado());
-			existente.setDescripcion(servicio.getDescripcion());
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION,
+                            "attachment; filename=plantilla_servicios.xlsx")
+                    .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                    .contentLength(plantillaResource.contentLength())
+                    .body(resource);
 
-			// Manejar nueva imagen si se sube una
-			if (!file.isEmpty()) {
-				File uploadFolder = new File("uploads");
-				if (!uploadFolder.exists()) {
-					uploadFolder.mkdirs();
-				}
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 
-				String extension = file.getOriginalFilename()
-						.substring(file.getOriginalFilename().lastIndexOf("."));
-				String fileName = UUID.randomUUID().toString() + extension;
+    // ============================================================
+    // 6️⃣ FORMULARIO DE EDICIÓN
+    // ============================================================
+    @GetMapping("/editar/{id}")
+    public String mostrarFormularioEdicion(@PathVariable Integer id, Model model) {
+        Servicios servicio = serviciosService.buscarPorId(id)
+                .orElseThrow(() -> new RuntimeException("Servicio no encontrado"));
+        model.addAttribute("servicio", servicio);
+        return "profesional/editar";
+    }
 
-				Path filePath = Paths.get(uploadFolder.getAbsolutePath(), fileName);
-				Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+    // ============================================================
+    // 7️⃣ EDITAR SERVICIO
+    // ============================================================
+    @PostMapping("/editar/{id}")
+    public String editarServicio(
+            @PathVariable Integer id,
+            @ModelAttribute Servicios servicio,
+            @RequestParam("imagenFile") MultipartFile file
+    ) {
 
-				existente.setImagen(fileName);
-			}
+        try {
+            Servicios existente = serviciosService.buscarPorId(id)
+                    .orElseThrow(() -> new RuntimeException("Servicio no encontrado"));
 
-			serviciosService.guardar(existente);
-			System.out.println("✏️ Servicio editado correctamente.");
+            existente.setNombre_servicios(servicio.getNombre_servicios());
+            existente.setCategoria(servicio.getCategoria());
+            existente.setPrecio_base(servicio.getPrecio_base());
+            existente.setEstado(servicio.getEstado());
+            existente.setDescripcion(servicio.getDescripcion());
 
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("❌ Error al editar el servicio.");
-		}
+            if (!file.isEmpty()) {
+                File folder = new File("uploads");
+                if (!folder.exists()) folder.mkdirs();
 
-		return "redirect:/profesional";
-	}
+                String extension = file.getOriginalFilename()
+                        .substring(file.getOriginalFilename().lastIndexOf("."));
+                String fileName = UUID.randomUUID() + extension;
 
-	// ============================================================
-	// 6️⃣ ELIMINAR SERVICIO
-	// ============================================================
-	@PostMapping("/eliminar/{id}")
-	public String eliminarServicio(@PathVariable Integer id) {
-		serviciosService.eliminar(id);
-		System.out.println("🗑️ Servicio eliminado con ID: " + id);
-		return "redirect:/profesional";
-	}
+                Path filePath = Paths.get(folder.getAbsolutePath(), fileName);
+                Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-	// ============================================================
-	// 7️⃣ DETALLE DE UN SERVICIO ESPECÍFICO
-	// ============================================================
-	@GetMapping("/detalle/{id}")
-	public String detalleServicio(@PathVariable Integer id, Model model) {
-		Optional<Servicios> servicio = serviciosService.buscarPorId(id);
+                existente.setImagen(fileName);
+            }
 
-		if (servicio.isPresent()) {
-			model.addAttribute("servicio", servicio.get());
-			return "usuario/detalleservicio"; // 👈 Vista del detalle del servicio
-		} else {
-			System.out.println("⚠️ Servicio no encontrado con ID: " + id);
-			return "redirect:/servicios";
-		}
-	}
+            serviciosService.guardar(existente);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return "redirect:/profesional";
+    }
+
+    // ============================================================
+    // 8️⃣ ELIMINAR SERVICIO
+    // ============================================================
+    @PostMapping("/eliminar/{id}")
+    public String eliminarServicio(@PathVariable Integer id) {
+        serviciosService.eliminar(id);
+        return "redirect:/profesional";
+    }
+
+    // ============================================================
+    // 9️⃣ DETALLE DEL SERVICIO
+    // ============================================================
+    @GetMapping("/detalle/{id}")
+    public String detalleServicio(@PathVariable Integer id, Model model) {
+        Optional<Servicios> servicio = serviciosService.buscarPorId(id);
+
+        if (servicio.isPresent()) {
+            model.addAttribute("servicio", servicio.get());
+            return "usuario/detalleservicio";
+        }
+
+        return "redirect:/servicios";
+    }
 }
