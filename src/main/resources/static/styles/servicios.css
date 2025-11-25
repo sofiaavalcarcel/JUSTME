@@ -14,7 +14,6 @@
     --danger-color: #dc3545;
 }
 
-
 /* Estilos base */
 * {
     margin: 0;
@@ -45,7 +44,6 @@ ul {
     margin: 0 auto;
     padding: 0 15px;
 }
-
 
 /* Header */
 .header {
@@ -97,78 +95,6 @@ ul {
     color: var(--primary-color);
 }
 
-/* User Menu */
-.user-menu {
-    position: relative;
-}
-
-.user-profile {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    padding: 8px 12px;
-    border-radius: 30px;
-    transition: background-color 0.3s;
-}
-
-.user-profile:hover {
-    background-color: var(--light-gray);
-}
-
-.user-profile img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 10px;
-}
-
-.user-profile span {
-    font-weight: 500;
-    margin-right: 8px;
-}
-
-.dropdown-menu {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background-color: var(--white);
-    border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    width: 220px;
-    padding: 10px 0;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(10px);
-    transition: all 0.3s;
-    z-index: 1001;
-}
-
-.user-profile.active .dropdown-menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-.dropdown-menu ul li a {
-    display: flex;
-    align-items: center;
-    padding: 10px 20px;
-    transition: all 0.3s;
-}
-
-.dropdown-menu ul li a:hover {
-    background-color: var(--secondary-color);
-    color: var(--primary-color);
-    padding-left: 25px;
-}
-
-.dropdown-menu ul li a i {
-    margin-right: 10px;
-    width: 20px;
-    text-align: center;
-}
-
 /* Main Content */
 .main {
     margin-top: 80px;
@@ -218,20 +144,14 @@ ul {
 
 .add-service-section .container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Evita desbordamiento */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 40px;
 }
 
 /* Ajuste del form-container */
 .form-container {
-    padding-right: 0; /* quitar padding que empuja el contenido */
-    border-right: none; /* opcional si no quieres la línea */
-}
-
-.preview-section h3 {
-    font-size: 20px;
-    margin-bottom: 20px;
-    color: var(--dark-color);
+    padding-right: 0;
+    border-right: none;
 }
 
 .add-service-form {
@@ -336,152 +256,72 @@ ul {
     background-color: #d1d1d1;
 }
 
-/* Service Preview */
-.service-preview {
+/* Sección de Subida Masiva */
+.mass-upload-section {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 1px solid var(--light-gray);
+}
+
+.mass-upload-section .section-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--dark-color);
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.mass-upload-container {
     background-color: var(--light-color);
-    border-radius: 8px;
-    padding: 20px;
-    min-height: 300px;
+    border-radius: 10px;
+    padding: 25px;
     border-left: 4px solid var(--primary-color);
 }
 
-.preview-placeholder {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
+.mass-upload-container .note {
     color: var(--gray-color);
+    font-size: 14px;
+    margin: 15px 0;
+    line-height: 1.5;
 }
 
-.preview-placeholder i {
-    font-size: 48px;
-    margin-bottom: 15px;
-    color: var(--light-gray);
+.mass-upload-container .form-group {
+    margin-bottom: 20px;
 }
 
-.preview-card {
-    display: none;
-}
-
-.preview-card h4 {
-    font-size: 20px;
-    margin-bottom: 15px;
+.mass-upload-container .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
     color: var(--dark-color);
-    border-bottom: 1px solid var(--light-gray);
-    padding-bottom: 10px;
 }
 
-.preview-card p {
-    color: var(--gray-color);
-    margin-bottom: 10px;
-    font-size: 15px;
-}
-
-.preview-card p i {
+.mass-upload-container .form-group label i {
     margin-right: 8px;
     color: var(--primary-color);
-    width: 16px;
-    text-align: center;
 }
 
-.preview-price {
-    font-weight: 600;
-    color: var(--dark-color);
-    margin-top: 15px;
-    font-size: 18px;
+.mass-upload-container .form-group input[type="file"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--light-gray);
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: var(--white);
+    transition: border-color 0.3s;
 }
 
-/* Footer */
-.footer {
-    background-color: var(--dark-color);
-    color: var(--white);
-    padding: 50px 0 0;
-    margin-top: 50px;
+.mass-upload-container .form-group input[type="file"]:focus {
+    outline: none;
+    border-color: var(--primary-color);
 }
 
-.footer-content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 30px;
-    margin-bottom: 30px;
-}
-
-.footer-section h4 {
-    font-size: 18px;
-    margin-bottom: 20px;
-    color: var(--white);
-}
-
-.footer-section p {
-    color: #adb5bd;
-    margin-bottom: 15px;
+.file-name {
+    display: block;
+    margin-top: 5px;
     font-size: 14px;
-}
-
-.social-icons {
-    display: flex;
-    gap: 15px;
-}
-
-.social-icons a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    transition: all 0.3s;
-}
-
-.social-icons a:hover {
-    background-color: var(--primary-color);
-    transform: translateY(-3px);
-}
-
-.footer-section ul li {
-    margin-bottom: 10px;
-}
-
-.footer-section ul li a {
-    color: #adb5bd;
-    font-size: 14px;
-    transition: color 0.3s;
-}
-
-.footer-section ul li a:hover {
-    color: var(--primary-color);
-}
-
-.footer-section ul li i {
-    margin-right: 10px;
-    width: 16px;
-    color: var(--primary-color);
-}
-
-.footer-bottom {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 20px 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 14px;
-    color: #adb5bd;
-}
-
-.legal-links {
-    display: flex;
-    gap: 20px;
-}
-
-.legal-links a {
-    color: #adb5bd;
-    transition: color 0.3s;
-}
-
-.legal-links a:hover {
-    color: var(--primary-color);
+    color: var(--gray-color);
+    font-style: italic;
 }
 
 /* Responsive */
@@ -517,20 +357,14 @@ ul {
         gap: 0;
     }
     
-    .footer-content {
-        grid-template-columns: 1fr;
-        text-align: center;
+    .form-actions {
+        flex-direction: column;
     }
     
-    .social-icons {
+    .btn-primary, .btn-secondary {
+        width: 100%;
         justify-content: center;
     }
-    
-    .footer-bottom {
-        flex-direction: column;
-        gap: 15px;
-        text-align: center;
-    }
 }
 
 
@@ -548,121 +382,71 @@ ul {
 
 
 
-
-
-
-/* Título */
-.section-title {
-    font-size: 2rem;
-    font-weight: 700;
-    text-align: center;
-    color: var(--primary-dark);
-    margin-bottom: 20px;
-    letter-spacing: 1px;
-}
-
-/* Contenedor general */
-.mass-upload-container {
-    max-width: 600px;
-    margin: auto;
-    padding: 25px;
-    border-radius: 20px;
-    backdrop-filter: blur(12px);
-    background: rgba(255,255,255,0.05);
-    border: 1px solid var(--primary-color);
-    box-shadow: 0 0 25px rgba(225,107,255,0.25);
-}
-
-/* Nota explicativa */
-.note {
-    color: var(--secondary-color);
-    text-align: center;
-    font-size: 0.95rem;
-    margin: 15px 0;
-}
-
-/* Botón Descargar */
-.btn-download {
-    display: inline-block;
-    background: var(--primary-color);
-    color: var(--white);
-    font-weight: 600;
-    padding: 12px 20px;
-    border-radius: 30px;
-    text-decoration: none;
-    transition: 0.3s;
-    box-shadow: 0 0 10px rgba(225,107,255,0.6);
-}
-
-.btn-download i {
-    margin-right: 8px;
-}
-
-.btn-download:hover {
-    background: var(--primary-dark);
-    transform: scale(1.05);
-}
-
-/* Formulario */
-.excel-form {
-    margin-top: 20px;
-}
-
-/* Grupo del input de archivo en subida masiva */
-.excel-form .form-group {
+.file-upload-btn {
     display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.excel-form .form-group label {
-    display: block;
-    font-weight: 600;
-    color: var(--primary-color);
-    margin-bottom: 2px;
-}
-
-.excel-form .form-group input[type="file"] {
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
     width: 100%;
-    padding: 10px 12px;
-    border-radius: 10px;
-    background: var(--white);          /* Fondo claro para contrastar */
-    color: var(--dark-color);          /* Texto oscuro y legible */
-    border: 1px solid var(--primary-color);
-    cursor: pointer;
-    font-weight: 500;
-}
-
-/* Texto que muestra el nombre del archivo seleccionado */
-.file-name {
-    display: block;
-    margin-top: 4px;
-    font-size: 0.9rem;
-    color: var(--secondary-color);
-    word-break: break-all;
-}
-
-/* Botón subir */
-.btn-upload {
-    width: 100%;
-    padding: 12px;
-    margin-top: 15px;
-    border: none;
-    border-radius: 30px;
-    background: var(--primary-dark);
+    padding: 0.8rem 1rem;
+   background-color: var(--primary-color);
     color: var(--white);
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
-    transition: 0.3s;
-    text-transform: uppercase;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(225, 107, 255, 0.3);
 }
 
-.btn-upload i {
-    margin-right: 8px;
+.file-upload-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(225, 107, 255, 0.4);
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
 }
 
-.btn-upload:hover {
-    background: var(--primary-color);
-    box-shadow: 0 0 15px rgba(225,107,255,0.9);
-    transform: translateY(-3px);
+.file-upload-btn:active {
+    transform: translateY(0);
+}
+
+.file-upload-btn i {
+    font-size: 1.1rem;
+}
+
+.file-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.file-info {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background-color: var(--light-color);
+    border-radius: 6px;
+    border-left: 3px solid var(--primary-color);
+    font-size: 0.8rem;
+    color: var(--gray-color);
+}
+
+.file-list {
+    list-style: none;
+    margin-top: 0.3rem;
+}
+
+.file-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.2rem 0;
+    font-size: 0.75rem;
+}
+
+.file-list li i {
+    color: var(--primary-color);
 }

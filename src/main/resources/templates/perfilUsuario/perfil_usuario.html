@@ -57,7 +57,7 @@
 			<div class="container">
 				<div class="profile-header">
 
-					<!-- Form de actualización -->
+					<!-- Form de actualización de datos de perfil -->
 					<form th:action="@{/usuario/actualizar}" method="post" enctype="multipart/form-data" class="profile-form">
 
 						<div class="profile-header">
@@ -121,8 +121,9 @@
 						</div>
 					</form>
 
-					<!-- Form Cambio de contraseña -->
-					<form th:action="@{/usuario/cambiar-contrasena}" method="post" class="profile-form" style="margin-top: 2rem;">
+					<!-- Sección separada para cambio de contraseña -->
+					<h3 class="section-subtitle">Seguridad y cambio de contraseña</h3>
+					<form th:action="@{/usuario/cambiar-contrasena}" method="post" class="profile-form password-form">
 						<div class="profile-content">
 							<div class="form-row">
 								<!-- Password actual -->
