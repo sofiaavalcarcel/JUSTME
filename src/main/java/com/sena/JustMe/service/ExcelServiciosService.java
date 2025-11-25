@@ -1,8 +1,5 @@
 package com.sena.JustMe.service;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -27,7 +24,6 @@ public class ExcelServiciosService {
     public int leerExcelServicios(MultipartFile file, Integer idUsuarioSesion) throws Exception {
 
         int totalGuardados = 0;
-        Set<String> nombresUnicos = new HashSet<>();
 
         XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
         XSSFSheet sheet = workbook.getSheetAt(0);
@@ -64,17 +60,17 @@ public class ExcelServiciosService {
                     continue;
                 }
 
-                if (!estado.equals("Activo") && !estado.equals("Inactivo")) {
-                    System.out.println("Fila " + (i+1) + ": Estado inválido.");
-                    continue;
+                if (estado == null || estado.trim().isEmpty()) {
+                    System.out.println("Fila " + (i+1) + ": Estado vacío, se asigna 'Activo' por defecto.");
+                    estado = "Activo";
+                } else if (estado.equalsIgnoreCase("activo")) {
+                    estado = "Activo";
+                } else if (estado.equalsIgnoreCase("inactivo")) {
+                    estado = "Inactivo";
+                } else {
+                    System.out.println("Fila " + (i+1) + ": Estado inválido, se asigna 'Activo' por defecto.");
+                    estado = "Activo";
                 }
-
-                if (nombresUnicos.contains(nombre)) {
-                    System.out.println("Fila " + (i+1) + ": Servicio duplicado.");
-                    continue;
-                }
-
-                nombresUnicos.add(nombre);
 
                 Usuarios usuario = usuariosRepository.findById(idUsuarioSesion).orElse(null);
 
