@@ -608,21 +608,38 @@ ul {
     margin-top: 20px;
 }
 
-.form-group label {
-    display: block;
-    font-weight: bold;
-    color: var(--primary-color);
-    margin-bottom: 6px;
+/* Grupo del input de archivo en subida masiva */
+.excel-form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
-.form-group input[type="file"] {
+.excel-form .form-group label {
+    display: block;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 2px;
+}
+
+.excel-form .form-group input[type="file"] {
     width: 100%;
-    padding: 10px;
+    padding: 10px 12px;
     border-radius: 10px;
-    background: rgba(255,255,255,0.1);
-    color: var(--white);
+    background: var(--white);          /* Fondo claro para contrastar */
+    color: var(--dark-color);          /* Texto oscuro y legible */
     border: 1px solid var(--primary-color);
     cursor: pointer;
+    font-weight: 500;
+}
+
+/* Texto que muestra el nombre del archivo seleccionado */
+.file-name {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    word-break: break-all;
 }
 
 /* Botón subir */

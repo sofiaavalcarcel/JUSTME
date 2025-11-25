@@ -128,6 +128,7 @@
 					        <div class="form-group">
 					            <label for="file"><i class="fas fa-upload"></i> Seleccionar archivo Excel:</label>
 					            <input type="file" id="file" name="file" accept=".xlsx" required>
+					            <span id="file-name" class="file-name"></span>
 					        </div>
 
 					        <button class="btn-upload" type="submit">
@@ -142,6 +143,23 @@
 		</section>
 
 	</main>
+
+	<script>
+	    (function() {
+	        const fileInput = document.getElementById('file');
+	        const fileNameSpan = document.getElementById('file-name');
+
+	        if (fileInput && fileNameSpan) {
+	            fileInput.addEventListener('change', function () {
+	                if (this.files && this.files.length > 0) {
+	                    fileNameSpan.textContent = this.files[0].name;
+	                } else {
+	                    fileNameSpan.textContent = '';
+	                }
+	            });
+	        }
+	    })();
+	</script>
 </body>
 
 </html>
