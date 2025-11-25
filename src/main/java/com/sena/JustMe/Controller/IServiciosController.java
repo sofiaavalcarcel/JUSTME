@@ -134,7 +134,7 @@ public class IServiciosController {
                     "Error al procesar el archivo: " + e.getMessage());
         }
 
-        return "redirect:/servicios/profesional/servicios";
+        return "redirect:/profesional";
     }
 
 
