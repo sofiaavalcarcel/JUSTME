@@ -18,7 +18,6 @@ import org.springframework.ui.Model;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.io.IOException;
@@ -109,32 +108,33 @@ public class IServiciosController {
     @PostMapping("/subir-excel")
     public String subirExcelServicios(
             @RequestParam("file") MultipartFile file,
-            RedirectAttributes redirectAttrs,
-            HttpSession session
+            HttpSession session,
+            Model model
     ) {
         if (file.isEmpty()) {
-            redirectAttrs.addFlashAttribute("error", "Debes seleccionar un archivo Excel.");
-            return "redirect:/servicios/profesional/servicios";
+            model.addAttribute("error", "Debes seleccionar un archivo Excel.");
+            model.addAttribute("servicio", new Servicios());
+            return "profesional/servicios";
         }
 
         Integer idUsuario = (Integer) session.getAttribute("idUsuario");
         if (idUsuario == null) {
-            redirectAttrs.addFlashAttribute("error", "No se encontró un usuario en sesión. Inicia sesión nuevamente.");
-            return "redirect:/login";
+            model.addAttribute("error", "No se encontró un usuario en sesión. Inicia sesión nuevamente.");
+            model.addAttribute("servicio", new Servicios());
+            return "profesional/servicios";
         }
 
         try {
             int registros = excelServiciosService.leerExcelServicios(file, idUsuario);
-            redirectAttrs.addFlashAttribute("success",
-                    "Se cargaron " + registros + " servicios correctamente.");
-
+            model.addAttribute("success", "Se cargaron " + registros + " servicios correctamente.");
         } catch (Exception e) {
             e.printStackTrace();
-            redirectAttrs.addFlashAttribute("error",
-                    "Error al procesar el archivo: " + e.getMessage());
+            model.addAttribute("error", "Error al procesar el archivo: " + e.getMessage());
         }
 
-        return "redirect:/profesional";
+        // Volver al formulario para que el JS muestre SweetAlert y luego redirija a /profesional
+        model.addAttribute("servicio", new Servicios());
+        return "profesional/servicios";
     }
 
 
