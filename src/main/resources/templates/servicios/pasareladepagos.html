@@ -113,6 +113,13 @@
             </div>
 
             <div class="coupon-section">
+                <label for="service-datetime">Escoja fecha y hora del servicio</label>
+                <div class="coupon-input">
+                    <input type="datetime-local" id="service-datetime">
+                </div>
+            </div>
+
+            <div class="coupon-section">
                 <label for="coupon">Cupón</label>
                 <div class="coupon-input">
                     <input type="text" id="coupon" placeholder="Ingrese un cupón">
@@ -272,9 +279,52 @@
         const form = document.getElementById("payment-form");
         const message = document.getElementById("payment-message");
         const button = document.getElementById("submit");
+        const serviceDateTimeInput = document.getElementById("service-datetime");
+
+        // Establecer el mínimo permitido para la fecha/hora (ahora mismo)
+        if (serviceDateTimeInput) {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const minValue = `${year}-${month}-${day}T${hours}:${minutes}`;
+            serviceDateTimeInput.min = minValue;
+        }
 
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
+
+            // Validar que el usuario haya escogido fecha y hora
+            const serviceDateTime = serviceDateTimeInput.value;
+            if (!serviceDateTime) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Fecha y hora requeridas',
+                    text: 'Por favor selecciona la fecha y hora en la que deseas el servicio.',
+                    confirmButtonColor: '#8b5cf6',
+                    background: 'var(--card-bg)',
+                    color: 'var(--dark-color)'
+                });
+                return;
+            }
+
+            // Validar que la fecha/hora no sea en el pasado
+            const selected = new Date(serviceDateTime);
+            const now = new Date();
+            if (selected.getTime() < now.getTime()) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Fecha inválida',
+                    text: 'La fecha y hora del servicio no puede ser en el pasado.',
+                    confirmButtonColor: '#8b5cf6',
+                    background: 'var(--card-bg)',
+                    color: 'var(--dark-color)'
+                });
+                return;
+            }
+
             button.disabled = true;
             button.classList.add('loading');
             button.innerHTML = '<span id="button-text">Procesando...</span>';
@@ -328,7 +378,8 @@
                                 amount: servicePrice,
                                 currency: 'cop',
                                 paymentIntentId: paymentIntent.id,
-                                status: paymentIntent.status
+                                status: paymentIntent.status,
+                                serviceDateTime: serviceDateTime
                             })
                         });
                     } catch (e) {

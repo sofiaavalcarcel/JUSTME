@@ -1,6 +1,10 @@
 package com.sena.JustMe.Controller;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,11 +73,12 @@ public class StripeController {
         Object monedaObj = data.get("currency");
         Object paymentIntentIdObj = data.get("paymentIntentId");
         Object estadoObj = data.get("status");
+        Object fechaHoraServicioObj = data.get("serviceDateTime");
 
         if (servicioIdObj == null || montoObj == null || monedaObj == null || paymentIntentIdObj == null
-                || estadoObj == null) {
+                || estadoObj == null || fechaHoraServicioObj == null) {
             response.put("success", false);
-            response.put("message", "Datos incompletos para registrar el pago");
+            response.put("message", "Datos incompletos para registrar el pago (falta información de fecha y hora)");
             return response;
         }
 
@@ -82,6 +87,28 @@ public class StripeController {
         String moneda = monedaObj.toString();
         String paymentIntentId = paymentIntentIdObj.toString();
         String estado = estadoObj.toString();
+        String fechaHoraServicioStr = fechaHoraServicioObj.toString();
+
+        // Parsear fecha y hora enviada desde el frontend (input datetime-local: yyyy-MM-dd'T'HH:mm)
+        Date fechaHoraCita;
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+            LocalDateTime ldt = LocalDateTime.parse(fechaHoraServicioStr, formatter);
+            ZonedDateTime zdt = ldt.atZone(ZoneId.systemDefault());
+            fechaHoraCita = Date.from(zdt.toInstant());
+        } catch (DateTimeParseException ex) {
+            response.put("success", false);
+            response.put("message", "Formato de fecha y hora inválido para la cita");
+            return response;
+        }
+
+        // Validar que la fecha/hora de la cita no sea en el pasado
+        Date ahora = new Date();
+        if (fechaHoraCita.before(ahora)) {
+            response.put("success", false);
+            response.put("message", "La fecha y hora de la cita no puede ser anterior al momento actual");
+            return response;
+        }
 
         Integer idUsuario = (Integer) session.getAttribute("idUsuario");
         if (idUsuario == null) {
@@ -114,13 +141,14 @@ public class StripeController {
         Citas cita = new Citas();
         cita.setUsuario(usuario);
         cita.setServicio(servicio);
-        cita.setFechaHora(new Date());
+        cita.setFechaHora(fechaHoraCita);
         cita.setEstado("Pendiente");
         cita.setPrecio(monto);
         cita.setDireccion(usuario.getDireccion());
 
         citasService.guardar(cita);
 
+        // Notificar al usuario: confirmación de pago (ya existente)
         if (usuario.getEmail() != null && !usuario.getEmail().isEmpty()) {
             try {
                 emailService.enviarCorreoConfirmacionPago(
@@ -130,6 +158,45 @@ public class StripeController {
                         monto,
                         moneda,
                         estado);
+            } catch (Exception e) {
+                // no interrumpir el flujo por un error de correo
+            }
+        }
+
+        // Notificar al profesional sobre la nueva cita
+        if (servicio.getUsuario() != null && servicio.getUsuario().getEmail() != null
+                && !servicio.getUsuario().getEmail().isEmpty()) {
+            try {
+                String nombreProfesional = servicio.getUsuario().getNombre() + " "
+                        + servicio.getUsuario().getApellido();
+                String nombreCliente = usuario.getNombre() + " " + usuario.getApellido();
+
+                emailService.enviarCorreoNuevaCitaProfesional(
+                        servicio.getUsuario().getEmail(),
+                        nombreProfesional,
+                        nombreCliente,
+                        servicio.getNombre_servicios(),
+                        fechaHoraCita,
+                        cita.getDireccion());
+            } catch (Exception e) {
+                // no interrumpir el flujo por un error de correo
+            }
+        }
+
+        // Notificar al usuario sobre la nueva cita creada
+        if (usuario.getEmail() != null && !usuario.getEmail().isEmpty()) {
+            try {
+                String nombreProfesional = (servicio.getUsuario() != null)
+                        ? servicio.getUsuario().getNombre() + " " + servicio.getUsuario().getApellido()
+                        : "Profesional";
+
+                emailService.enviarCorreoNuevaCitaUsuario(
+                        usuario.getEmail(),
+                        usuario.getNombre(),
+                        nombreProfesional,
+                        servicio.getNombre_servicios(),
+                        fechaHoraCita,
+                        cita.getDireccion());
             } catch (Exception e) {
                 // no interrumpir el flujo por un error de correo
             }
