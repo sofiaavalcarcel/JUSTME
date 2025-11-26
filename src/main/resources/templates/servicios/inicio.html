@@ -204,18 +204,34 @@
 					<a href="#" class="view-all">Ver todas</a>
 				</div>
 				<div class="appointments-list">
-    <div th:if="${citas == null or #lists.isEmpty(citas)}">
-        <p>No tienes citas programadas.</p>
-    </div>
-    <div th:each="cita : ${citas}" class="appointment-card">
-        <div class="appointment-info">
-            <h4 th:text="${cita.servicio.nombre_servicios}">Nombre Servicio</h4>
-            <p><i class="fas fa-calendar-alt"></i> <span th:text="${#dates.format(cita.fechaHora, 'dd/MM/yyyy HH:mm')}">Fecha</span></p>
-            <p><i class="fas fa-map-marker-alt"></i> <span th:text="${cita.direccion}">Dirección</span></p>
-            <p><i class="fas fa-dollar-sign"></i> <span th:text="${cita.precio}">Precio</span></p>
-        </div>
-    </div>
-</div>
+					<div th:if="${citas == null or #lists.isEmpty(citas)}">
+						<p>No tienes citas programadas.</p>
+					</div>
+					<div th:each="cita : ${citas}" class="appointment-card">
+						<div class="appointment-info">
+							<h4 th:text="${cita.servicio.nombre_servicios}">Nombre Servicio</h4>
+							<p><i class="fas fa-user"></i>
+								<span th:text="${cita.servicio != null and cita.servicio.usuario != null ? cita.servicio.usuario.nombre + ' ' + cita.servicio.usuario.apellido : 'Profesional sin nombre'}">
+									Nombre del profesional
+								</span>
+							</p>
+							<p th:if="${cita.servicio != null and cita.servicio.usuario != null and cita.servicio.usuario.email != null}">
+								<i class="fas fa-envelope"></i>
+								<span th:text="${cita.servicio.usuario.email}">correo@ejemplo.com</span>
+							</p>
+							<p th:if="${cita.servicio != null and cita.servicio.usuario != null and cita.servicio.usuario.numero != null}">
+								<i class="fas fa-phone"></i>
+								<span th:text="${cita.servicio.usuario.numero}">+57 000 000 0000</span>
+							</p>
+							<p><i class="fas fa-calendar-alt"></i>
+								<span th:text="${#dates.format(cita.fechaHora, 'dd/MM/yyyy HH:mm')}">Fecha</span></p>
+							<p><i class="fas fa-map-marker-alt"></i>
+								<span th:text="${cita.direccion}">Dirección</span></p>
+							<p><i class="fas fa-dollar-sign"></i>
+								<span th:text="${cita.precio}">Precio</span></p>
+						</div>
+					</div>
+				</div>
 			</div>
 		</section>
 

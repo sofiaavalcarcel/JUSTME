@@ -337,13 +337,25 @@
 
                     Swal.fire({
                         icon: 'success',
-                        title: '¡Pago exitoso!',
-                        text: 'Tu pago se ha procesado correctamente. Serás redirigido en breve.',
-                        confirmButtonColor: '#8b5cf6',
+                        title: '¡Pago completado!',
+                        html: '<div style="font-size:14px; margin-top:8px;">' +
+                              '<p style="margin:4px 0;">Tu pago se procesó correctamente.</p>' +
+                              '<p style="margin:4px 0; opacity:0.9;">Estamos creando tu cita y en unos segundos te llevaremos al inicio.</p>' +
+                              '</div>',
                         background: 'var(--card-bg)',
                         color: 'var(--dark-color)',
-                        timer: 3000,
-                        showConfirmButton: false
+                        confirmButtonColor: '#8b5cf6',
+                        showConfirmButton: false,
+                        timer: 2600,
+                        timerProgressBar: true,
+                        backdrop: 'rgba(15,23,42,0.55)',
+                        didOpen: () => {
+                            const popup = Swal.getPopup();
+                            if (popup) {
+                                popup.style.borderRadius = '18px';
+                                popup.style.boxShadow = '0 18px 60px rgba(15,23,42,0.35)';
+                            }
+                        }
                     }).then(() => {
                         // Redirigir a /inicio después del pago exitoso
                         window.location.href = '/inicio';

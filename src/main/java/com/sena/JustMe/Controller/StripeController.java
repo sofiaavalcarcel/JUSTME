@@ -103,6 +103,7 @@ public class StripeController {
         pago.setUsuario(usuario);
         pago.setServicio(servicio);
         pago.setMonto(monto);
+        pago.setMoneda(moneda);
         pago.setEstado(estado);
         pago.setPaymentIntentId(paymentIntentId);
         pago.setFechaCreacion(LocalDateTime.now());
