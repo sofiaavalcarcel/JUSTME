@@ -1,5 +1,4 @@
 :root {
-    
     --primary-color:#e16bff ;
     --primary-dark: #9033a7;
     --secondary-color: #e16bff;
@@ -1535,15 +1534,19 @@ body.dark-mode .theme-toggle-btn:hover {
 
 		.servicios-grid {
 		    display: grid;
-		    grid-template-columns: repeat(3, 1fr);
+		    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
 		    gap: 25px;
+		    justify-items: center;
+		    width: 100%;
+		    max-width: 1400px;
+		    margin: 0 auto;
 		}
 
 		/* Card de cada servicio */
 		.card {
 		    background-color: var(--white);
 		    border-radius: 15px;
-		    padding: 25px 20px;
+		    padding: 20px;
 		    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 		    transition: all 0.3s ease;
 		    text-align: center;
@@ -1552,7 +1555,9 @@ body.dark-mode .theme-toggle-btn:hover {
 		    display: flex;
 		    flex-direction: column;
 		    height: 100%;
-			width: 400px;
+		    width: 100%;
+		    max-width: 350px;
+		    margin: 0 auto;
 		}
 
 		.card:hover {
@@ -1562,7 +1567,7 @@ body.dark-mode .theme-toggle-btn:hover {
 
 		/* Título del servicio */
 		.card h3 {
-		    font-size: 20px;
+		    font-size: 18px;
 		    color: var(--primary-dark);
 		    margin-bottom: 10px;
 		    font-weight: 600;
@@ -1571,10 +1576,11 @@ body.dark-mode .theme-toggle-btn:hover {
 
 		/* Descripción */
 		.card p {
-		    font-size: 15px;
+		    font-size: 14px;
 		    color: var(--gray-color);
 		    margin-bottom: 8px;
 		    flex-grow: 1;
+		    line-height: 1.4;
 		}
 
 		/* Precio */
@@ -1609,9 +1615,9 @@ body.dark-mode .theme-toggle-btn:hover {
 
 		.card-img-top {
 		    width: 100%;
-		    height: 200px;
+		    height: 180px;
 		    object-fit: cover;
-		    border-radius: 15px;
+		    border-radius: 12px;
 		    display: block;
 		    margin-bottom: 15px;
 		}
@@ -1627,8 +1633,8 @@ body.dark-mode .theme-toggle-btn:hover {
 		}
 
 		.profesional-foto {
-		    width: 50px;
-		    height: 50px;
+		    width: 45px;
+		    height: 45px;
 		    border-radius: 50%;
 		    object-fit: cover;
 		    border: 2px solid #ddd;
@@ -1645,12 +1651,12 @@ body.dark-mode .theme-toggle-btn:hover {
 		.profesional-nombre {
 		    font-weight: 600;
 		    color: #333;
-		    font-size: 14px;
+		    font-size: 13px;
 		}
 
 		.profesional-email {
 		    color: #777;
-		    font-size: 0.85rem;
+		    font-size: 0.8rem;
 		}
 
 		/* ============================= */
@@ -1660,7 +1666,7 @@ body.dark-mode .theme-toggle-btn:hover {
 		/* Tablets grandes (1200px - 992px) */
 		@media (max-width: 1200px) {
 		    .servicios-grid {
-		        grid-template-columns: repeat(3, 1fr);
+		        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 		        gap: 20px;
 		    }
 		    
@@ -1672,7 +1678,7 @@ body.dark-mode .theme-toggle-btn:hover {
 		/* Tablets (991px - 768px) */
 		@media (max-width: 991px) {
 		    .servicios-grid {
-		        grid-template-columns: repeat(2, 1fr);
+		        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 		        gap: 20px;
 		    }
 		    
@@ -1686,22 +1692,26 @@ body.dark-mode .theme-toggle-btn:hover {
 		    }
 		    
 		    .card {
-		        padding: 20px 15px;
+		        padding: 18px 15px;
 		    }
 		    
 		    .card h3 {
-		        font-size: 18px;
+		        font-size: 17px;
 		    }
 		    
 		    .card p {
-		        font-size: 14px;
+		        font-size: 13px;
+		    }
+		    
+		    .card-img-top {
+		        height: 160px;
 		    }
 		}
 
 		/* Tablets pequeñas y móviles grandes (767px - 576px) */
 		@media (max-width: 767px) {
 		    .servicios-grid {
-		        grid-template-columns: repeat(2, 1fr);
+		        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 		        gap: 15px;
 		    }
 		    
@@ -1720,8 +1730,8 @@ body.dark-mode .theme-toggle-btn:hover {
 		    }
 		    
 		    .card-img-top {
-		        height: 160px;
-		        border-radius: 12px;
+		        height: 150px;
+		        border-radius: 10px;
 		    }
 		    
 		    .profesional-info {
@@ -1736,8 +1746,8 @@ body.dark-mode .theme-toggle-btn:hover {
 		    }
 		    
 		    .profesional-foto {
-		        width: 45px;
-		        height: 45px;
+		        width: 40px;
+		        height: 40px;
 		    }
 		}
 
@@ -1746,7 +1756,7 @@ body.dark-mode .theme-toggle-btn:hover {
 		    .servicios-grid {
 		        grid-template-columns: 1fr;
 		        gap: 20px;
-		        max-width: 400px;
+		        max-width: 350px;
 		        margin: 0 auto;
 		    }
 		    
@@ -1760,13 +1770,13 @@ body.dark-mode .theme-toggle-btn:hover {
 		    }
 		    
 		    .card {
-		        padding: 20px;
+		        padding: 18px;
 		        border-radius: 15px;
 		    }
 		    
 		    .card-img-top {
-		        height: 180px;
-		        border-radius: 12px;
+		        height: 160px;
+		        border-radius: 10px;
 		    }
 		    
 		    .profesional-info {
@@ -1779,8 +1789,8 @@ body.dark-mode .theme-toggle-btn:hover {
 		    }
 		    
 		    .btn-interesa {
-		        padding: 12px 18px;
-		        font-size: 15px;
+		        padding: 10px 16px;
+		        font-size: 14px;
 		    }
 		}
 
@@ -1799,7 +1809,7 @@ body.dark-mode .theme-toggle-btn:hover {
 		    }
 		    
 		    .card h3 {
-		        font-size: 17px;
+		        font-size: 16px;
 		    }
 		    
 		    .profesional-info {
@@ -1844,6 +1854,6 @@ body.dark-mode .theme-toggle-btn:hover {
 		    }
 		    
 		    .card-img-top {
-		        height: 140px;
+		        height: 130px;
 		    }
 		}

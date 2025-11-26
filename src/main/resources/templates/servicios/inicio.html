@@ -9,6 +9,88 @@
 	<link rel="stylesheet" th:href="@{/styles/inicio.css}" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<style>
+		:root {
+			--primary-color: #e16bff;
+			--primary-dark: #9033a7;
+			--secondary-color: #e16bff;
+			--dark-color: #333;
+			--light-color: #f8f9fa;
+			--gray-color: #6c757d;
+			--light-gray: #e9ecef;
+			--white: #fff;
+			--black: #000;
+		}
+
+		/* Estilos adicionales para la paginación */
+		.pagination {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin: 20px 0;
+			gap: 10px;
+		}
+		
+		.pagination button {
+			background-color: var(--light-color);
+			border: 1px solid var(--light-gray);
+			color: var(--gray-color);
+			padding: 8px 16px;
+			border-radius: 4px;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			font-family: inherit;
+		}
+		
+		.pagination button:hover:not(:disabled) {
+			background-color: var(--light-gray);
+			color: var(--dark-color);
+			border-color: var(--primary-color);
+		}
+		
+		.pagination button.active {
+			background-color: var(--primary-color);
+			color: var(--white);
+			border-color: var(--primary-color);
+		}
+		
+		.pagination button:disabled {
+			opacity: 0.6;
+			cursor: not-allowed;
+			background-color: var(--light-gray);
+		}
+		
+		.page-info {
+			margin: 0 15px;
+			font-weight: 500;
+			color: var(--dark-color);
+		}
+		
+		.pagination-container {
+			margin-top: 20px;
+		}
+
+		/* Estilos para modo oscuro */
+		body.dark-mode .pagination button {
+			background-color: var(--dark-color);
+			border-color: var(--gray-color);
+			color: var(--light-color);
+		}
+
+		body.dark-mode .pagination button:hover:not(:disabled) {
+			background-color: var(--gray-color);
+			color: var(--white);
+		}
+
+		body.dark-mode .pagination button.active {
+			background-color: var(--primary-color);
+			color: var(--white);
+		}
+
+		body.dark-mode .page-info {
+			color: var(--light-color);
+		}
+	</style>
 </head>
 
 <body>
@@ -142,13 +224,13 @@
 		<section class="servicios-section">
 			<div class="container">
 				<h2>Servicios disponibles</h2>
-				<div class="servicios-grid">
+				<div class="servicios-grid" id="serviciosGrid">
 
 					<div th:if="${servicios == null or #lists.isEmpty(servicios)}">
 						<p>No hay servicios para mostrar.</p>
 					</div>
 
-					<div th:each="servicio : ${servicios}" class="card">
+					<div th:each="servicio : ${servicios}" class="card servicio-card">
 						<img th:src="@{'/uploads/' + ${servicio.imagen}}" th:alt="${servicio.nombre_servicios}"
 							class="card-img-top">
 
@@ -193,6 +275,13 @@
 					</div>
 
 				</div>
+				
+				<!-- Paginación para servicios -->
+				<div class="pagination-container" id="serviciosPagination">
+					<div class="pagination" id="serviciosPaginationControls">
+						<!-- Los controles de paginación se generarán dinámicamente con JavaScript -->
+					</div>
+				</div>
 			</div>
 		</section>
 
@@ -205,8 +294,8 @@
 				<div th:if="${citas == null or #lists.isEmpty(citas)}">
 					<p>No tienes citas registradas.</p>
 				</div>
-				<div class="appointments-list" th:if="${citas != null and !#lists.isEmpty(citas)}">
-					<div class="appointment-card" th:each="cita : ${citas}">
+				<div class="appointments-list" id="citasList" th:if="${citas != null and !#lists.isEmpty(citas)}">
+					<div class="appointment-card cita-card" th:each="cita : ${citas}">
 						<h4 th:text="${cita.servicio != null ? cita.servicio.nombre_servicios : 'Servicio'}">Servicio</h4>
 						<p>
 							<strong>Fecha y hora:</strong>
@@ -236,6 +325,13 @@
 							<strong>Teléfono profesional:</strong>
 							<span th:text="${cita.servicio != null and cita.servicio.usuario != null ? cita.servicio.usuario.numero : ''}">+57 000 000 0000</span>
 						</p>
+					</div>
+				</div>
+				
+				<!-- Paginación para citas -->
+				<div class="pagination-container" id="citasPagination">
+					<div class="pagination" id="citasPaginationControls">
+						<!-- Los controles de paginación se generarán dinámicamente con JavaScript -->
 					</div>
 				</div>
 			</div>
@@ -384,6 +480,158 @@
 					updateThemeIcon();
 				});
 			}
+
+			// ===========================================
+			// PAGINACIÓN PARA SERVICIOS Y CITAS
+			// ===========================================
+
+			// Configuración - Servicios: 6 por página, Citas: 3 por página
+			const serviciosPerPage = 6;
+			const citasPerPage = 3;
+
+			// Función para inicializar la paginación
+			function initPagination(containerSelector, itemSelector, paginationControlsId, itemsPerPage) {
+				const container = document.querySelector(containerSelector);
+				if (!container) return;
+				
+				const items = Array.from(container.querySelectorAll(itemSelector));
+				const totalItems = items.length;
+				
+				if (totalItems <= itemsPerPage) {
+					// Si hay menos elementos que el límite por página, ocultar controles de paginación
+					document.getElementById(paginationControlsId).parentElement.style.display = 'none';
+					return;
+				}
+				
+				let currentPage = 1;
+				const totalPages = Math.ceil(totalItems / itemsPerPage);
+				
+				// Función para mostrar una página específica
+				function showPage(page) {
+					currentPage = page;
+					const startIndex = (page - 1) * itemsPerPage;
+					const endIndex = startIndex + itemsPerPage;
+					
+					// Ocultar todos los elementos
+					items.forEach(item => {
+						item.style.display = 'none';
+					});
+					
+					// Mostrar solo los elementos de la página actual
+					for (let i = startIndex; i < endIndex && i < totalItems; i++) {
+						items[i].style.display = 'block';
+					}
+					
+					// Actualizar controles de paginación
+					updatePaginationControls(paginationControlsId, currentPage, totalPages);
+				}
+				
+				// Inicializar mostrando la primera página
+				showPage(1);
+			}
+
+			// Función para actualizar los controles de paginación
+			function updatePaginationControls(paginationControlsId, currentPage, totalPages) {
+				const paginationControls = document.getElementById(paginationControlsId);
+				paginationControls.innerHTML = '';
+				
+				// Botón anterior
+				const prevButton = document.createElement('button');
+				prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
+				prevButton.disabled = currentPage === 1;
+				prevButton.addEventListener('click', () => {
+					if (currentPage > 1) {
+						initPaginationForCurrentSection(currentPage - 1);
+					}
+				});
+				paginationControls.appendChild(prevButton);
+				
+				// Números de página
+				const maxVisiblePages = 5;
+				let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+				let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+				
+				if (endPage - startPage + 1 < maxVisiblePages) {
+					startPage = Math.max(1, endPage - maxVisiblePages + 1);
+				}
+				
+				for (let i = startPage; i <= endPage; i++) {
+					const pageButton = document.createElement('button');
+					pageButton.textContent = i;
+					pageButton.classList.toggle('active', i === currentPage);
+					pageButton.addEventListener('click', () => {
+						initPaginationForCurrentSection(i);
+					});
+					paginationControls.appendChild(pageButton);
+				}
+				
+				// Botón siguiente
+				const nextButton = document.createElement('button');
+				nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
+				nextButton.disabled = currentPage === totalPages;
+				nextButton.addEventListener('click', () => {
+					if (currentPage < totalPages) {
+						initPaginationForCurrentSection(currentPage + 1);
+					}
+				});
+				paginationControls.appendChild(nextButton);
+				
+				// Información de página actual
+				const pageInfo = document.createElement('span');
+				pageInfo.className = 'page-info';
+				pageInfo.textContent = `Página ${currentPage} de ${totalPages}`;
+				paginationControls.appendChild(pageInfo);
+			}
+
+			// Función para determinar qué sección estamos paginando
+			function initPaginationForCurrentSection(page) {
+				// Verificar si estamos en la sección de servicios
+				const serviciosGrid = document.getElementById('serviciosGrid');
+				if (serviciosGrid && serviciosGrid.querySelector('.servicio-card')) {
+					initPagination('#serviciosGrid', '.servicio-card', 'serviciosPaginationControls', serviciosPerPage);
+					showPageForSection('#serviciosGrid', '.servicio-card', 'serviciosPaginationControls', page, serviciosPerPage);
+				}
+				
+				// Verificar si estamos en la sección de citas
+				const citasList = document.getElementById('citasList');
+				if (citasList && citasList.querySelector('.cita-card')) {
+					initPagination('#citasList', '.cita-card', 'citasPaginationControls', citasPerPage);
+					showPageForSection('#citasList', '.cita-card', 'citasPaginationControls', page, citasPerPage);
+				}
+			}
+
+			// Función para mostrar una página específica de una sección
+			function showPageForSection(containerSelector, itemSelector, paginationControlsId, page, itemsPerPage) {
+				const container = document.querySelector(containerSelector);
+				if (!container) return;
+				
+				const items = Array.from(container.querySelectorAll(itemSelector));
+				const totalItems = items.length;
+				const totalPages = Math.ceil(totalItems / itemsPerPage);
+				
+				if (page < 1) page = 1;
+				if (page > totalPages) page = totalPages;
+				
+				const startIndex = (page - 1) * itemsPerPage;
+				const endIndex = startIndex + itemsPerPage;
+				
+				// Ocultar todos los elementos
+				items.forEach(item => {
+					item.style.display = 'none';
+				});
+				
+				// Mostrar solo los elementos de la página actual
+				for (let i = startIndex; i < endIndex && i < totalItems; i++) {
+					items[i].style.display = 'block';
+				}
+				
+				// Actualizar controles de paginación
+				updatePaginationControls(paginationControlsId, page, totalPages);
+			}
+
+			// Inicializar paginación para servicios y citas
+			initPagination('#serviciosGrid', '.servicio-card', 'serviciosPaginationControls', serviciosPerPage);
+			initPagination('#citasList', '.cita-card', 'citasPaginationControls', citasPerPage);
 		});
 	</script>
 
