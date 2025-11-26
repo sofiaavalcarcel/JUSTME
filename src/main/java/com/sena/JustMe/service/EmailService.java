@@ -179,7 +179,7 @@ public class EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, "UTF-8");
 
             helper.setTo(destinatario);
-            helper.setSubject("Has realizado una nueva reserva - JUSTME");
+            helper.setSubject("Has realizado una nueva reserva (en espera de confirmación) - JUSTME");
 
             String nombreCli = (nombreUsuario != null && !nombreUsuario.isEmpty()) ? nombreUsuario : "Cliente";
             String profesional = (nombreProfesional != null && !nombreProfesional.isEmpty()) ? nombreProfesional
@@ -200,6 +200,43 @@ public class EmailService {
             logger.info("Correo de nueva cita enviado al usuario: {}", destinatario);
         } catch (MessagingException e) {
             logger.error("Error al enviar correo de nueva cita al usuario: {}", destinatario, e);
+        }
+    }
+
+    // Correo cuando la cita es confirmada por el profesional
+    public void enviarCorreoCitaConfirmadaUsuario(String destinatario, String nombreUsuario, String nombreProfesional,
+            String nombreServicio, Date fechaHora, String direccion) {
+        if (!validarDestinatario(destinatario)) {
+            logger.warn("Destinatario no válido (usuario, cita confirmada): {}", destinatario);
+            return;
+        }
+
+        try {
+            MimeMessage mensaje = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, "UTF-8");
+
+            helper.setTo(destinatario);
+            helper.setSubject("Tu cita ha sido confirmada - JUSTME");
+
+            String nombreCli = (nombreUsuario != null && !nombreUsuario.isEmpty()) ? nombreUsuario : "Cliente";
+            String profesional = (nombreProfesional != null && !nombreProfesional.isEmpty()) ? nombreProfesional
+                    : "tu profesional";
+            String servicioMostrado = (nombreServicio != null && !nombreServicio.isEmpty()) ? nombreServicio
+                    : "Servicio";
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            String fechaTexto = (fechaHora != null) ? sdf.format(fechaHora) : "Por definir";
+            String direccionTexto = (direccion != null && !direccion.isEmpty()) ? direccion : "Dirección acordada";
+
+            String cuerpoHtml = construirEmailCitaConfirmadaUsuario(nombreCli, profesional, servicioMostrado,
+                    fechaTexto, direccionTexto);
+
+            helper.setText(cuerpoHtml, true);
+            mailSender.send(mensaje);
+
+            logger.info("Correo de cita confirmada enviado al usuario: {}", destinatario);
+        } catch (MessagingException e) {
+            logger.error("Error al enviar correo de cita confirmada al usuario: {}", destinatario, e);
         }
     }
 
@@ -514,12 +551,12 @@ public class EmailService {
         html.append("    <div class='container'>");
         html.append("        <div class='header'>");
         html.append("            <h1>Has realizado una nueva reserva</h1>");
-        html.append("            <p>Tu cita ha sido creada correctamente en JUSTME</p>");
+        html.append("            <p>Tu cita está en espera de confirmación por parte del profesional</p>");
         html.append("        </div>");
         html.append("        <div class='content'>");
         html.append("            <div class='greeting'>Hola ").append(nombreUsuario).append("!</div>");
         html.append(
-                "            <p>Te confirmamos que tu reserva se ha registrado correctamente. Aquí tienes los detalles de tu cita:</p>");
+                "            <p>Hemos registrado tu reserva y está pendiente de que el profesional la confirme. Aquí tienes los detalles de tu cita:</p>");
         html.append("            <div class='details-card'>");
         html.append("                <div class='detail-row'>");
         html.append("                    <span class='detail-label'>Servicio:</span>");
@@ -539,7 +576,79 @@ public class EmailService {
         html.append("                </div>");
         html.append("            </div>");
         html.append(
-                "            <p style='margin-top: 18px;'>Pronto tu profesional se pondrá en contacto contigo si necesita confirmar algún dato adicional.</p>");
+                "            <p style='margin-top: 18px;'>Cuando tu profesional confirme la cita, recibirás un nuevo correo de confirmación.</p>");
+        html.append("        </div>");
+        html.append("        <div class='footer'>");
+        html.append("            <p>&copy; 2025 JUSTME. Todos los derechos reservados.</p>");
+        html.append("            <p>Este es un correo automático, por favor no respondas a este mensaje.</p>");
+        html.append("        </div>");
+        html.append("    </div>");
+        html.append("</body>");
+        html.append("</html>");
+
+        return html.toString();
+    }
+
+    // Cuerpo del correo cuando la cita está confirmada
+    private String construirEmailCitaConfirmadaUsuario(String nombreUsuario, String nombreProfesional, String servicio,
+            String fecha, String direccion) {
+        StringBuilder html = new StringBuilder();
+
+        html.append("<!DOCTYPE html>");
+        html.append("<html lang='es'>");
+        html.append("<head>");
+        html.append("    <meta charset='UTF-8'>");
+        html.append("    <meta name='viewport' content='width=device-width, initial-scale=1.0'>");
+        html.append("    <title>Cita confirmada</title>");
+        html.append("    <style>");
+        html.append(
+                "        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f4f4f4; }");
+        html.append("        .container { max-width: 600px; margin: 0 auto; background: white; }");
+        html.append(
+                "        .header { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 40px 30px; text-align: center; }");
+        html.append("        .header h1 { margin: 0; font-size: 26px; font-weight: bold; }");
+        html.append("        .header p { margin: 10px 0 0 0; opacity: 0.9; }");
+        html.append("        .content { padding: 40px 30px; }");
+        html.append("        .greeting { color: #10b981; font-size: 22px; margin-bottom: 18px; }");
+        html.append(
+                "        .details-card { background: #ecfdf5; padding: 22px; border-radius: 10px; margin: 20px 0; border-left: 5px solid #10b981; }");
+        html.append(
+                "        .detail-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #d1fae5; font-size: 14px; }");
+        html.append("        .detail-label { font-weight: bold; color: #047857; }");
+        html.append("        .detail-value { color: #064e3b; font-weight: 500; }");
+        html.append("        .footer { background: #064e3b; color: white; padding: 24px; text-align: center; font-size: 13px; }");
+        html.append("    </style>");
+        html.append("</head>");
+        html.append("<body>");
+        html.append("    <div class='container'>");
+        html.append("        <div class='header'>");
+        html.append("            <h1>Tu cita ha sido confirmada</h1>");
+        html.append("            <p>¡Todo está listo para tu servicio en JUSTME!</p>");
+        html.append("        </div>");
+        html.append("        <div class='content'>");
+        html.append("            <div class='greeting'>Hola ").append(nombreUsuario).append("!</div>");
+        html.append(
+                "            <p>Tu profesional ha confirmado la cita. Revisa los detalles a continuación para que no se te escape nada:</p>");
+        html.append("            <div class='details-card'>");
+        html.append("                <div class='detail-row'>");
+        html.append("                    <span class='detail-label'>Servicio:</span>");
+        html.append("                    <span class='detail-value'>").append(servicio).append("</span>");
+        html.append("                </div>");
+        html.append("                <div class='detail-row'>");
+        html.append("                    <span class='detail-label'>Profesional:</span>");
+        html.append("                    <span class='detail-value'>").append(nombreProfesional).append("</span>");
+        html.append("                </div>");
+        html.append("                <div class='detail-row'>");
+        html.append("                    <span class='detail-label'>Fecha y hora:</span>");
+        html.append("                    <span class='detail-value'>").append(fecha).append("</span>");
+        html.append("                </div>");
+        html.append("                <div class='detail-row'>");
+        html.append("                    <span class='detail-label'>Dirección:</span>");
+        html.append("                    <span class='detail-value'>").append(direccion).append("</span>");
+        html.append("                </div>");
+        html.append("            </div>");
+        html.append(
+                "            <p style='margin-top: 18px;'>Te recomendamos estar listo unos minutos antes de la hora programada para aprovechar al máximo tu servicio.</p>");
         html.append("        </div>");
         html.append("        <div class='footer'>");
         html.append("            <p>&copy; 2025 JUSTME. Todos los derechos reservados.</p>");

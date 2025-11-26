@@ -200,48 +200,53 @@
 		<section class="appointments-section" id="citas">
 			<div class="container">
 				<div class="section-header">
-					<h3>Mis próximas citas</h3>
-					<a href="#" class="view-all">Ver todas</a>
+					<h3>Mis Citas</h3>
 				</div>
-				<div class="appointments-list">
-					<div th:if="${citas == null or #lists.isEmpty(citas)}">
-						<p>No tienes citas programadas.</p>
-					</div>
-					<div th:each="cita : ${citas}" class="appointment-card">
-						<div class="appointment-info">
-							<h4 th:text="${cita.servicio.nombre_servicios}">Nombre Servicio</h4>
-							<p><i class="fas fa-user"></i>
-								<span th:text="${cita.servicio != null and cita.servicio.usuario != null ? cita.servicio.usuario.nombre + ' ' + cita.servicio.usuario.apellido : 'Profesional sin nombre'}">
-									Nombre del profesional
-								</span>
-							</p>
-							<p th:if="${cita.servicio != null and cita.servicio.usuario != null and cita.servicio.usuario.email != null}">
-								<i class="fas fa-envelope"></i>
-								<span th:text="${cita.servicio.usuario.email}">correo@ejemplo.com</span>
-							</p>
-							<p th:if="${cita.servicio != null and cita.servicio.usuario != null and cita.servicio.usuario.numero != null}">
-								<i class="fas fa-phone"></i>
-								<span th:text="${cita.servicio.usuario.numero}">+57 000 000 0000</span>
-							</p>
-							<p><i class="fas fa-calendar-alt"></i>
-								<span th:text="${#dates.format(cita.fechaHora, 'dd/MM/yyyy HH:mm')}">Fecha</span></p>
-							<p><i class="fas fa-map-marker-alt"></i>
-								<span th:text="${cita.direccion}">Dirección</span></p>
-							<p><i class="fas fa-dollar-sign"></i>
-								<span th:text="${cita.precio}">Precio</span></p>
-						</div>
+				<div th:if="${citas == null or #lists.isEmpty(citas)}">
+					<p>No tienes citas registradas.</p>
+				</div>
+				<div class="appointments-list" th:if="${citas != null and !#lists.isEmpty(citas)}">
+					<div class="appointment-card" th:each="cita : ${citas}">
+						<h4 th:text="${cita.servicio != null ? cita.servicio.nombre_servicios : 'Servicio'}">Servicio</h4>
+						<p>
+							<strong>Fecha y hora:</strong>
+							<span th:text="${#dates.format(cita.fechaHora, 'dd/MM/yyyy HH:mm')}">01/01/2025 10:00</span>
+						</p>
+						<p>
+							<strong>Dirección:</strong>
+							<span th:text="${cita.direccion}">Dirección</span>
+						</p>
+						<p>
+							<strong>Precio:</strong>
+							<span th:text="${#strings.concat('$', #numbers.formatDecimal(cita.precio, 0, 'POINT', 0, 'POINT'))}">$0</span>
+						</p>
+						<p>
+							<strong>Estado:</strong>
+							<span class="status" th:classappend="${cita.estado} == 'En espera' ? ' status-pending' : (${cita.estado} == 'Confirmada' ? ' status-confirmed' : (${cita.estado} == 'En proceso' ? ' status-in-progress' : (${cita.estado} == 'Finalizada' ? ' status-finished' : ' status-default')))" th:text="${cita.estado}">En espera</span>
+						</p>
+						<p>
+							<strong>Profesional:</strong>
+							<span th:text="${cita.servicio != null and cita.servicio.usuario != null ? cita.servicio.usuario.nombre + ' ' + cita.servicio.usuario.apellido : 'Sin asignar'}">Nombre profesional</span>
+						</p>
+						<p>
+							<strong>Correo profesional:</strong>
+							<span th:text="${cita.servicio != null and cita.servicio.usuario != null ? cita.servicio.usuario.email : ''}">correo@ejemplo.com</span>
+						</p>
+						<p>
+							<strong>Teléfono profesional:</strong>
+							<span th:text="${cita.servicio != null and cita.servicio.usuario != null ? cita.servicio.usuario.numero : ''}">+57 000 000 0000</span>
+						</p>
 					</div>
 				</div>
 			</div>
 		</section>
 
-		<!-- Reseñas Section -->
-		<section class="reviews-section" id="comentarios">
+		<!-- Comentarios Section -->
+		<section class="reviews-section">
 			<div class="container">
 				<div class="section-header">
 					<h3>Comentarios sobre ti</h3>
 				</div>
-
 				<div class="reviews-summary">
 					<div class="overall-rating">
 						<div class="rating-number">4.8</div>
@@ -254,7 +259,6 @@
 						</div>
 						<p>12 valoraciones</p>
 					</div>
-
 					<div class="rating-bars">
 						<div class="rating-bar"><span>5 estrellas</span>
 							<div class="bar-container">
@@ -283,7 +287,6 @@
 						</div>
 					</div>
 				</div>
-
 				<div class="reviews-list"></div>
 			</div>
 		</section>

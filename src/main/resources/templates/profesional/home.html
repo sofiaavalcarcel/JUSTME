@@ -198,6 +198,24 @@
 							<p><i class="fas fa-calendar-alt"></i> <span th:text="${#dates.format(cita.fechaHora, 'dd/MM/yyyy HH:mm')}">Fecha</span></p>
 							<p><i class="fas fa-map-marker-alt"></i> <span th:text="${cita.direccion}">Dirección</span></p>
 							<p><i class="fas fa-dollar-sign"></i> <span th:text="${cita.precio}">Precio</span></p>
+							<p><i class="fas fa-info-circle"></i>
+								<span>Estado actual: </span>
+								<span th:text="${cita.estado}">En espera</span>
+							</p>
+							<form th:action="@{/profesional/citas/actualizar-estado}" method="post" class="appointment-status-form">
+								<input type="hidden" name="idCita" th:value="${cita.idCita}" />
+								<label for="estado-[[${cita.idCita}]]">Cambiar estado:</label>
+								<select th:id="${'estado-' + cita.idCita}" name="estado">
+									<option th:value="'En espera'" th:selected="${cita.estado == 'En espera'}">En espera</option>
+									<option th:value="'Confirmada'" th:selected="${cita.estado == 'Confirmada'}">Confirmada</option>
+									<option th:value="'En proceso'" th:selected="${cita.estado == 'En proceso'}">En proceso</option>
+									<option th:value="'Finalizada'" th:selected="${cita.estado == 'Finalizada'}">Finalizada</option>
+								</select>
+								<button type="submit" class="btn-action btn-edit" style="margin-top: 8px;">
+									<i class="fas fa-save"></i>
+									<span>Actualizar estado</span>
+								</button>
+							</form>
 						</div>
 					</div>
 				</div>

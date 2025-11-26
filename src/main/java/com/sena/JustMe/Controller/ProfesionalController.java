@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.sena.JustMe.model.Citas;
 import com.sena.JustMe.model.Servicios;
 import com.sena.JustMe.model.Usuarios;
+import com.sena.JustMe.service.EmailService;
 import com.sena.JustMe.service.ICitasService;
 import com.sena.JustMe.service.IServiciosService;
 import com.sena.JustMe.service.IUsuariosService;
@@ -37,6 +40,9 @@ public class ProfesionalController {
 
 	@Autowired
 	private IUsuariosService usuarioService;
+
+	@Autowired
+	private EmailService emailService;
 
 	@GetMapping("")
 	public String home(HttpSession session, Model model) {
@@ -165,5 +171,57 @@ public class ProfesionalController {
 		}
 
 		return "redirect:/perfilProfesional";
+	}
+
+	// =========================
+	// Citas: actualizar estado
+	// =========================
+
+	@PostMapping("/citas/actualizar-estado")
+	public String actualizarEstadoCita(@RequestParam("idCita") Integer idCita,
+			@RequestParam("estado") String nuevoEstado,
+			HttpSession session) {
+
+		if (idCita == null || nuevoEstado == null || nuevoEstado.isEmpty()) {
+			return "redirect:/profesional";
+		}
+
+		Optional<Citas> optionalCita = citasService.buscarPorId(idCita);
+		if (optionalCita.isEmpty()) {
+			return "redirect:/profesional";
+		}
+
+		Citas cita = optionalCita.get();
+		cita.setEstado(nuevoEstado);
+		citasService.guardar(cita);
+
+		// Si el profesional marca la cita como Confirmada, enviamos correo al usuario
+		if ("Confirmada".equalsIgnoreCase(nuevoEstado)) {
+			Usuarios cliente = cita.getUsuario();
+			Servicios servicio = cita.getServicio();
+			Usuarios profesional = (servicio != null) ? servicio.getUsuario() : null;
+
+			if (cliente != null && cliente.getEmail() != null && !cliente.getEmail().isEmpty()) {
+				try {
+					String nombreCliente = cliente.getNombre();
+					String nombreProfesional = (profesional != null)
+							? profesional.getNombre() + " " + profesional.getApellido()
+							: "tu profesional";
+					String nombreServicio = (servicio != null) ? servicio.getNombre_servicios() : "Servicio";
+
+					emailService.enviarCorreoCitaConfirmadaUsuario(
+							cliente.getEmail(),
+							nombreCliente,
+							nombreProfesional,
+							nombreServicio,
+							cita.getFechaHora(),
+							cita.getDireccion());
+				} catch (Exception e) {
+					// No interrumpir flujo por error de correo
+				}
+			}
+		}
+
+		return "redirect:/profesional";
 	}
 }

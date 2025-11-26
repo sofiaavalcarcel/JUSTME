@@ -142,7 +142,8 @@ public class StripeController {
         cita.setUsuario(usuario);
         cita.setServicio(servicio);
         cita.setFechaHora(fechaHoraCita);
-        cita.setEstado("Pendiente");
+        // Estado inicial de la cita al pagar: En espera de confirmación
+        cita.setEstado("En espera");
         cita.setPrecio(monto);
         cita.setDireccion(usuario.getDireccion());
 
