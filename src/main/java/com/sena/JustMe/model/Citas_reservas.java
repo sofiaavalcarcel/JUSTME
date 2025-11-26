@@ -28,13 +28,19 @@ public class Citas_reservas {
 	@JoinColumn(name = "idservicio", referencedColumnName = "idservicios")
 	private Servicios servicio;
 
+	// 🔹 Relación con Usuarios (Cliente que reserva)
+	@ManyToOne
+	@JoinColumn(name = "idusuario", referencedColumnName = "idusuarios")
+	private Usuarios usuario;
+
 	// 🔹 Constructor vacío
 	public Citas_reservas() {
 	}
 
 	// 🔹 Constructor con parámetros
 	public Citas_reservas(Integer idcitas_reservas, Date fecha_hora, String direccion_servicio, String estado_cita,
-			String precio, String observacionesCl, String observacionesLb, String fechaEdicion, Servicios servicio) {
+			String precio, String observacionesCl, String observacionesLb, String fechaEdicion, Servicios servicio,
+			Usuarios usuario) {
 		this.idcitas_reservas = idcitas_reservas;
 		this.fecha_hora = fecha_hora;
 		this.direccion_servicio = direccion_servicio;
@@ -44,6 +50,7 @@ public class Citas_reservas {
 		this.observacionesLb = observacionesLb;
 		this.fechaEdicion = fechaEdicion;
 		this.servicio = servicio;
+		this.usuario = usuario;
 	}
 
 	// 🔹 Getters y Setters
@@ -118,6 +125,15 @@ public class Citas_reservas {
 
 	public void setServicio(Servicios servicio) {
 		this.servicio = servicio;
+	}
+
+	// 🔹 Getter y Setter de la relación con Usuario (Cliente)
+	public Usuarios getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuarios usuario) {
+		this.usuario = usuario;
 	}
 
 	// ✅ Alias estándar para compatibilidad (por si en el controller se usa getId)

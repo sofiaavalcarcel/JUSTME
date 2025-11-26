@@ -14,4 +14,6 @@ public interface ICitas_reservasService {
 
 	List<Citas_reservas> listarcitasPorUsuario(Integer idUsuario);
 
+	List<Citas_reservas> listarcitasPorCliente(Integer idUsuario);
+
 }

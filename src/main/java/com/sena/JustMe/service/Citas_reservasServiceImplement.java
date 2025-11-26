@@ -19,7 +19,7 @@ public class Citas_reservasServiceImplement implements ICitas_reservasService {
     public List<Citas_reservas> listarcitas() {
         return repository.findAll();
     }
-    
+
     @Override
     public Optional<Citas_reservas> buscarPorId(Integer id) {
         return repository.findById(id);
@@ -34,5 +34,10 @@ public class Citas_reservasServiceImplement implements ICitas_reservasService {
     @Override
     public List<Citas_reservas> listarcitasPorUsuario(Integer idUsuario) {
         return repository.findByServicio_Usuario_Idusuarios(idUsuario);
+    }
+
+    @Override
+    public List<Citas_reservas> listarcitasPorCliente(Integer idUsuario) {
+        return repository.findByUsuario_Idusuarios(idUsuario);
     }
 }

@@ -16,6 +16,9 @@ import com.sena.JustMe.model.Usuarios;
 import com.sena.JustMe.service.IPagosService;
 import com.sena.JustMe.service.IServiciosService;
 import com.sena.JustMe.service.IUsuariosService;
+import com.sena.JustMe.service.ICitasService;
+import com.sena.JustMe.model.Citas;
+import java.util.Date;
 import com.sena.JustMe.service.EmailService;
 import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentCreateParams;
@@ -34,6 +37,9 @@ public class StripeController {
 
     @Autowired
     private IUsuariosService usuariosService;
+
+    @Autowired
+    private ICitasService citasService;
 
     @Autowired
     private EmailService emailService;
@@ -97,12 +103,22 @@ public class StripeController {
         pago.setUsuario(usuario);
         pago.setServicio(servicio);
         pago.setMonto(monto);
-        pago.setMoneda(moneda);
         pago.setEstado(estado);
         pago.setPaymentIntentId(paymentIntentId);
         pago.setFechaCreacion(LocalDateTime.now());
 
         pagosService.guardar(pago);
+
+        // 🔹 Crear Cita automáticamente (Nueva tabla)
+        Citas cita = new Citas();
+        cita.setUsuario(usuario);
+        cita.setServicio(servicio);
+        cita.setFechaHora(new Date());
+        cita.setEstado("Pendiente");
+        cita.setPrecio(monto);
+        cita.setDireccion(usuario.getDireccion());
+
+        citasService.guardar(cita);
 
         if (usuario.getEmail() != null && !usuario.getEmail().isEmpty()) {
             try {
@@ -122,4 +138,3 @@ public class StripeController {
         return response;
     }
 }
-

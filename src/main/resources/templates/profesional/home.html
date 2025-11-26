@@ -172,51 +172,6 @@
 					<h3>
 						Mis citas
 						<br />
-						<span class="badge" th:text="${'Total: ' + citas.size() + ' citas'}">Total: 0 citas</span>
-					</h3>
-				</div>
-
-				<section class="panel">
-					<div class="citas-container">
-						<div class="cita-card" th:each="cita : ${citas}">
-							<div class="card-content">
-								<p><i class="fas fa-calendar-alt"></i> <strong>Fecha y Hora:</strong>
-									<span th:text="${#dates.format(cita.fecha_hora, 'yyyy-MM-dd HH:mm')}"></span>
-								</p>
-								<p><i class="fas fa-map-marker-alt"></i> <strong>Dirección:</strong>
-									<span th:text="${cita.direccion_servicio}"></span>
-								</p>
-								<p><i class="fas fa-info-circle"></i> <strong>Estado:</strong>
-									<span th:text="${cita.estado_cita}"></span>
-								</p>
-								<p><i class="fas fa-dollar-sign"></i> <strong>Precio:</strong>
-									<span class="price"
-										th:text="${#strings.concat('$', #numbers.formatDecimal(cita.precio, 0, 'POINT', 0, 'POINT'))}"></span>
-								</p>
-								<p><i class="fas fa-user-edit"></i> <strong>Observaciones Cliente:</strong>
-									<span th:text="${cita.observacionesCl}"></span>
-								</p>
-								<p><i class="fas fa-user-cog"></i> <strong>Observaciones Laburante:</strong>
-									<span th:text="${cita.observacionesLb}"></span>
-								</p>
-								<p><i class="fas fa-edit"></i> <strong>Fecha Edición:</strong>
-									<span th:text="${cita.fechaEdicion}"></span>
-								</p>
-							</div>
-
-							<div class="card-actions">
-								<a th:href="@{/citas/editar/{id}(id=${cita.idcitas_reservas})}"
-									class="btn-action btn-edit" title="Editar cita">
-									<i class="fas fa-pen"></i>
-									<span>Editar</span>
-								</a>
-							</div>
-						</div>
-					</div>
-				</section>
-			</div>
-		</section>
-
 
 
 		<section class="reviews-section">

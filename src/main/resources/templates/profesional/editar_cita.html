@@ -52,7 +52,7 @@
 					class="edit-service-form">
 
 					<!-- ✅ ID de la cita -->
-					<input type="hidden" th:field="*{idcitas_reservas}" />
+					<input type="hidden" th:field="*{idCita}" />
 
 					<!-- ✅ ID del servicio asociado -->
 					<input type="hidden" th:if="*{servicio != null}" th:field="*{servicio.idservicios}" />
@@ -60,13 +60,13 @@
 
 					<div class="form-row">
 						<div class="form-group">
-							<label for="fecha_hora"><i class="fa-solid fa-clock"></i> Fecha y Hora</label>
-							<input type="datetime-local" th:field="*{fecha_hora}" id="fecha_hora" required>
+							<label for="fechaHora"><i class="fa-solid fa-clock"></i> Fecha y Hora</label>
+							<input type="datetime-local" th:field="*{fechaHora}" id="fechaHora" required>
 						</div>
 
 						<div class="form-group">
-							<label for="direccion_servicio"><i class="fa-solid fa-road"></i> Dirección</label>
-							<input type="text" th:field="*{direccion_servicio}" id="direccion_servicio" required>
+							<label for="direccion"><i class="fa-solid fa-road"></i> Dirección</label>
+							<input type="text" th:field="*{direccion}" id="direccion" required>
 						</div>
 					</div>
 
@@ -77,8 +77,8 @@
 						</div>
 
 						<div class="form-group">
-							<label for="estado_cita"><i class="fas fa-toggle-on"></i> Estado</label>
-							<select th:field="*{estado_cita}" id="estado_cita" required>
+							<label for="estado"><i class="fas fa-toggle-on"></i> Estado</label>
+							<select th:field="*{estado}" id="estado" required>
 								<option value="" disabled>Seleccione un estado</option>
 								<option value="Pendiente">Pendiente</option>
 								<option value="Confirmada">Confirmada</option>
@@ -87,22 +87,7 @@
 						</div>
 					</div>
 
-					<div class="form-row">
-						<div class="form-group">
-							<label for="observacionesCl"><i class="fa-solid fa-user"></i> Observaciones Cliente</label>
-							<textarea th:field="*{observacionesCl}" id="observacionesCl" rows="2"></textarea>
-						</div>
-
-						<div class="form-group">
-							<label for="observacionesLb"><i class="fa-solid fa-briefcase"></i> Observaciones Laburante</label>
-							<textarea th:field="*{observacionesLb}" id="observacionesLb" rows="2"></textarea>
-						</div>
-					</div>
-
-					<div class="form-group">
-						<label for="fechaEdicion"><i class="fa-solid fa-calendar"></i> Fecha Edición</label>
-						<input type="date" th:field="*{fechaEdicion}" id="fechaEdicion" required>
-					</div>
+					<!-- Removed observations and edit date as they are not in Citas entity yet -->
 
 					<div class="form-actions">
 						<a th:href="@{/profesional}" class="btn-secondary">Cancelar</a>
