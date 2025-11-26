@@ -130,15 +130,15 @@
             <div class="summary-total">
                 <div class="total-row">
                     <span>Subtotal</span>
-                    <span th:text="${'$' + #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 2, 'COMMA')}">$0.00</span>
+                    <span id="subtotal-amount" th:text="${'$' + #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 2, 'COMMA')}">$0.00</span>
                 </div>
                 <div class="total-row">
                     <span>Descuento</span>
-                    <span>$0</span>
+                    <span id="discount-amount">$0</span>
                 </div>
                 <div class="total-row grand-total">
                     <span>Total</span>
-                    <span th:text="${'$' + #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 2, 'COMMA')}">$0.00</span>
+                    <span id="total-amount" th:text="${'$' + #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 2, 'COMMA')}">$0.00</span>
                 </div>
             </div>
 
@@ -293,6 +293,25 @@
             serviceDateTimeInput.min = minValue;
         }
 
+        // Variables de precio y elementos del resumen (para manejar cupones)
+        let originalPrice = servicePrice;
+        let discountAmount = 0;
+        let finalPrice = originalPrice;
+        let couponApplied = false;
+
+        const subtotalAmountEl = document.getElementById('subtotal-amount');
+        const discountAmountEl = document.getElementById('discount-amount');
+        const totalAmountEl = document.getElementById('total-amount');
+        const couponInput = document.getElementById('coupon');
+
+        function formatCurrency(amount) {
+            if (isNaN(amount)) return '$0.00';
+            return '$' + amount.toLocaleString('es-CO', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
 
@@ -335,7 +354,7 @@
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify({
-                        amount: Math.round(servicePrice * 100), // Convertir a centavos
+                        amount: Math.round(finalPrice * 100), // Convertir a centavos (con descuento si aplica)
                         currency: 'cop'
                     })
                 });
@@ -375,7 +394,7 @@
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({
                                 servicioId: serviceId,
-                                amount: servicePrice,
+                                amount: finalPrice,
                                 currency: 'cop',
                                 paymentIntentId: paymentIntent.id,
                                 status: paymentIntent.status,
@@ -428,6 +447,68 @@
             }
         });
 
+        // Manejo del cupón JUSTME (10% descuento)
+        document.querySelector('.apply-btn').addEventListener('click', function (e) {
+            e.preventDefault();
+            const rawCode = couponInput ? couponInput.value.trim() : '';
+            const couponCode = rawCode.toUpperCase();
+
+            if (!couponCode) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Cupón vacío',
+                    text: 'Por favor ingresa un código de cupón válido.',
+                    confirmButtonColor: '#8b5cf6',
+                    background: 'var(--card-bg)',
+                    color: 'var(--dark-color)'
+                });
+                return;
+            }
+
+            if (couponCode === 'JUSTME') {
+                if (couponApplied) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Cupón ya aplicado',
+                        text: 'El cupón JUSTME ya fue aplicado al total.',
+                        confirmButtonColor: '#8b5cf6',
+                        background: 'var(--card-bg)',
+                        color: 'var(--dark-color)'
+                    });
+                    return;
+                }
+
+                couponApplied = true;
+                discountAmount = originalPrice * 0.10;
+                finalPrice = originalPrice - discountAmount;
+
+                if (discountAmountEl) {
+                    discountAmountEl.textContent = '-' + formatCurrency(discountAmount);
+                }
+                if (totalAmountEl) {
+                    totalAmountEl.textContent = formatCurrency(finalPrice);
+                }
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Cupón aplicado',
+                    text: 'Se aplicó un 10% de descuento con el cupón JUSTME.',
+                    confirmButtonColor: '#8b5cf6',
+                    background: 'var(--card-bg)',
+                    color: 'var(--dark-color)'
+                });
+            } else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Cupón inválido',
+                    text: 'Este código de cupón no es válido.',
+                    confirmButtonColor: '#8b5cf6',
+                    background: 'var(--card-bg)',
+                    color: 'var(--dark-color)'
+                });
+            }
+        });
+
         // Manejar errores de validación en tiempo real
         cardNumber.on('change', (event) => {
             if (event.error) {
@@ -444,32 +525,6 @@
         cardCvc.on('change', (event) => {
             if (event.error) {
                 console.log('Error en CVC:', event.error.message);
-            }
-        });
-
-        // Manejo del cupón
-        document.querySelector('.apply-btn').addEventListener('click', function (e) {
-            e.preventDefault();
-            const couponCode = document.getElementById('coupon').value;
-
-            if (couponCode) {
-                Swal.fire({
-                    icon: 'info',
-                    title: 'Cupón aplicado',
-                    text: 'El código de cupón ha sido aplicado correctamente.',
-                    confirmButtonColor: '#8b5cf6',
-                    background: 'var(--card-bg)',
-                    color: 'var(--dark-color)'
-                });
-            } else {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Cupón vacío',
-                    text: 'Por favor ingresa un código de cupón válido.',
-                    confirmButtonColor: '#8b5cf6',
-                    background: 'var(--card-bg)',
-                    color: 'var(--dark-color)'
-                });
             }
         });
 
