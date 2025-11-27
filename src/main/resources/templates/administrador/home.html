@@ -33,29 +33,25 @@
 			</div>
 
 			<div class="sidebar-section">
-				<div class="sidebar-title">Opciones</div>
+				<div class="sidebar-title">Secciones</div>
 				<nav class="menu">
-					<a class="menu-item active" th:href="@{/estadisticas}">
-						<span class="dot"></span> Estadísticas
+					<a class="menu-item active" th:href="@{/administrador}">
+						<span class="dot"></span> Panel
 					</a>
-
-					<a class="menu-item" th:href="@{/assetsADMIN/clientes.html}">
-						<span class="dot"></span> Clientes
+					<a class="menu-item" th:href="@{/administrador/servicios}">
+						<span class="dot"></span> Servicios
+					</a>
+					<a class="menu-item" th:href="@{/administrador/usuarios}">
+						<span class="dot"></span> Usuarios
+					</a>
+					<a class="menu-item" th:href="@{/administrador/citas}">
+						<span class="dot"></span> Citas
+					</a>
+					<a class="menu-item" th:href="@{/administrador/pagos}">
+						<span class="dot"></span> Pagos
 					</a>
 					<a class="menu-item" th:href="@{/cerrar}">
 						<span class="dot"></span> Cerrar Sesión
-					</a>
-				</nav>
-			</div>
-
-			<div class="sidebar-section">
-				<div class="sidebar-title">Ajustes</div>
-				<nav class="menu">
-					<a class="menu-item" th:href="@{/mensajes}">
-						<span class="dot"></span> Mensajes
-					</a>
-					<a class="menu-item" th:href="@{/configuracion}">
-						<span class="dot"></span> Configuración
 					</a>
 				</nav>
 			</div>
@@ -74,7 +70,8 @@
 			<!-- TOPBAR -->
 			<header class="topbar">
 				<button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
-				<div class="crumbs">Opciones / <span>Estadísticas</span></div>
+				<div class="crumbs">Panel / <span>Resumen general</span></div>
+
 				<div class="top-actions">
 					<div class="search">
 						<input id="search" type="text" placeholder="Buscar…" />
@@ -87,61 +84,85 @@
 
 			<section class="services-section">
 				<div class="container">
-					<!-- 🔹 Encabezado con título y botón -->
 					<div class="section-header">
-						<h3>Servicios de JustMe</h3>
-						
+						<h3>Resumen general</h3>
+					</div>
+					<div class="grid">
+						<div class="card kpi">
+							<div class="kpi-title">Servicios</div>
+							<div class="kpi-value" th:text="${totalServicios}">0</div>
+						</div>
+						<div class="card kpi">
+							<div class="kpi-title">Usuarios</div>
+							<div class="kpi-value" th:text="${totalUsuarios}">0</div>
+						</div>
+						<div class="card kpi">
+							<div class="kpi-title">Citas</div>
+							<div class="kpi-value" th:text="${totalCitas}">0</div>
+						</div>
+						<div class="card kpi">
+							<div class="kpi-title">Ingresos totales</div>
+							<div class="kpi-value"
+								th:text="${#strings.concat('$', #numbers.formatDecimal(totalIngresos,0,'POINT',0,'POINT'))}">0</div>
+						</div>
 					</div>
 
-					<!-- 🔹 Aquí va la tabla, ya debajo -->
-					<div class="card col-2">
-						<div class="wrap">
+					<!-- Fila de gráficos: servicios por categoría y citas por estado -->
+					<div class="grid" style="margin-top: 24px;">
+						<div class="card col-6">
+							<div class="panel-header">
+								<h4>Servicios por categoría</h4>
+							</div>
+							<div class="panel-body">
+								<canvas id="chartServiciosCat" height="170"></canvas>
+							</div>
+						</div>
+						<div class="card col-6">
+							<div class="panel-header">
+								<h4>Citas por estado</h4>
+							</div>
+							<div class="panel-body">
+								<canvas id="chartCitasEstado" height="170"></canvas>
+							</div>
+						</div>
+					</div>
 
-							<!-- Tabla con servicios -->
-							<section class="panel">
-								<div class="toolbar">
-									
-								</div>
-
-								<div style="overflow:auto">
-									<table>
-										<thead>
-											<tr>
-												<th>ID</th>
-												<th>Nombre</th>
-												<th>Descripción</th>
-												<th>Precio Base</th>
-												<th>Categoría</th>
-												<th>Estado</th>
-
-												<th>Acciones</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr th:each="servicio : ${servicios}">
-												<td th:text="${servicio.idservicios}">1</td>
-												<td><span class="chip"
-														th:text="${servicio.nombre_servicios}">Servicio</span></td>
-												<td th:text="${servicio.descripcion}">Descripción</td>
-												<td class="price"
-													th:text="${#strings.concat('$', #numbers.formatDecimal(servicio.precio_base,0,'POINT',0,'POINT'))}">
-												</td>
-												<td th:text="${servicio.categoria}">Categoría</td>
-												<td><span class="state" th:text="${servicio.estado}">Activo</span></td>
-
-												<td>
-													<a th:href="@{/servicios/editar/{id}(id=${servicio.idservicios})}"
-														class="btn-edit">✏️</a>
-													<a th:href="@{/servicios/eliminar/{id}(id=${servicio.idservicios})}"
-														class="btn-delete">🗑️</a>
-												</td>
-											</tr>
-
-
-										</tbody>
-									</table>
-								</div>
-							</section>
+					<!-- Fila inferior: mejores profesionales y total ingresos app -->
+					<div class="grid" style="margin-top: 24px;">
+						<div class="card col-6">
+							<div class="wrap">
+								<section class="panel">
+									<div class="toolbar">
+										<h4>Mejores profesionales (por ingresos)</h4>
+									</div>
+									<div style="max-height:260px; overflow-y:auto; overflow-x:hidden;">
+										<table>
+											<thead>
+												<tr>
+													<th>Profesional</th>
+													<th>Ingresos</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:each="nombre, iter : ${labelsTopProfesionales}">
+													<td th:text="${nombre}">Nombre</td>
+													<td th:text="${#strings.concat('$', #numbers.formatDecimal(dataTopProfesionales[iter.index],0,'POINT',0,'POINT'))}">$0</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</section>
+							</div>
+						</div>
+						<div class="card col-6">
+							<div class="panel-header">
+								<h4>Ingresos de la aplicación (1%)</h4>
+							</div>
+							<div class="panel-body">
+								<p class="mini-title">Total acumulado (1% de todos los pagos)</p>
+								<p class="mini-value"
+									th:text="${#strings.concat('$', #numbers.formatDecimal(totalIngresosApp1,0,'POINT',0,'POINT'))}">$0</p>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -163,8 +184,8 @@
 				<h3>Actividades</h3>
 				<ul class="activity">
 					<li th:each="a : ${actividades}">
-						<span class="avatar sm" th:text="${a.inicial}">X</span>
-						<span th:text="${a.descripcion}">Acción</span>
+						<span class="avatar sm">A</span>
+						<span th:text="${a}">Acción</span>
 					</li>
 				</ul>
 			</div>
@@ -173,8 +194,8 @@
 				<h3>Managers</h3>
 				<ul class="contacts">
 					<li th:each="m : ${managers}">
-						<span class="avatar" th:text="${m.inicial}">S</span>
-						<span th:text="${m.nombre}">Nombre</span>
+						<span class="avatar" th:text="${#strings.substring(m,0,1)}">S</span>
+						<span th:text="${m}">Nombre</span>
 					</li>
 				</ul>
 			</div>
@@ -182,6 +203,57 @@
 	</div>
 
 	<script th:src="@{/assetsADMIN/scripts/script.js}"></script>
+	<script th:inline="javascript">
+		document.addEventListener('DOMContentLoaded', function () {
+			const labelsServiciosCat = /*[[${labelsServiciosCat}]]*/ [];
+			const dataServiciosCat = /*[[${dataServiciosCat}]]*/ [];
+			const labelsCitasEstado = /*[[${labelsCitasEstado}]]*/ [];
+			const dataCitasEstado = /*[[${dataCitasEstado}]]*/ [];
+
+			// Gráfico barras: servicios por categoría
+			const ctxServicios = document.getElementById('chartServiciosCat');
+			if (ctxServicios && labelsServiciosCat && dataServiciosCat) {
+				new Chart(ctxServicios, {
+					type: 'bar',
+					data: {
+						labels: labelsServiciosCat,
+						datasets: [{
+							label: 'Servicios',
+							data: dataServiciosCat,
+							backgroundColor: 'rgba(99, 102, 241, 0.7)'
+						}]
+					},
+					options: {
+						plugins: { legend: { display: false } },
+						responsive: true,
+						maintainAspectRatio: false
+					}
+				});
+			}
+
+			// Gráfico doughnut: citas por estado
+			const ctxCitas = document.getElementById('chartCitasEstado');
+			if (ctxCitas && labelsCitasEstado && dataCitasEstado) {
+				new Chart(ctxCitas, {
+					type: 'doughnut',
+					data: {
+						labels: labelsCitasEstado,
+						datasets: [{
+							data: dataCitasEstado,
+							backgroundColor: ['#22c55e', '#eab308', '#ef4444', '#3b82f6', '#a855f7']
+						}]
+					},
+					options: {
+						plugins: { legend: { position: 'bottom' } },
+						responsive: true,
+						maintainAspectRatio: false
+					}
+				});
+			}
+
+		});
+	</script>
+
 </body>
 
 </html>

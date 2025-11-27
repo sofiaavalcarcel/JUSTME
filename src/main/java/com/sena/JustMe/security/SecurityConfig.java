@@ -29,9 +29,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // recursos estáticos
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        // solo admin restringido
-                        .requestMatchers("/administrador/**").hasRole("ADMIN")
-                        // TODO lo demás es público
+                        // TEMPORAL: todo el resto de rutas públicas mientras se desarrolla
                         .anyRequest().permitAll())
                 // usamos nuestro propio formulario /acceder, no el login de Spring
                 .formLogin(form -> form.disable())

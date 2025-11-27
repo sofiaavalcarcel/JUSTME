@@ -1,4 +1,5 @@
 :root{
+  /* Tema oscuro base */
   --bg:#0b0b12;
   --panel:#0e0e16;
   --card: rgba(255,255,255,0.06);
@@ -14,21 +15,33 @@
   --shadow: 0 10px 30px rgba(139,92,246,0.18);
 }
 
-/* Variables para modo claro */
-.light-mode {
-  --bg:#ffffff;
-  --panel:#f8f9fa;
-  --card: rgba(139,92,246,0.06);
-  --card-2: rgba(139,92,246,0.08);
-  --stroke: rgba(139,92,246,0.12);
-  --text:#4c1d95;
-  --muted:#6b7280;
-  --accent-1:#8b5cf6;   /* violeta */
-  --accent-2:#6d28d9;   /* morado */
-  --accent-3:#d946ef;   /* fucsia */
+/* Variables para modo claro (basadas en el root que compartiste) */
+body.light-mode {
+  --primary-color: #e16bff;
+  --primary-dark: #9033a7;
+  --secondary-color: #e16bff;
+  --dark-color: #333;
+  --light-color: #f8f9fa;
+  --gray-color: #6c757d;
+  --light-gray: #e9ecef;
+  --white: #fff;
+  --black: #000;
+  --bg-color: #ffffff;
+
+  /* Mapeo a las variables usadas en el panel */
+  --bg: var(--bg-color);
+  --panel: #f8f9fa;
+  --card: rgba(225, 107, 255, 0.06);
+  --card-2: rgba(225, 107, 255, 0.12);
+  --stroke: rgba(144, 51, 167, 0.25);
+  --text: var(--dark-color);
+  --muted: var(--gray-color);
+  --accent-1: var(--primary-color);
+  --accent-2: var(--primary-dark);
+  --accent-3: #d946ef;
   --success:#16a34a;
   --danger:#dc2626;
-  --shadow: 0 10px 30px rgba(139,92,246,0.18);
+  --shadow: 0 10px 30px rgba(144,51,167,0.18);
 }
 
 *{ box-sizing:border-box; margin: 0; padding: 0; }
@@ -46,8 +59,8 @@ body{
 
 /* Modo claro para body */
 body.light-mode {
-  background: radial-gradient(80vw 80vh at -10% -10%, rgba(139,92,246,0.1) 0%, transparent 55%),
-              radial-gradient(70vw 70vh at 110% 110%, rgba(217,70,239,0.1) 0%, transparent 60%),
+  background: radial-gradient(80vw 80vh at -10% -10%, rgba(225,107,255,0.12) 0%, transparent 55%),
+              radial-gradient(70vw 70vh at 110% 110%, rgba(144,51,167,0.10) 0%, transparent 60%),
               var(--bg);
 }
 
@@ -292,6 +305,7 @@ body.light-mode {
   transition: background 0.3s ease, border-color 0.3s ease;
 }
 .col-2{ grid-column: span 8 / span 8; }
+.col-6{ grid-column: span 6 / span 6; }
 .kpi{ grid-column: span 3 / span 3; }
 .kpi-title{ color:var(--muted); font-size:13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .kpi-value{ font-size:clamp(20px, 2.5vw, 28px); font-weight:800; margin:8px 0; line-height: 1.2; }
@@ -377,9 +391,9 @@ body.light-mode {
   max-height: 300px;
   transition: border-color 0.3s ease;
 }
-table{ width:100%; border-collapse:collapse; font-size:14px; min-width: 400px; }
-thead{ background:rgba(139,92,246,0.12); position: sticky; top: 0; z-index: 1; transition: background 0.3s ease; }
-th, td{ padding:12px 14px; border-bottom:1px solid var(--stroke); white-space: nowrap; transition: border-color 0.3s ease; }
+table{ width:100%; border-collapse:collapse; font-size:14px; min-width: 400px; background: var(--panel); color: var(--text); }
+thead{ background:rgba(139,92,246,0.12); position: sticky; top: 0; z-index: 1; transition: background 0.3s ease, color 0.3s ease; }
+th, td{ padding:12px 14px; border-bottom:1px solid var(--stroke); white-space: nowrap; transition: border-color 0.3s ease, color 0.3s ease; }
 th { text-align: left; }
 tbody tr:hover{ background:rgba(255,255,255,0.04) }
 
@@ -397,29 +411,30 @@ tbody tr:hover{ background:rgba(255,255,255,0.04) }
 
 /* Override para modo claro */
 body.light-mode .card {
-  background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.8));
-  box-shadow: 0 1px 0 rgba(139,92,246,0.05) inset, 0 10px 30px rgba(139,92,246,0.15);
+  background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(248,249,250,0.95));
+  box-shadow: 0 1px 0 rgba(144,51,167,0.05) inset, 0 10px 30px rgba(144,51,167,0.18);
 }
 
 body.light-mode .sidebar, 
 body.light-mode .rightbar {
-  background: linear-gradient(180deg, rgba(139,92,246,0.05), rgba(255,255,255,0.3));
+  background: linear-gradient(180deg, rgba(225,107,255,0.04), rgba(255,255,255,0.9));
 }
 
 body.light-mode .topbar {
-  background: linear-gradient(180deg, rgba(139,92,246,0.06), rgba(255,255,255,0.2));
+  background: linear-gradient(180deg, rgba(225,107,255,0.06), rgba(255,255,255,0.9));
 }
 
 body.light-mode .progress {
-  background: rgba(139,92,246,0.1);
+  background: rgba(225,107,255,0.12);
 }
 
 body.light-mode thead {
-  background: rgba(139,92,246,0.08);
+  background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+  color: #fff;
 }
 
 body.light-mode tbody tr:hover {
-  background: rgba(139,92,246,0.04);
+  background: rgba(225,107,255,0.06);
 }
 
 .rightbar .card + .card{ margin-top:16px }
@@ -898,7 +913,8 @@ body.light-mode tbody tr:hover {
 }
 
 .form-group input,
-.form-group select {
+.form-group select,
+.form-group textarea {
   width: 100%;
   background: var(--card);
   border: 1px solid var(--stroke);
@@ -910,7 +926,8 @@ body.light-mode tbody tr:hover {
 }
 
 .form-group input:focus,
-.form-group select:focus {
+.form-group select:focus,
+.form-group textarea:focus {
   border-color: var(--accent-1);
 }
 
@@ -1011,29 +1028,29 @@ td[data-label="Acciones"] {
   justify-content: center;
 }
 
-/* Botones estilo icono */
+/* Botones */
 .btn-edit, .btn-delete {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  font-size: 16px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.85rem;
   border: none;
   cursor: pointer;
   text-decoration: none;
   color: #fff;
   transition: 0.3s ease;
+  min-width: 72px;
 }
 
 /* Colores */
 .btn-edit {
-  background-color: #007bff;
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
 }
 
 .btn-edit:hover {
-  background-color: #0056b3;
+  background: linear-gradient(135deg, #4338ca, #4f46e5);
 }
 
 .btn-delete {

@@ -23,4 +23,28 @@ public class PagosServiceImplement implements IPagosService {
     public List<Pagos> listarPorUsuario(Integer idUsuario) {
         return pagosRepository.findByUsuarioIdusuarios(idUsuario);
     }
+
+    // Listar todos los pagos (para panel administrador)
+    @Override
+    public List<Pagos> listarTodos() {
+        return pagosRepository.findAll();
+    }
+
+    // Obtener el total de ingresos sumando los montos de todos los pagos
+    @Override
+    public Double obtenerTotalIngresos() {
+        return pagosRepository.findAll().stream()
+                .mapToDouble(p -> p.getMonto() != null ? p.getMonto() : 0.0)
+                .sum();
+    }
+
+    // Listar pagos más recientes, limitando por el parámetro "limite"
+    @Override
+    public List<Pagos> listarPagosRecientes(int limite) {
+        List<Pagos> ordenados = pagosRepository.findAllByOrderByFechaCreacionDesc();
+        if (ordenados.size() <= limite) {
+            return ordenados;
+        }
+        return ordenados.subList(0, limite);
+    }
 }
