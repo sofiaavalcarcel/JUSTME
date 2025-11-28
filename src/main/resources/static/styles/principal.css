@@ -843,7 +843,7 @@ nav {
 	transform: translateY(-50%);
 	background: transparent;
 	border: none;
-	color: #000000;
+	color: rgb(255, 255, 255);
 	cursor: pointer;
 	padding: 0;
 	display: flex;
