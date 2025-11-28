@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Restablecer contraseña - JUSTME</title>
+    <link rel="stylesheet" th:href="@{/styles/principal.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+</head>
+<body>
+    <section class="hero" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+        <div class="card" style="max-width: 400px; width: 100%; padding: 2rem;">
+            <h2>Restablecer contraseña</h2>
+            <p>Revisa tu correo, ingresa el código que te enviamos y define tu nueva contraseña.</p>
+
+            <form th:action="@{/restablecer-contrasena}" method="post">
+                <div class="form-group">
+                    <label for="codigo">Código de verificación</label>
+                    <input type="text" id="codigo" name="codigo" maxlength="6" required />
+                </div>
+
+                <div class="form-group password-wrapper">
+                    <label for="nuevaContrasena">Nueva contraseña</label>
+                    <div class="password-input-container">
+                        <input type="password" id="nuevaContrasena" name="nuevaContrasena" required />
+                        <button type="button" class="toggle-password" data-target="nuevaContrasena">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group password-wrapper">
+                    <label for="confirmarContrasena">Confirmar contraseña</label>
+                    <div class="password-input-container">
+                        <input type="password" id="confirmarContrasena" name="confirmarContrasena" required />
+                        <button type="button" class="toggle-password" data-target="confirmarContrasena">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <p class="error-message" th:if="${param.error} == 'codigo'">
+                    El código ingresado no es válido.
+                </p>
+
+                <p class="error-message" th:if="${param.error} == 'contrasena'">
+                    Las contraseñas no coinciden.
+                </p>
+
+                <p class="success-message" th:if="${param.success}">
+                    Te enviamos el código a tu correo. Ingresa el código y tu nueva contraseña.
+                </p>
+
+                <button type="submit" class="modal-btn">Cambiar contraseña</button>
+            </form>
+
+            <p class="signup-link" style="margin-top: 1rem;">
+                <a th:href="@{/recuperar-contrasena}">¿No recibiste el código? Volver a enviar</a>
+            </p>
+
+            <p class="signup-link" style="margin-top: 0.5rem;">
+                <a th:href="@{/}">Volver al inicio</a>
+            </p>
+        </div>
+    </section>
+    <script th:src="@{/scripts/principal.js}"></script>
+</body>
+</html>

@@ -7,6 +7,7 @@
 	<title>Just Me - Belleza a Domicilio</title>
 	<link rel="stylesheet" href="styles/principal.css" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 	<!-- =======================================================
 	    * Template Name: JusteMe
@@ -161,10 +162,19 @@
 					<input type="text" id="loginEmail" name="email" placeholder="Ingresa tu correo o número" required />
 				</div>
 
-				<div class="form-group">
+				<div class="form-group password-wrapper">
 					<label for="loginPassword">Contraseña</label>
-					<input type="password" id="loginPassword" name="contrasena" required />
+					<div class="password-input-container">
+						<input type="password" id="loginPassword" name="contrasena" required />
+						<button type="button" class="toggle-password" data-target="loginPassword">
+							<i class="fas fa-eye"></i>
+						</button>
+					</div>
 				</div>
+
+				<p class="signup-link">
+					<a th:href="@{/recuperar-contrasena}" class="signup-link link">¿Olvidaste tu contraseña?</a>
+				</p>
 				<p id="errorMessage" class="error-message" th:if="${param.error}" th:text="'Credenciales incorrectas'">
 				</p>
 				<button type="submit" class="modal-btn">Ingresar</button>

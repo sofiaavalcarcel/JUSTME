@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,6 +50,9 @@ public class UsuarioController {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     // =========================
     // Páginas públicas
@@ -138,6 +143,80 @@ public class UsuarioController {
             LOGGER.warn("Error de autenticación para el usuario {}", usuario.getEmail());
             return "redirect:/?error=true";
         }
+    }
+
+    @GetMapping("/recuperar-contrasena")
+    public String mostrarFormularioRecuperarContrasena() {
+        return "servicios/recuperar_contrasena";
+    }
+
+    @PostMapping("/recuperar-contrasena")
+    public String enviarCodigoRecuperacion(@RequestParam("email") String email, HttpSession session) {
+        Optional<Usuarios> optionalUsuario = usuarioService.findByEmail(email);
+
+        if (optionalUsuario.isEmpty()) {
+            return "redirect:/recuperar-contrasena?error=notfound";
+        }
+
+        Usuarios usuario = optionalUsuario.get();
+
+        String codigo = String.format("%06d", new Random().nextInt(1_000_000));
+        emailService.enviarCorreoRecuperacionContrasena(usuario.getEmail(), usuario.getNombre(), codigo);
+
+        session.setAttribute("resetEmail", usuario.getEmail());
+        session.setAttribute("resetCode", codigo);
+
+        return "redirect:/restablecer-contrasena?success=true";
+    }
+
+    @GetMapping("/restablecer-contrasena")
+    public String mostrarFormularioRestablecerContrasena(HttpSession session) {
+        String email = (String) session.getAttribute("resetEmail");
+        String codigo = (String) session.getAttribute("resetCode");
+
+        if (email == null || codigo == null) {
+            return "redirect:/recuperar-contrasena";
+        }
+
+        return "servicios/restablecer_contrasena";
+    }
+
+    @PostMapping("/restablecer-contrasena")
+    public String procesarRestablecerContrasena(
+            @RequestParam("codigo") String codigoIngresado,
+            @RequestParam("nuevaContrasena") String nuevaContrasena,
+            @RequestParam("confirmarContrasena") String confirmarContrasena,
+            HttpSession session) {
+
+        String email = (String) session.getAttribute("resetEmail");
+        String codigoGuardado = (String) session.getAttribute("resetCode");
+
+        if (email == null || codigoGuardado == null) {
+            return "redirect:/recuperar-contrasena";
+        }
+
+        if (!codigoGuardado.equals(codigoIngresado)) {
+            return "redirect:/restablecer-contrasena?error=codigo";
+        }
+
+        if (!nuevaContrasena.equals(confirmarContrasena)) {
+            return "redirect:/restablecer-contrasena?error=contrasena";
+        }
+
+        Optional<Usuarios> optionalUsuario = usuarioService.findByEmail(email);
+
+        if (optionalUsuario.isEmpty()) {
+            return "redirect:/recuperar-contrasena";
+        }
+
+        Usuarios usuario = optionalUsuario.get();
+        usuario.setContrasena(passwordEncoder.encode(nuevaContrasena));
+        usuarioService.save(usuario);
+
+        session.removeAttribute("resetEmail");
+        session.removeAttribute("resetCode");
+
+        return "redirect:/?resetSuccess=true";
     }
 
     @GetMapping("/cerrar")

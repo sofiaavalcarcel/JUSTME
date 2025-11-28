@@ -254,6 +254,78 @@ public class EmailService {
         return destinatario != null && !destinatario.isEmpty() && destinatario.contains("@");
     }
 
+    public void enviarCorreoRecuperacionContrasena(String destinatario, String nombre, String codigo) {
+        if (!validarDestinatario(destinatario)) {
+            logger.warn("Destinatario no válido en recuperación de contraseña: {}", destinatario);
+            return;
+        }
+
+        try {
+            MimeMessage mensaje = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, "UTF-8");
+
+            helper.setTo(destinatario);
+            helper.setSubject("Recuperación de contraseña - JUSTME");
+
+            String saludoNombre = (nombre != null && !nombre.isEmpty()) ? nombre : "Usuario";
+            String cuerpoHtml = construirEmailRecuperacionContrasena(saludoNombre, codigo);
+
+            helper.setText(cuerpoHtml, true);
+            mailSender.send(mensaje);
+
+            logger.info("Correo de recuperación de contraseña enviado a: {}", destinatario);
+        } catch (MessagingException e) {
+            logger.error("Error al enviar correo de recuperación de contraseña a: {}", destinatario, e);
+        }
+    }
+
+    private String construirEmailRecuperacionContrasena(String nombre, String codigo) {
+        StringBuilder html = new StringBuilder();
+
+        html.append("<!DOCTYPE html>");
+        html.append("<html lang='es'>");
+        html.append("<head>");
+        html.append("    <meta charset='UTF-8'>");
+        html.append("    <meta name='viewport' content='width=device-width, initial-scale=1.0'>");
+        html.append("    <title>Recuperación de contraseña</title>");
+        html.append("    <style>");
+        html.append("        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f4f4f4; }");
+        html.append("        .container { max-width: 600px; margin: 0 auto; background: white; }");
+        html.append("        .header { background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: white; padding: 40px 30px; text-align: center; }");
+        html.append("        .header h1 { margin: 0; font-size: 26px; font-weight: bold; }");
+        html.append("        .header p { margin: 10px 0 0 0; opacity: 0.9; }");
+        html.append("        .content { padding: 40px 30px; }");
+        html.append("        .greeting { color: #ea580c; font-size: 22px; margin-bottom: 18px; }");
+        html.append("        .code-box { background: #fff7ed; border-radius: 10px; padding: 20px; text-align: center; border: 1px solid #fed7aa; margin: 20px 0; }");
+        html.append("        .code { font-size: 32px; letter-spacing: 6px; font-weight: bold; color: #c2410c; }");
+        html.append("        .footer { background: #1f2937; color: white; padding: 24px; text-align: center; font-size: 13px; }");
+        html.append("    </style>");
+        html.append("</head>");
+        html.append("<body>");
+        html.append("    <div class='container'>");
+        html.append("        <div class='header'>");
+        html.append("            <h1>Recuperación de contraseña</h1>");
+        html.append("            <p>Hemos recibido una solicitud para restablecer tu contraseña</p>");
+        html.append("        </div>");
+        html.append("        <div class='content'>");
+        html.append("            <div class='greeting'>Hola ").append(nombre).append("!</div>");
+        html.append("            <p>Utiliza el siguiente código para continuar con el proceso de recuperación de tu contraseña en JUSTME:</p>");
+        html.append("            <div class='code-box'>");
+        html.append("                <div class='code'>").append(codigo).append("</div>");
+        html.append("            </div>");
+        html.append("            <p>Si no solicitaste este cambio, puedes ignorar este correo. Tu contraseña actual seguirá siendo válida.</p>");
+        html.append("        </div>");
+        html.append("        <div class='footer'>");
+        html.append("            <p>&copy; 2025 JUSTME. Todos los derechos reservados.</p>");
+        html.append("            <p>Este es un correo automático, por favor no respondas a este mensaje.</p>");
+        html.append("        </div>");
+        html.append("    </div>");
+        html.append("</body>");
+        html.append("</html>");
+
+        return html.toString();
+    }
+
     /**
      * Construye el cuerpo del correo de bienvenida.
      *

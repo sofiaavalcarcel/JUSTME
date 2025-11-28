@@ -1,5 +1,19 @@
 
 document.addEventListener('DOMContentLoaded', () => {
+	// SweetAlert para contraseña cambiada correctamente
+	try {
+		const params = new URLSearchParams(window.location.search);
+		if (typeof Swal !== 'undefined' && params.get('resetSuccess') === 'true') {
+			Swal.fire({
+				icon: 'success',
+				title: 'Contraseña actualizada',
+				text: 'Tu contraseña se cambió correctamente. Ahora puedes iniciar sesión con tu nueva contraseña.',
+				confirmButtonText: 'Aceptar'
+			});
+		}
+	} catch (e) {
+		console.error('Error evaluando parámetros de URL para SweetAlert', e);
+	}
 	// ================================
 	// Datos de servicios
 	// ================================
@@ -196,5 +210,28 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 		});
 	}
+
+	// Toggle mostrar/ocultar contraseña en login
+	document.querySelectorAll('.toggle-password').forEach(btn => {
+		btn.addEventListener('click', () => {
+			const targetId = btn.getAttribute('data-target');
+			const input = document.getElementById(targetId);
+			const icon = btn.querySelector('i');
+			if (!input) return;
+			if (input.type === 'password') {
+				input.type = 'text';
+				if (icon) {
+					icon.classList.remove('fa-eye');
+					icon.classList.add('fa-eye-slash');
+				}
+			} else {
+				input.type = 'password';
+				if (icon) {
+					icon.classList.remove('fa-eye-slash');
+					icon.classList.add('fa-eye');
+				}
+			}
+		});
+	});
 });
 

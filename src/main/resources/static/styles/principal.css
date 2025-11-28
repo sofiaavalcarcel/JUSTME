@@ -798,6 +798,12 @@ nav {
 	color: #fff;
 }
 
+.password-label-with-icon {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
 .modal .form-group input {
 	width: 100%;
 	padding: 0.8rem;
@@ -813,6 +819,40 @@ nav {
 	outline: none;
 	border-color: #e16bff;
 	background: rgba(255, 255, 255, 0.2);
+}
+
+/* Contenedor para inputs de contraseña con icono de ojo */
+.password-wrapper {
+	position: relative;
+}
+
+.password-input-container {
+	position: relative;
+}
+
+.password-input-container input[type="password"],
+.password-input-container input[type="text"] {
+	width: 100%;
+	padding-right: 2.5rem; /* espacio para el icono */
+}
+
+.toggle-password {
+	position: absolute;
+	top: 50%;
+	right: 0.75rem;
+	transform: translateY(-50%);
+	background: transparent;
+	border: none;
+	color: #000000;
+	cursor: pointer;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.toggle-password i {
+	font-size: 1rem;
 }
 
 .modal-btn {
