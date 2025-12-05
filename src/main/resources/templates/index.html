@@ -50,31 +50,30 @@
 	</div>
 
 	<header>
-		<nav>
-			<div class="card">
-				<div class="loader">
-					<p>Just</p>
-					<div class="words">
-						<span class="word">Me</span>
-						<span class="word">Beauty</span>
-						<span class="word">Me</span>
-						<span class="word">Stylish</span>
-						<span class="word">Me</span>
-					</div>
-				</div>
-			</div>
-			<ul class="nav-links">
-				<li><a href="#home">Inicio</a></li>
-				<li><a href="#services">Servicios</a></li>
-				<li><a href="#about">Nosotros</a></li>
-				<li><a th:href="@{/contactanos}">Contactanos</a></li>
-
-			</ul>
-			<div class="auth-buttons">
-				<button class="login">Iniciar Sesión</button>
-				<a th:href="@{/registro}" class="btn-custom">Regístrate</a>
-			</div>
-		</nav>
+	    <nav>
+	        <!-- LOGO ANIMADO - IZQUIERDA -->
+	        <div class="card">
+	            <div class="loader">
+	                <p>Just</p>
+	                <div class="words">
+	                    <span class="word">Me</span>
+	                    <span class="word">Beauty</span>
+	                    <span class="word">Me</span>
+	                    <span class="word">Stylish</span>
+	                    <span class="word">Me</span>
+	                </div>
+	            </div>
+	        </div>
+	        
+	        <!-- BOTONES DE AUTENTICACIÓN - DERECHA -->
+	        <div class="auth-buttons">
+	            <button class="login" id="desktopLoginBtn">Iniciar Sesión</button>
+	            <a th:href="@{/registro}" class="btn-custom">Regístrate</a>
+	        </div>
+	    </nav>
+	    
+	    <!-- OVERLAY PARA FONDO OSCURO - SOLO EN MÓVIL -->
+	    <div class="menu-overlay" id="menuOverlay"></div>
 	</header>
 
 	<section class="hero" id="home">
