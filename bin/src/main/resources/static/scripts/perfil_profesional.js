@@ -59,6 +59,25 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
+    // Mostrar/ocultar contraseñas
+    const toggleButtons = document.querySelectorAll('.toggle-password');
+    toggleButtons.forEach(btn => {
+        btn.addEventListener('click', function () {
+            const targetId = this.getAttribute('data-target');
+            const input = document.getElementById(targetId);
+            if (!input) return;
+
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+
+            const icon = this.querySelector('i');
+            if (icon) {
+                icon.classList.toggle('fa-eye');
+                icon.classList.toggle('fa-eye-slash');
+            }
+        });
+    });
+
     // Mostrar modal de configuración
     configBtn.addEventListener("click", function (e) {
         e.preventDefault();

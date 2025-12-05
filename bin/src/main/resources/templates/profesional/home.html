@@ -12,7 +12,6 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
 </head>
 
 <body>
@@ -71,6 +70,10 @@
 			</div>
 		</div>
 	</header>
+
+	<!-- Contenedores ocultos para mensajes flash -->
+	<div id="flash-success" th:if="${success}" th:data-message="${success}" style="display: none;"></div>
+	<div id="flash-error" th:if="${error}" th:data-message="${error}" style="display: none;"></div>
 
 	<!-- Main Content -->
 	<main class="main">
@@ -166,58 +169,58 @@
 
 
 		<!-- 🔹 Citas -->
-		<section class="services-section">
+		<section class="appointments-section" id="citas">
 			<div class="container">
 				<div class="section-header">
-					<h3>
-						Mis citas
-						<br />
-						<span class="badge" th:text="${'Total: ' + citas.size() + ' citas'}">Total: 0 citas</span>
-					</h3>
+					<h3>Mis próximas citas</h3>
+					<a href="#" class="view-all">Ver todas</a>
 				</div>
-
-				<section class="panel">
-					<div class="citas-container">
-						<div class="cita-card" th:each="cita : ${citas}">
-							<div class="card-content">
-								<p><i class="fas fa-calendar-alt"></i> <strong>Fecha y Hora:</strong>
-									<span th:text="${#dates.format(cita.fecha_hora, 'yyyy-MM-dd HH:mm')}"></span>
-								</p>
-								<p><i class="fas fa-map-marker-alt"></i> <strong>Dirección:</strong>
-									<span th:text="${cita.direccion_servicio}"></span>
-								</p>
-								<p><i class="fas fa-info-circle"></i> <strong>Estado:</strong>
-									<span th:text="${cita.estado_cita}"></span>
-								</p>
-								<p><i class="fas fa-dollar-sign"></i> <strong>Precio:</strong>
-									<span class="price"
-										th:text="${#strings.concat('$', #numbers.formatDecimal(cita.precio, 0, 'POINT', 0, 'POINT'))}"></span>
-								</p>
-								<p><i class="fas fa-user-edit"></i> <strong>Observaciones Cliente:</strong>
-									<span th:text="${cita.observacionesCl}"></span>
-								</p>
-								<p><i class="fas fa-user-cog"></i> <strong>Observaciones Laburante:</strong>
-									<span th:text="${cita.observacionesLb}"></span>
-								</p>
-								<p><i class="fas fa-edit"></i> <strong>Fecha Edición:</strong>
-									<span th:text="${cita.fechaEdicion}"></span>
-								</p>
-							</div>
-
-							<div class="card-actions">
-								<a th:href="@{/citas/editar/{id}(id=${cita.idcitas_reservas})}"
-									class="btn-action btn-edit" title="Editar cita">
-									<i class="fas fa-pen"></i>
-									<span>Editar</span>
-								</a>
-							</div>
+				<div class="appointments-list">
+					<div th:if="${citas == null or #lists.isEmpty(citas)}">
+						<p>No tienes citas programadas.</p>
+					</div>
+					<div th:each="cita : ${citas}" class="appointment-card">
+						<div class="appointment-info">
+							<h4 th:text="${cita.servicio.nombre_servicios}">Nombre Servicio</h4>
+							<p><i class="fas fa-user"></i>
+								<span th:text="${cita.usuario != null ? cita.usuario.nombre + ' ' + cita.usuario.apellido : 'Cliente sin nombre'}">
+									Nombre del cliente
+								</span>
+							</p>
+							<p th:if="${cita.usuario != null and cita.usuario.email != null}">
+								<i class="fas fa-envelope"></i>
+								<span th:text="${cita.usuario.email}">correo@ejemplo.com</span>
+							</p>
+							<p th:if="${cita.usuario != null and cita.usuario.numero != null}">
+								<i class="fas fa-phone"></i>
+								<span th:text="${cita.usuario.numero}">+57 000 000 0000</span>
+							</p>
+							<p><i class="fas fa-calendar-alt"></i> <span th:text="${#dates.format(cita.fechaHora, 'dd/MM/yyyy HH:mm')}">Fecha</span></p>
+							<p><i class="fas fa-map-marker-alt"></i> <span th:text="${cita.direccion}">Dirección</span></p>
+							<p><i class="fas fa-dollar-sign"></i> <span th:text="${cita.precio}">Precio</span></p>
+							<p><i class="fas fa-info-circle"></i>
+								<span>Estado actual: </span>
+								<span th:text="${cita.estado}">En espera</span>
+							</p>
+							<form th:action="@{/profesional/citas/actualizar-estado}" method="post" class="appointment-status-form">
+								<input type="hidden" name="idCita" th:value="${cita.idCita}" />
+								<label for="estado-[[${cita.idCita}]]">Cambiar estado:</label>
+								<select th:id="${'estado-' + cita.idCita}" name="estado">
+									<option th:value="'En espera'" th:selected="${cita.estado == 'En espera'}">En espera</option>
+									<option th:value="'Confirmada'" th:selected="${cita.estado == 'Confirmada'}">Confirmada</option>
+									<option th:value="'En proceso'" th:selected="${cita.estado == 'En proceso'}">En proceso</option>
+									<option th:value="'Finalizada'" th:selected="${cita.estado == 'Finalizada'}">Finalizada</option>
+								</select>
+								<button type="submit" class="btn-action btn-edit" style="margin-top: 8px;">
+									<i class="fas fa-save"></i>
+									<span>Actualizar estado</span>
+								</button>
+							</form>
 						</div>
 					</div>
-				</section>
+				</div>
 			</div>
 		</section>
-
-
 
 		<section class="reviews-section">
 			<div class="container">
@@ -349,6 +352,74 @@
 					}
 				});
 			});
+		});
+	</script>
+
+	<!-- Script SweetAlert para animación de carga de servicios -->
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const successEl = document.getElementById('flash-success');
+			const errorEl = document.getElementById('flash-error');
+
+			// Si hay error, mostrar alerta simple de error
+			if (errorEl) {
+				const errorMsg = errorEl.dataset.message || 'Ocurrió un error al procesar el archivo.';
+				Swal.fire({
+					icon: 'error',
+					title: 'Error al cargar servicios',
+					text: errorMsg,
+					confirmButtonColor: '#d33'
+				});
+				return;
+			}
+
+			// Si hay éxito, mostrar animación de "cargando servicios"
+			if (successEl) {
+				const msg = successEl.dataset.message || '';
+				const match = msg.match(/(\d+)/);
+				const total = match ? parseInt(match[1], 10) : 0;
+
+				// Duración del loader en función de la cantidad (entre 0.8s y 4s)
+				let timer = total > 0 ? total * 40 : 1000;
+				if (timer < 800) timer = 800;
+				if (timer > 4000) timer = 4000;
+
+				let current = 0;
+				const steps = 30;
+				const stepValue = total > 0 ? Math.max(1, Math.round(total / steps)) : 1;
+				const stepTime = Math.max(50, Math.round(timer / steps));
+
+				Swal.fire({
+					title: 'Cargando servicios...',
+					html: '<span>Se están registrando <b id="swal-count">0</b> servicios</span>',
+					allowOutsideClick: false,
+					allowEscapeKey: false,
+					showConfirmButton: false,
+					timer: timer,
+					timerProgressBar: true,
+					didOpen: () => {
+						Swal.showLoading();
+						const countEl = document.getElementById('swal-count');
+						const interval = setInterval(() => {
+							current += stepValue;
+							if (current >= total) {
+								current = total;
+								clearInterval(interval);
+							}
+							if (countEl) {
+								countEl.textContent = total > 0 ? current : 0;
+							}
+						}, stepTime);
+					}
+				}).then(() => {
+					Swal.fire({
+						icon: 'success',
+						title: 'Servicios cargados',
+						text: msg || 'Los servicios se han cargado correctamente.',
+						confirmButtonColor: '#3085d6'
+					});
+				});
+			}
 		});
 	</script>
 

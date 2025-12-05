@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/styles/registrar.css}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -149,19 +150,45 @@
             const termsError = document.getElementById('termsError');
             const passwordError = document.getElementById('passwordError');
             const termsCheckbox = document.getElementById('terms');
+
+            // SweetAlert2 para mostrar error si el correo ya existe
+            const params = new URLSearchParams(window.location.search);
+            const error = params.get('error');
+            if (error === 'email') {
+                Swal.fire({
+                    title: 'Correo ya registrado',
+                    text: 'El correo electrónico ingresado ya se encuentra registrado. Intenta con otro o inicia sesión.',
+                    icon: 'error',
+                    confirmButtonColor: '#e16bff'
+                });
+            }
             
+            // Validar complejidad de contraseña: mínimo 8 caracteres, mayúscula, número y símbolo
+            function isPasswordStrong(value) {
+                const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+                return regex.test(value);
+            }
+
             function validatePasswords() {
+                // Reset visual
+                passwordError.classList.remove('show');
+
                 if (password.value && confirmPassword.value) {
+                    // Validar coincidencia
                     if (password.value === confirmPassword.value) {
-                        // Contraseñas coinciden
                         passwordMatch.innerHTML = '<i class="fas fa-check"></i><span>Las contraseñas coinciden</span>';
                         passwordMatch.className = 'password-match success show';
                         confirmPassword.style.borderColor = 'var(--success-color)';
-                        passwordError.classList.remove('show');
                     } else {
-                        // Contraseñas no coinciden
                         passwordMatch.innerHTML = '<i class="fas fa-times"></i><span>Las contraseñas no coinciden</span>';
                         passwordMatch.className = 'password-match error show';
+                        confirmPassword.style.borderColor = 'var(--error-color)';
+                    }
+
+                    // Validar complejidad solo si coinciden
+                    if (password.value === confirmPassword.value && !isPasswordStrong(password.value)) {
+                        passwordError.innerHTML = '<i class="fas fa-exclamation-circle"></i><span>La contraseña debe tener mínimo 8 caracteres, incluir una mayúscula, un número y un símbolo.</span>';
+                        passwordError.classList.add('show');
                         confirmPassword.style.borderColor = 'var(--error-color)';
                     }
                 } else {
@@ -198,9 +225,22 @@
                     }
                     
                     // Validación de contraseñas
-                    if (password && confirmPassword && password.value !== confirmPassword.value) {
-                        if (passwordError) passwordError.classList.add('show');
-                        hasError = true;
+                    if (password && confirmPassword) {
+                        // No coinciden
+                        if (password.value !== confirmPassword.value) {
+                            if (passwordError) {
+                                passwordError.innerHTML = '<i class="fas fa-exclamation-circle"></i><span>Las contraseñas no coinciden</span>';
+                                passwordError.classList.add('show');
+                            }
+                            hasError = true;
+                        } else if (!isPasswordStrong(password.value)) {
+                            // Coinciden pero no cumplen complejidad
+                            if (passwordError) {
+                                passwordError.innerHTML = '<i class="fas fa-exclamation-circle"></i><span>La contraseña debe tener mínimo 8 caracteres, incluir una mayúscula, un número y un símbolo.</span>';
+                                passwordError.classList.add('show');
+                            }
+                            hasError = true;
+                        }
                     }
                     
                     // Si hay errores, prevenir el envío

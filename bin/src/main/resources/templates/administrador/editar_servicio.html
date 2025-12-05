@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar servicio | JustMe</title>
+    <link rel="stylesheet" th:href="@{/assetsADMIN/styles/style.css}">
+</head>
+<body>
+<div class="app">
+    <!-- SIDEBAR IZQUIERDA -->
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="logo">JM</div>
+            <div class="brand-text">
+                <span class="brand-title">Just<span class="accent">Me</span></span>
+                <span class="brand-sub">Panel Admin</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-title">Secciones</div>
+            <nav class="menu">
+                <a class="menu-item" th:href="@{/administrador}"><span class="dot"></span> Panel</a>
+                <a class="menu-item active" th:href="@{/administrador/servicios}"><span class="dot"></span> Servicios</a>
+                <a class="menu-item" th:href="@{/administrador/usuarios}"><span class="dot"></span> Usuarios</a>
+                <a class="menu-item" th:href="@{/administrador/citas}"><span class="dot"></span> Citas</a>
+                <a class="menu-item" th:href="@{/administrador/pagos}"><span class="dot"></span> Pagos</a>
+                <a class="menu-item" th:href="@{/cerrar}"><span class="dot"></span> Cerrar Sesión</a>
+            </nav>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="mini-logo">⟡</div>
+            <div class="footer-text">JustMe ©</div>
+        </div>
+    </aside>
+
+    <!-- OVERLAY PARA MÓVIL -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main">
+        <header class="topbar">
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+            <div class="crumbs">Servicios / <span>Editar servicio</span></div>
+            <div class="top-actions">
+                <div class="avatar" title="Admin">A</div>
+            </div>
+        </header>
+
+        <section class="services-section">
+            <div class="container">
+                <div class="section-header">
+                    <h3>Editar servicio</h3>
+                </div>
+                <div class="card col-2">
+                    <div class="wrap">
+                        <section class="panel">
+                            <form th:action="@{/administrador/servicios/guardar}" th:object="${servicio}" method="post">
+                                <input type="hidden" th:field="*{idservicios}" />
+                                <div style="display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px;">
+                                    <div>
+                                        <div class="form-group">
+                                            <label>Nombre del servicio</label>
+                                            <input type="text" th:field="*{nombre_servicios}" required />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Categoría</label>
+                                            <input type="text" th:field="*{categoria}" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Precio base</label>
+                                            <input type="number" step="0.01" th:field="*{precio_base}" required />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="form-group">
+                                            <label>Estado</label>
+                                            <input type="text" th:field="*{estado}" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Descripción</label>
+                                            <textarea th:field="*{descripcion}" rows="5" style="resize:vertical;"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="toolbar" style="margin-top: 16px; display:flex; gap:8px;">
+                                    <button type="submit" class="btn-edit">Guardar</button>
+                                    <a th:href="@{/administrador/servicios}" class="btn-delete">Cancelar</a>
+                                </div>
+                            </form>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- SIDEBAR DERECHA SIMPLE -->
+    <aside class="rightbar">
+        <div class="card">
+            <h3>Acciones rápidas</h3>
+            <ul class="activity">
+                <li><span class="avatar sm">S</span><span>Edición de servicio</span></li>
+            </ul>
+        </div>
+    </aside>
+</div>
+
+<script th:src="@{/assetsADMIN/scripts/script.js}"></script>
+</body>
+</html>

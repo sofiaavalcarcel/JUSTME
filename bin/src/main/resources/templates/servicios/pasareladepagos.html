@@ -113,6 +113,13 @@
             </div>
 
             <div class="coupon-section">
+                <label for="service-datetime">Escoja fecha y hora del servicio</label>
+                <div class="coupon-input">
+                    <input type="datetime-local" id="service-datetime">
+                </div>
+            </div>
+
+            <div class="coupon-section">
                 <label for="coupon">Cupón</label>
                 <div class="coupon-input">
                     <input type="text" id="coupon" placeholder="Ingrese un cupón">
@@ -123,15 +130,15 @@
             <div class="summary-total">
                 <div class="total-row">
                     <span>Subtotal</span>
-                    <span th:text="${'$' + #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 2, 'COMMA')}">$0.00</span>
+                    <span id="subtotal-amount" th:text="${'$' + #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 2, 'COMMA')}">$0.00</span>
                 </div>
                 <div class="total-row">
                     <span>Descuento</span>
-                    <span>$0</span>
+                    <span id="discount-amount">$0</span>
                 </div>
                 <div class="total-row grand-total">
                     <span>Total</span>
-                    <span th:text="${'$' + #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 2, 'COMMA')}">$0.00</span>
+                    <span id="total-amount" th:text="${'$' + #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 2, 'COMMA')}">$0.00</span>
                 </div>
             </div>
 
@@ -144,6 +151,7 @@
 
     <script th:inline="javascript">
         const servicePrice = /*[[${servicio.precio_base}]]*/ 0;
+        const serviceId = /*[[${servicio.id}]]*/ 0;
     </script>
 
     <script>
@@ -271,9 +279,71 @@
         const form = document.getElementById("payment-form");
         const message = document.getElementById("payment-message");
         const button = document.getElementById("submit");
+        const serviceDateTimeInput = document.getElementById("service-datetime");
+
+        // Establecer el mínimo permitido para la fecha/hora (ahora mismo)
+        if (serviceDateTimeInput) {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const minValue = `${year}-${month}-${day}T${hours}:${minutes}`;
+            serviceDateTimeInput.min = minValue;
+        }
+
+        // Variables de precio y elementos del resumen (para manejar cupones)
+        let originalPrice = servicePrice;
+        let discountAmount = 0;
+        let finalPrice = originalPrice;
+        let couponApplied = false;
+
+        const subtotalAmountEl = document.getElementById('subtotal-amount');
+        const discountAmountEl = document.getElementById('discount-amount');
+        const totalAmountEl = document.getElementById('total-amount');
+        const couponInput = document.getElementById('coupon');
+
+        function formatCurrency(amount) {
+            if (isNaN(amount)) return '$0.00';
+            return '$' + amount.toLocaleString('es-CO', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
 
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
+
+            // Validar que el usuario haya escogido fecha y hora
+            const serviceDateTime = serviceDateTimeInput.value;
+            if (!serviceDateTime) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Fecha y hora requeridas',
+                    text: 'Por favor selecciona la fecha y hora en la que deseas el servicio.',
+                    confirmButtonColor: '#8b5cf6',
+                    background: 'var(--card-bg)',
+                    color: 'var(--dark-color)'
+                });
+                return;
+            }
+
+            // Validar que la fecha/hora no sea en el pasado
+            const selected = new Date(serviceDateTime);
+            const now = new Date();
+            if (selected.getTime() < now.getTime()) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Fecha inválida',
+                    text: 'La fecha y hora del servicio no puede ser en el pasado.',
+                    confirmButtonColor: '#8b5cf6',
+                    background: 'var(--card-bg)',
+                    color: 'var(--dark-color)'
+                });
+                return;
+            }
+
             button.disabled = true;
             button.classList.add('loading');
             button.innerHTML = '<span id="button-text">Procesando...</span>';
@@ -284,7 +354,7 @@
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify({
-                        amount: Math.round(servicePrice * 100), // Convertir a centavos
+                        amount: Math.round(finalPrice * 100), // Convertir a centavos (con descuento si aplica)
                         currency: 'cop'
                     })
                 });
@@ -318,15 +388,44 @@
                     button.classList.remove('loading');
                     button.innerHTML = '<span id="button-text">Pagar Ahora</span>';
                 } else if (paymentIntent.status === "succeeded") {
+                    try {
+                        await fetch("/api/stripe/registrar-pago", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                servicioId: serviceId,
+                                amount: finalPrice,
+                                currency: 'cop',
+                                paymentIntentId: paymentIntent.id,
+                                status: paymentIntent.status,
+                                serviceDateTime: serviceDateTime
+                            })
+                        });
+                    } catch (e) {
+                        console.error('Error registrando el pago en el backend', e);
+                    }
+
                     Swal.fire({
                         icon: 'success',
-                        title: '¡Pago exitoso!',
-                        text: 'Tu pago se ha procesado correctamente. Serás redirigido en breve.',
-                        confirmButtonColor: '#8b5cf6',
+                        title: '¡Pago completado!',
+                        html: '<div style="font-size:14px; margin-top:8px;">' +
+                              '<p style="margin:4px 0;">Tu pago se procesó correctamente.</p>' +
+                              '<p style="margin:4px 0; opacity:0.9;">Estamos creando tu cita y en unos segundos te llevaremos al inicio.</p>' +
+                              '</div>',
                         background: 'var(--card-bg)',
                         color: 'var(--dark-color)',
-                        timer: 3000,
-                        showConfirmButton: false
+                        confirmButtonColor: '#8b5cf6',
+                        showConfirmButton: false,
+                        timer: 2600,
+                        timerProgressBar: true,
+                        backdrop: 'rgba(15,23,42,0.55)',
+                        didOpen: () => {
+                            const popup = Swal.getPopup();
+                            if (popup) {
+                                popup.style.borderRadius = '18px';
+                                popup.style.boxShadow = '0 18px 60px rgba(15,23,42,0.35)';
+                            }
+                        }
                     }).then(() => {
                         // Redirigir a /inicio después del pago exitoso
                         window.location.href = '/inicio';
@@ -348,6 +447,68 @@
             }
         });
 
+        // Manejo del cupón JUSTME (10% descuento)
+        document.querySelector('.apply-btn').addEventListener('click', function (e) {
+            e.preventDefault();
+            const rawCode = couponInput ? couponInput.value.trim() : '';
+            const couponCode = rawCode.toUpperCase();
+
+            if (!couponCode) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Cupón vacío',
+                    text: 'Por favor ingresa un código de cupón válido.',
+                    confirmButtonColor: '#8b5cf6',
+                    background: 'var(--card-bg)',
+                    color: 'var(--dark-color)'
+                });
+                return;
+            }
+
+            if (couponCode === 'JUSTME') {
+                if (couponApplied) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Cupón ya aplicado',
+                        text: 'El cupón JUSTME ya fue aplicado al total.',
+                        confirmButtonColor: '#8b5cf6',
+                        background: 'var(--card-bg)',
+                        color: 'var(--dark-color)'
+                    });
+                    return;
+                }
+
+                couponApplied = true;
+                discountAmount = originalPrice * 0.10;
+                finalPrice = originalPrice - discountAmount;
+
+                if (discountAmountEl) {
+                    discountAmountEl.textContent = '-' + formatCurrency(discountAmount);
+                }
+                if (totalAmountEl) {
+                    totalAmountEl.textContent = formatCurrency(finalPrice);
+                }
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Cupón aplicado',
+                    text: 'Se aplicó un 10% de descuento con el cupón JUSTME.',
+                    confirmButtonColor: '#8b5cf6',
+                    background: 'var(--card-bg)',
+                    color: 'var(--dark-color)'
+                });
+            } else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Cupón inválido',
+                    text: 'Este código de cupón no es válido.',
+                    confirmButtonColor: '#8b5cf6',
+                    background: 'var(--card-bg)',
+                    color: 'var(--dark-color)'
+                });
+            }
+        });
+
         // Manejar errores de validación en tiempo real
         cardNumber.on('change', (event) => {
             if (event.error) {
@@ -364,32 +525,6 @@
         cardCvc.on('change', (event) => {
             if (event.error) {
                 console.log('Error en CVC:', event.error.message);
-            }
-        });
-
-        // Manejo del cupón
-        document.querySelector('.apply-btn').addEventListener('click', function (e) {
-            e.preventDefault();
-            const couponCode = document.getElementById('coupon').value;
-
-            if (couponCode) {
-                Swal.fire({
-                    icon: 'info',
-                    title: 'Cupón aplicado',
-                    text: 'El código de cupón ha sido aplicado correctamente.',
-                    confirmButtonColor: '#8b5cf6',
-                    background: 'var(--card-bg)',
-                    color: 'var(--dark-color)'
-                });
-            } else {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Cupón vacío',
-                    text: 'Por favor ingresa un código de cupón válido.',
-                    confirmButtonColor: '#8b5cf6',
-                    background: 'var(--card-bg)',
-                    color: 'var(--dark-color)'
-                });
             }
         });
 

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pagos | JustMe — Admin</title>
+    <link rel="stylesheet" th:href="@{/assetsADMIN/styles/style.css}" />
+</head>
+<body>
+<div class="app">
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="logo">JM</div>
+            <div class="brand-text">
+                <span class="brand-title">Just<span class="accent">Me</span></span>
+                <span class="brand-sub">Panel Admin</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+        </div>
+        <div class="sidebar-section">
+            <div class="sidebar-title">Secciones</div>
+            <nav class="menu">
+                <a class="menu-item" th:href="@{/administrador}"><span class="dot"></span> Panel</a>
+                <a class="menu-item" th:href="@{/administrador/servicios}"><span class="dot"></span> Servicios</a>
+                <a class="menu-item" th:href="@{/administrador/usuarios}"><span class="dot"></span> Usuarios</a>
+                <a class="menu-item" th:href="@{/administrador/citas}"><span class="dot"></span> Citas</a>
+                <a class="menu-item active" th:href="@{/administrador/pagos}"><span class="dot"></span> Pagos</a>
+                <a class="menu-item" th:href="@{/cerrar}"><span class="dot"></span> Cerrar Sesión</a>
+            </nav>
+        </div>
+        <div class="sidebar-footer">
+            <div class="mini-logo">⟡</div>
+            <div class="footer-text">JustMe ©</div>
+        </div>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <main class="main">
+        <header class="topbar">
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+            <div class="crumbs">Pagos / <span>Listado</span></div>
+            <div class="top-actions">
+                <div class="avatar" title="Admin">A</div>
+            </div>
+        </header>
+
+        <section class="services-section">
+            <div class="container">
+                <div class="section-header">
+                    <h3>Pagos</h3>
+                </div>
+                <div class="card col-2">
+                    <div class="wrap">
+                        <section class="panel">
+                            <div class="toolbar">
+                                <h4>Pagos</h4>
+                            </div>
+                            <div style="overflow:auto">
+                                <table id="tablaPagos">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Usuario</th>
+                                        <th>Monto</th>
+                                        <th>Moneda</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="p : ${pagos}">
+                                        <td th:text="${p.idpago}">1</td>
+                                        <td th:text="${p.usuario != null ? p.usuario.email : 'N/A'}">usuario@ejemplo.com</td>
+                                        <td th:text="${#strings.concat('$', #numbers.formatDecimal(p.monto,0,'POINT',0,'POINT'))}">$0</td>
+                                        <td th:text="${p.moneda}">COP</td>
+                                        <td th:text="${p.estado}">COMPLETADO</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <div class="pagination" id="paginacionPagos" style="margin-top:8px;">
+                    <button class="pagination-btn" id="pagosPrev">← Anterior</button>
+                    <span class="pagination-info" id="pagosInfo">Página 1</span>
+                    <button class="pagination-btn" id="pagosNext">Siguiente →</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <aside class="rightbar">
+        <div class="card">
+            <h3>Acciones rápidas</h3>
+            <ul class="activity">
+                <li><span class="avatar sm">P</span><span>Revisión de pagos</span></li>
+            </ul>
+        </div>
+    </aside>
+</div>
+
+<script th:src="@{/assetsADMIN/scripts/script.js}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const pageSizePagos = 5;
+        function setupTable(tableId, rowSelector, searchInputId, prevBtnId, nextBtnId, infoId, pageSize) {
+            const table = document.getElementById(tableId);
+            if (!table) return;
+            const rows = Array.from(table.querySelectorAll(rowSelector));
+            const prevBtn = document.getElementById(prevBtnId);
+            const nextBtn = document.getElementById(nextBtnId);
+            const info = document.getElementById(infoId);
+            let filteredRows = rows.slice();
+            let currentPage = 1;
+            function render() {
+                rows.forEach(r => r.style.display = 'none');
+                const total = filteredRows.length;
+                const totalPages = Math.max(1, Math.ceil(total / pageSize));
+                if (currentPage > totalPages) currentPage = totalPages;
+                const start = (currentPage - 1) * pageSize;
+                const end = start + pageSize;
+                filteredRows.slice(start, end).forEach(r => r.style.display = 'table-row');
+                if (info) info.textContent = `Página ${currentPage} de ${totalPages}`;
+                if (prevBtn) prevBtn.disabled = currentPage === 1;
+                if (nextBtn) nextBtn.disabled = currentPage === totalPages;
+            }
+            if (prevBtn) prevBtn.addEventListener('click', function () { if (currentPage > 1) { currentPage--; render(); } });
+            if (nextBtn) nextBtn.addEventListener('click', function () { const totalPages = Math.max(1, Math.ceil(filteredRows.length / pageSize)); if (currentPage < totalPages) { currentPage++; render(); } });
+            render();
+        }
+        setupTable('tablaPagos', 'tbody tr', null, 'pagosPrev', 'pagosNext', 'pagosInfo', pageSizePagos);
+    });
+</script>
+</body>
+</html>

@@ -747,6 +747,48 @@ ul {
     line-height: 1.6;
 }
 
+/* Formulario de cambio de estado en tarjetas de citas (panel profesional) */
+.appointment-status-form {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.appointment-status-form label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--dark-color);
+}
+
+.appointment-status-form select {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--light-gray);
+    font-size: 13px;
+    color: var(--dark-color);
+    background-color: #fff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.appointment-status-form select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(225, 107, 255, 0.15);
+}
+
+@media (max-width: 600px) {
+    .appointment-status-form {
+        gap: 4px;
+    }
+
+    .appointment-status-form select {
+        font-size: 12px;
+        padding: 7px 9px;
+    }
+}
+
 /* Footer */
 .footer {
     background-color: var(--dark-color);

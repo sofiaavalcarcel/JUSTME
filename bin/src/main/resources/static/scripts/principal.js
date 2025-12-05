@@ -1,5 +1,19 @@
 
 document.addEventListener('DOMContentLoaded', () => {
+	// SweetAlert para contraseña cambiada correctamente
+	try {
+		const params = new URLSearchParams(window.location.search);
+		if (typeof Swal !== 'undefined' && params.get('resetSuccess') === 'true') {
+			Swal.fire({
+				icon: 'success',
+				title: 'Contraseña actualizada',
+				text: 'Tu contraseña se cambió correctamente. Ahora puedes iniciar sesión con tu nueva contraseña.',
+				confirmButtonText: 'Aceptar'
+			});
+		}
+	} catch (e) {
+		console.error('Error evaluando parámetros de URL para SweetAlert', e);
+	}
 	// ================================
 	// Datos de servicios
 	// ================================
@@ -196,5 +210,149 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 		});
 	}
+
+	// Toggle mostrar/ocultar contraseña en login
+	document.querySelectorAll('.toggle-password').forEach(btn => {
+		btn.addEventListener('click', () => {
+			const targetId = btn.getAttribute('data-target');
+			const input = document.getElementById(targetId);
+			const icon = btn.querySelector('i');
+			if (!input) return;
+			if (input.type === 'password') {
+				input.type = 'text';
+				if (icon) {
+					icon.classList.remove('fa-eye');
+					icon.classList.add('fa-eye-slash');
+				}
+			} else {
+				input.type = 'password';
+				if (icon) {
+					icon.classList.remove('fa-eye-slash');
+					icon.classList.add('fa-eye');
+				}
+			}
+		});
+	});
 });
 
+
+
+// ============================================
+// FUNCIONALIDAD DEL MENÚ HAMBURGUESA
+// ============================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Elementos del menú hamburguesa
+    const hamburgerMenu = document.getElementById('hamburgerMenu');
+    const navLinks = document.getElementById('navLinks');
+    const menuOverlay = document.getElementById('menuOverlay');
+    const body = document.body;
+    const header = document.querySelector('header');
+    
+    // Botones de login
+    const desktopLoginBtn = document.getElementById('desktopLoginBtn');
+    const mobileLoginBtn = document.getElementById('mobileLoginBtn');
+    const loginModal = document.getElementById('loginModal');
+    const modalOverlay = document.getElementById('modalOverlay');
+    
+    // Función para abrir/cerrar el menú
+    function toggleMenu() {
+        hamburgerMenu.classList.toggle('active');
+        navLinks.classList.toggle('active');
+        menuOverlay.classList.toggle('active');
+        body.classList.toggle('menu-open');
+        header.classList.toggle('active');
+    }
+    
+    // Evento para el menú hamburguesa
+    if (hamburgerMenu) {
+        hamburgerMenu.addEventListener('click', toggleMenu);
+    }
+    
+    // Cerrar menú al hacer clic en el overlay
+    if (menuOverlay) {
+        menuOverlay.addEventListener('click', toggleMenu);
+    }
+    
+    // Cerrar menú al hacer clic en un enlace (solo en móvil)
+    if (navLinks) {
+        const navLinksItems = navLinks.querySelectorAll('a');
+        navLinksItems.forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 992) {
+                    toggleMenu();
+                }
+            });
+        });
+    }
+    
+    // Función para abrir modal de login
+    function openLoginModal() {
+        if (loginModal && modalOverlay) {
+            loginModal.classList.add('active');
+            modalOverlay.classList.add('active');
+            body.classList.add('modal-open');
+            
+            // Cerrar menú móvil si está abierto
+            if (window.innerWidth <= 992) {
+                toggleMenu();
+            }
+        }
+    }
+    
+    // Eventos para botones de login
+    if (desktopLoginBtn) {
+        desktopLoginBtn.addEventListener('click', openLoginModal);
+    }
+    
+    if (mobileLoginBtn) {
+        mobileLoginBtn.addEventListener('click', openLoginModal);
+    }
+    
+    // Cerrar menú al cambiar tamaño de ventana (si se hace más grande)
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 992) {
+            // Si estamos en desktop, cerrar menú móvil si está abierto
+            if (hamburgerMenu.classList.contains('active')) {
+                hamburgerMenu.classList.remove('active');
+                navLinks.classList.remove('active');
+                menuOverlay.classList.remove('active');
+                body.classList.remove('menu-open');
+                header.classList.remove('active');
+            }
+        }
+    });
+    
+    // Cerrar menú con tecla ESC
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && hamburgerMenu.classList.contains('active')) {
+            toggleMenu();
+        }
+    });
+});
+
+// Función para el preloader (mantener tu función existente)
+window.addEventListener('load', function() {
+    const preloader = document.getElementById('preloader');
+    const loadingProgress = document.querySelector('.loading-progress');
+    
+    if (preloader && loadingProgress) {
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += Math.random() * 15;
+            if (progress > 100) {
+                progress = 100;
+                clearInterval(interval);
+                
+                setTimeout(() => {
+                    preloader.classList.add('hidden');
+                    
+                    setTimeout(() => {
+                        preloader.style.display = 'none';
+                    }, 500);
+                }, 300);
+            }
+            loadingProgress.style.width = progress + '%';
+        }, 150);
+    }
+});

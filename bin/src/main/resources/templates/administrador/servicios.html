@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Servicios | JustMe — Admin</title>
+    <link rel="stylesheet" th:href="@{/assetsADMIN/styles/style.css}" />
+</head>
+<body>
+<div class="app">
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="logo">JM</div>
+            <div class="brand-text">
+                <span class="brand-title">Just<span class="accent">Me</span></span>
+                <span class="brand-sub">Panel Admin</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+        </div>
+        <div class="sidebar-section">
+            <div class="sidebar-title">Secciones</div>
+            <nav class="menu">
+                <a class="menu-item" th:href="@{/administrador}"><span class="dot"></span> Panel</a>
+                <a class="menu-item active" th:href="@{/administrador/servicios}"><span class="dot"></span> Servicios</a>
+                <a class="menu-item" th:href="@{/administrador/usuarios}"><span class="dot"></span> Usuarios</a>
+                <a class="menu-item" th:href="@{/administrador/citas}"><span class="dot"></span> Citas</a>
+                <a class="menu-item" th:href="@{/administrador/pagos}"><span class="dot"></span> Pagos</a>
+                <a class="menu-item" th:href="@{/cerrar}"><span class="dot"></span> Cerrar Sesión</a>
+            </nav>
+        </div>
+        <div class="sidebar-footer">
+            <div class="mini-logo">⟡</div>
+            <div class="footer-text">JustMe ©</div>
+        </div>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <main class="main">
+        <header class="topbar">
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+            <div class="crumbs">Servicios / <span>Listado</span></div>
+            <div class="top-actions">
+                <div class="avatar" title="Admin">A</div>
+            </div>
+        </header>
+
+        <section class="services-section">
+            <div class="container">
+                <div class="section-header">
+                    <h3>Servicios</h3>
+                </div>
+                <div class="card col-2">
+                    <div class="wrap">
+                        <section class="panel">
+                            <div class="toolbar">
+                                <h4>Servicios</h4>
+                                <div class="search" style="margin-left:auto; max-width: 260px;">
+                                    <input id="searchServicios" type="text" placeholder="Buscar servicio..." />
+                                </div>
+                            </div>
+                            <div style="overflow:auto">
+                                <table id="tablaServicios">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nombre</th>
+                                        <th>Descripción</th>
+                                        <th>Precio Base</th>
+                                        <th>Categoría</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="servicio : ${servicios}">
+                                        <td th:text="${servicio.idservicios}">1</td>
+                                        <td><span class="chip" th:text="${servicio.nombre_servicios}">Servicio</span></td>
+                                        <td th:text="${servicio.descripcion}">Descripción</td>
+                                        <td class="price" th:text="${#strings.concat('$', #numbers.formatDecimal(servicio.precio_base,0,'POINT',0,'POINT'))}"></td>
+                                        <td th:text="${servicio.categoria}">Categoría</td>
+                                        <td><span class="state" th:text="${servicio.estado}">Activo</span></td>
+                                        <td>
+                                            <a th:href="@{/administrador/servicios/editar/{id}(id=${servicio.idservicios})}" class="btn-edit">Editar</a>
+                                            <a th:href="@{/servicios/eliminar/{id}(id=${servicio.idservicios})}" class="btn-delete">Eliminar</a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <div class="pagination" id="paginacionServicios" style="margin-top:8px;">
+                    <button class="pagination-btn" id="serviciosPrev">← Anterior</button>
+                    <span class="pagination-info" id="serviciosInfo">Página 1</span>
+                    <button class="pagination-btn" id="serviciosNext">Siguiente →</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <aside class="rightbar">
+        <div class="card">
+            <h3>Acciones rápidas</h3>
+            <ul class="activity">
+                <li><span class="avatar sm">S</span><span>Gestión de servicios</span></li>
+            </ul>
+        </div>
+    </aside>
+</div>
+
+<script th:src="@{/assetsADMIN/scripts/script.js}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const pageSizeServicios = 5;
+        function setupTable(tableId, rowSelector, searchInputId, prevBtnId, nextBtnId, infoId, pageSize) {
+            const table = document.getElementById(tableId);
+            if (!table) return;
+            const rows = Array.from(table.querySelectorAll(rowSelector));
+            const searchInput = document.getElementById(searchInputId);
+            const prevBtn = document.getElementById(prevBtnId);
+            const nextBtn = document.getElementById(nextBtnId);
+            const info = document.getElementById(infoId);
+            let filteredRows = rows.slice();
+            let currentPage = 1;
+            function applyFilter() {
+                const query = (searchInput?.value || '').toLowerCase();
+                filteredRows = rows.filter(r => r.innerText.toLowerCase().includes(query));
+                currentPage = 1;
+                render();
+            }
+            function render() {
+                rows.forEach(r => r.style.display = 'none');
+                const total = filteredRows.length;
+                const totalPages = Math.max(1, Math.ceil(total / pageSize));
+                if (currentPage > totalPages) currentPage = totalPages;
+                const start = (currentPage - 1) * pageSize;
+                const end = start + pageSize;
+                filteredRows.slice(start, end).forEach(r => r.style.display = 'table-row');
+                if (info) info.textContent = `Página ${currentPage} de ${totalPages}`;
+                if (prevBtn) prevBtn.disabled = currentPage === 1;
+                if (nextBtn) prevBtn.disabled = currentPage === 1;
+                if (nextBtn) nextBtn.disabled = currentPage === totalPages;
+            }
+            if (searchInput) searchInput.addEventListener('input', applyFilter);
+            if (prevBtn) prevBtn.addEventListener('click', function () { if (currentPage > 1) { currentPage--; render(); } });
+            if (nextBtn) nextBtn.addEventListener('click', function () { const totalPages = Math.max(1, Math.ceil(filteredRows.length / pageSize)); if (currentPage < totalPages) { currentPage++; render(); } });
+            render();
+        }
+        setupTable('tablaServicios', 'tbody tr', 'searchServicios', 'serviciosPrev', 'serviciosNext', 'serviciosInfo', pageSizeServicios);
+    });
+</script>
+</body>
+</html>
