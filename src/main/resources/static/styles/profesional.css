@@ -1022,7 +1022,7 @@ ul {
 
 .btn-edit:hover {
   background: var(--primary-color);
-  color: #fff;
+  color: rgb(255, 128, 255);
 }
 
 .btn-delete {
@@ -1307,6 +1307,7 @@ ul {
   margin-top: 16px;
   padding-top: 12px;
   border-top: 1px solid #f0f0f0;
+  width: 100%;
 }
 
 .delete-form {
@@ -1315,24 +1316,37 @@ ul {
 }
 
 .btn-action {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  text-decoration: none;
-  transition: all 0.2s ease;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  min-width: 90px;
-  height: 36px;
-  box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 14px !important; /* Reducir padding lateral */
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    min-width: 90px;
+    max-width: 100px; /* Limitar ancho máximo */
+    height: 36px;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
-
+/* Contenedor interno para texto e icono */
+.btn-action-inner {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    justify-content: center;
+    overflow: hidden;
+}
 .btn-edit {
   background-color: #e8f5e9;
   color: #2e7d32;
@@ -1346,9 +1360,10 @@ ul {
 }
 
 .btn-delete {
-  background-color: #ffebee;
-  color: #c62828;
-  border: 1px solid #ffcdd2;
+    background-color: #ffebee;
+    color: #c62828 !important; /* Forzar color */
+    border: 1px solid #ffcdd2;
+    padding: 8px 12px !important; /* Menos padding lateral */
 }
 
 .btn-delete:hover {
@@ -1357,13 +1372,21 @@ ul {
   box-shadow: 0 4px 8px rgba(198, 40, 40, 0.2);
 }
 
+/* Iconos dentro de botones */
 .btn-action i {
-  font-size: 0.9rem;
-  flex-shrink: 0;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    min-width: 16px;
+    text-align: center;
 }
 
+/* Texto dentro de botones */
 .btn-action span {
-  white-space: nowrap;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 1;
+    min-width: 0; /* Permitir que se reduzca */
 }
 
 /* ==========================================================
@@ -1662,4 +1685,656 @@ ul {
     right: 10px;
     gap: 10px;
   }
+}
+/* Agrega esto al final del archivo CSS */
+
+/* ===== MENÚ HAMBURGUESA ===== */
+.hamburger-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--dark-color);
+    cursor: pointer;
+    padding: 5px;
+    margin-left: auto;
+    margin-right: 15px;
+    z-index: 1002;
+}
+
+.hamburger-btn:hover {
+    color: var(--primary-color);
+}
+
+/* ===== RESPONSIVE ADICIONAL - MEJORADO ===== */
+@media (max-width: 992px) {
+    .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: var(--white);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+    
+    .header .container {
+        flex-wrap: wrap;
+        padding: 12px 15px;
+        position: relative;
+        min-height: 70px;
+    }
+    
+    .hamburger-btn {
+        display: block;
+        order: 2;
+        margin-left: auto;
+        margin-right: 15px;
+        background: var(--secondary-color);
+        width: 44px;
+        height: 44px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+    }
+    
+    .hamburger-btn:hover {
+        background: var(--primary-color);
+        color: white;
+    }
+    
+    .logo {
+        order: 1;
+        margin-bottom: 0;
+    }
+    
+    .logo h1 {
+        font-size: 24px;
+    }
+    
+    .user-menu {
+        order: 3;
+        margin-top: 0;
+        margin-left: 0;
+    }
+    
+    .user-profile {
+        padding: 6px 10px;
+        background: var(--secondary-color);
+        border-radius: 25px;
+        transition: all 0.3s;
+    }
+    
+    .user-profile:hover {
+        background: var(--primary-color);
+        color: white;
+    }
+    
+    .user-profile:hover img {
+        border-color: white;
+    }
+    
+    .user-profile img {
+        width: 38px;
+        height: 38px;
+        border: 2px solid transparent;
+        transition: border-color 0.3s;
+    }
+    
+    .user-profile span {
+        font-size: 14px;
+        margin-right: 8px;
+        font-weight: 500;
+    }
+    
+    /* MENÚ PRINCIPAL - MEJORADO */
+    .nav {
+        order: 4;
+        width: 100%;
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        background-color: var(--white);
+        position: fixed;
+        top: 70px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+        z-index: 999;
+        margin-top: 0;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+    }
+    
+    .nav.active {
+        max-height: calc(100vh - 70px);
+        height: calc(100vh - 70px);
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        overflow-y: auto;
+        padding-bottom: 20px;
+    }
+    
+    .nav ul {
+        flex-direction: column;
+        padding: 20px;
+        margin-bottom: 0;
+        height: 100%;
+    }
+    
+    .nav ul li {
+        margin: 5px 0;
+        width: 100%;
+    }
+    
+    .nav ul li a {
+        justify-content: flex-start;
+        padding: 16px 20px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        transition: all 0.3s;
+        font-size: 16px;
+        font-weight: 500;
+        width: 100%;
+        background: var(--light-color);
+        margin-bottom: 5px;
+    }
+    
+    .nav ul li a i {
+        font-size: 18px;
+        width: 24px;
+        margin-right: 12px;
+    }
+    
+    .nav ul li a:hover {
+        background-color: var(--primary-color);
+        color: white;
+        transform: translateX(5px);
+    }
+    
+    .nav ul li a.active {
+        background-color: var(--primary-color);
+        color: white;
+        box-shadow: 0 4px 12px rgba(225, 107, 255, 0.3);
+    }
+    
+    /* DROPDOWN DEL PERFIL - MEJORADO */
+    .dropdown-menu {
+        position: fixed;
+        top: 70px;
+        right: 15px;
+        left: auto;
+        width: 220px;
+        z-index: 1003;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        border-radius: 12px;
+        padding: 10px 0;
+        display: none;
+        animation: dropdownFade 0.3s ease;
+    }
+    
+    @keyframes dropdownFade {
+        from {
+            opacity: 0;
+            transform: translateY(-10px) scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+    
+    .dropdown-menu ul li a {
+        padding: 12px 20px;
+        font-size: 15px;
+        transition: all 0.2s;
+    }
+    
+    .dropdown-menu ul li a:hover {
+        background-color: var(--secondary-color);
+        color: var(--primary-color);
+        padding-left: 25px;
+    }
+    
+    .main {
+        margin-top: 70px;
+        padding-top: 20px;
+    }
+    
+    /* AJUSTES PARA LAS CARDS CUANDO EL MENÚ ESTÁ ABIERTO */
+    body.menu-open {
+        overflow: hidden;
+    }
+    
+    body.menu-open .main {
+        filter: blur(2px);
+        transition: filter 0.3s;
+    }
+}
+
+/* ===== AJUSTES ESPECÍFICOS PARA LAS CARDS EN MÓVIL ===== */
+@media (max-width: 768px) {
+    .quick-stats {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 10px;
+    }
+    
+    .stat-card {
+        flex: 0 0 calc(50% - 15px);
+        min-width: calc(50% - 15px);
+        margin-bottom: 15px;
+        padding: 20px 15px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    
+    .stat-card i {
+        font-size: 24px;
+        margin-bottom: 12px;
+    }
+    
+    .stat-card h3 {
+        font-size: 28px;
+        margin: 8px 0;
+    }
+    
+    .stat-card p {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--gray-color);
+    }
+    
+    /* SERVICIOS SECTION */
+    .services-section .container,
+    .appointments-section .container,
+    .reviews-section .container {
+        padding: 20px 15px;
+    }
+    
+    .section-header {
+        margin-bottom: 20px;
+    }
+    
+    .section-header h3 {
+        font-size: 20px;
+        line-height: 1.3;
+    }
+    
+    /* CARDS CONTAINER - MEJORADO */
+    .cards-container,
+    .services-list,
+    .citas-container,
+    .appointments-list,
+    .reviews-list {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+        margin-top: 20px;
+        padding: 5px;
+    }
+    
+    /* SERVICE CARD - MEJORADO */
+    .service-card {
+        width: 100%;
+        max-width: 100%;
+        min-height: auto;
+        padding: 20px;
+        border-radius: 16px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        margin-bottom: 0;
+        border-left: 5px solid var(--primary-color);
+    }
+    
+    .service-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+    
+    .service-image {
+        height: 160px;
+        border-radius: 12px;
+        object-fit: cover;
+        margin-bottom: 15px;
+    }
+    
+    .service-info h4 {
+        font-size: 18px;
+        margin-bottom: 10px;
+        line-height: 1.4;
+    }
+    
+    .service-info p {
+        font-size: 14px;
+        line-height: 1.5;
+        margin-bottom: 8px;
+    }
+    
+    .service-info i {
+        font-size: 14px;
+        margin-top: 3px;
+    }
+    
+    /* Descripción con scroll */
+    .descripcion-container {
+        max-height: 80px;
+        margin: 10px 0;
+    }
+    
+    .service-info .descripcion span {
+        font-size: 13px;
+        line-height: 1.5;
+    }
+    
+    /* Botones de acción */
+    .card-actions {
+        margin-top: 20px;
+        padding-top: 15px;
+        justify-content: flex-end;
+        gap: 12px;
+    }
+    
+    .btn-action {
+        min-width: 100px;
+        height: 40px;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    
+    /* CITAS CARDS */
+    .cita-card {
+        width: 100%;
+        max-width: 100%;
+        min-height: auto;
+        padding: 20px;
+        border-radius: 16px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        margin-bottom: 0;
+        border-left: 5px solid #e66df3;
+    }
+    
+    .cita-card .card-content p {
+        font-size: 14px;
+        margin-bottom: 10px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .cita-card .card-content strong {
+        min-width: auto;
+        margin-bottom: 3px;
+        color: var(--dark-color);
+    }
+    
+    /* FORMULARIOS */
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 14px 16px;
+        font-size: 15px;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
+        padding: 14px 20px;
+        font-size: 16px;
+        border-radius: 10px;
+    }
+}
+
+@media (max-width: 576px) {
+    .header .container {
+        padding: 10px 12px;
+    }
+    
+    .hamburger-btn {
+        width: 42px;
+        height: 42px;
+        font-size: 20px;
+    }
+    
+    .logo h1 {
+        font-size: 22px;
+    }
+    
+    .user-profile span {
+        max-width: 80px;
+        font-size: 13px;
+    }
+    
+    .user-profile img {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .stat-card {
+        flex: 0 0 100%;
+        min-width: 100%;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .section-header h3 {
+        font-size: 19px;
+    }
+    
+    .btn-primary {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    /* Ajustes específicos para botones en cards */
+    .card-actions {
+        justify-content: space-between;
+        gap: 10px;
+    }
+    
+    .btn-action {
+        min-width: calc(50% - 5px);
+        justify-content: center;
+    }
+    
+    .btn-action span {
+        display: inline-block;
+    }
+    
+    .service-card,
+    .cita-card {
+        padding: 18px 16px;
+    }
+    
+    .service-image {
+        height: 150px;
+    }
+    
+    .dropdown-menu {
+        width: 200px;
+        right: 12px;
+    }
+}
+
+/* ===== CUANDO SOLO HAY UNA CARD ===== */
+@media (max-width: 768px) {
+    .cards-container:has(> .service-card:only-child),
+    .citas-container:has(> .cita-card:only-child) {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 400px;
+    }
+    
+    .cards-container .service-card:first-child:last-child,
+    .citas-container .cita-card:first-child:last-child {
+        max-width: 400px;
+        width: 100%;
+        margin: 0 auto;
+    }
+}
+
+/* ===== EVITAR PROBLEMAS DE OVERFLOW ===== */
+@media (max-width: 992px) {
+    body {
+        overflow-x: hidden;
+    }
+    
+    .container {
+        width: 100%;
+        padding: 0 15px;
+    }
+    
+    .main > section {
+        overflow: hidden;
+    }
+    
+    .welcome-section,
+    .services-section,
+    .appointments-section,
+    .reviews-section,
+    .add-service-section {
+        border-radius: 0;
+        margin-bottom: 20px;
+        box-shadow: none;
+        padding: 25px 0;
+    }
+    
+    .welcome-section {
+        background: linear-gradient(135deg, #f9f9ff 0%, #f0f0ff 100%);
+        padding: 30px 0;
+    }
+}
+
+/* ===== ASEGURAR QUE EL DROPDOWN SE VEA BIEN ===== */
+.user-profile.active .dropdown-menu {
+    display: block;
+    animation: dropdownFade 0.3s ease;
+}
+
+/* Desactivar blur cuando no hay menú abierto */
+body:not(.menu-open) .main {
+    filter: none;
+}
+/* ===== RESPONSIVE PARA BOTONES ===== */
+@media (max-width: 768px) {
+    .card-actions {
+        justify-content: space-between;
+        gap: 8px;
+    }
+    
+    .btn-action {
+        min-width: 80px;
+        max-width: 90px;
+        padding: 7px 10px !important;
+        font-size: 0.8rem;
+    }
+    
+    .btn-action i {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .card-actions {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+    
+    .btn-action {
+        min-width: calc(50% - 10px);
+        max-width: calc(50% - 10px);
+        width: calc(50% - 10px);
+        padding: 8px 5px !important;
+    }
+    
+    /* Opcional: Ocultar texto y mostrar solo iconos en móvil muy pequeño */
+    @media (max-width: 400px) {
+        .btn-action span {
+            display: none;
+        }
+        
+        .btn-action {
+            min-width: 44px;
+            max-width: 44px;
+            width: 44px;
+            padding: 8px !important;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        .btn-action i {
+            margin: 0;
+        }
+    }
+}
+
+/* ===== SOLUCIÓN ESPECÍFICA PARA EL BOTÓN ELIMINAR ===== */
+/* Si el texto sigue desbordando, forzar ajuste */
+.btn-delete {
+    word-wrap: normal !important;
+    word-break: keep-all !important;
+    overflow-wrap: normal !important;
+    hyphens: none !important;
+}
+
+/* Contenedor específico para el texto "Eliminar" */
+.btn-delete span {
+    display: inline-block;
+    max-width: 30px; /* Ancho máximo para el texto */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ===== VERSIÓN MÁS SEGURA ===== */
+/* Si nada funciona, usar esta versión más simple */
+.btn-action-simple {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    min-width: 90px;
+    max-width: 100px;
+    height: 36px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Para el botón eliminar específicamente */
+.delete-form .btn-action-simple {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px solid #ffcdd2;
 }

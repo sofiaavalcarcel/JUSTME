@@ -1,6 +1,80 @@
 document.addEventListener("DOMContentLoaded", function () {
     // =======================
-    // MENU DESPLEGABLE
+    // MENÚ HAMBURGUESA
+    // =======================
+    const hamburgerBtn = document.getElementById("hamburgerBtn");
+    const mainNav = document.getElementById("mainNav");
+    const body = document.body;
+
+    if (hamburgerBtn && mainNav) {
+        hamburgerBtn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            
+            const isOpening = !mainNav.classList.contains("active");
+            
+            // Cerrar dropdown del usuario si está abierto
+            if (userProfile && userProfile.classList.contains("active")) {
+                userProfile.classList.remove("active");
+                if (dropdownMenu) {
+                    dropdownMenu.style.display = "none";
+                }
+            }
+            
+            // Alternar menú hamburguesa
+            mainNav.classList.toggle("active");
+            
+            // Cambiar icono
+            const icon = this.querySelector("i");
+            if (mainNav.classList.contains("active")) {
+                icon.classList.remove("fa-bars");
+                icon.classList.add("fa-times");
+                // Prevenir scroll del body cuando el menú está abierto
+                body.style.overflow = 'hidden';
+            } else {
+                icon.classList.remove("fa-times");
+                icon.classList.add("fa-bars");
+                body.style.overflow = '';
+            }
+        });
+
+        // Cerrar menú al hacer clic en un enlace
+        const navLinks = mainNav.querySelectorAll("a");
+        navLinks.forEach(link => {
+            link.addEventListener("click", function () {
+                if (mainNav.classList.contains("active")) {
+                    mainNav.classList.remove("active");
+                    body.style.overflow = '';
+                    const icon = hamburgerBtn.querySelector("i");
+                    if (icon) {
+                        icon.classList.remove("fa-times");
+                        icon.classList.add("fa-bars");
+                    }
+                }
+            });
+        });
+
+        // Cerrar menú al hacer clic fuera (solo en móvil)
+        document.addEventListener("click", function (e) {
+            if (window.innerWidth <= 992) {
+                const isClickInsideNav = mainNav.contains(e.target);
+                const isClickOnHamburger = hamburgerBtn.contains(e.target);
+                
+                if (!isClickInsideNav && !isClickOnHamburger && mainNav.classList.contains("active")) {
+                    mainNav.classList.remove("active");
+                    body.style.overflow = '';
+                    const icon = hamburgerBtn.querySelector("i");
+                    if (icon) {
+                        icon.classList.remove("fa-times");
+                        icon.classList.add("fa-bars");
+                    }
+                }
+            }
+        });
+    }
+
+    // =======================
+    // MENU DESPLEGABLE USUARIO
     // =======================
     const userProfile = document.getElementById("userProfile");
     const dropdownMenu = document.getElementById("dropdownMenu");
@@ -9,18 +83,67 @@ document.addEventListener("DOMContentLoaded", function () {
     if (userProfile && dropdownMenu) {
         userProfile.addEventListener("click", function (e) {
             e.stopPropagation();
+            e.preventDefault();
+            
+            // Cerrar menú hamburguesa si está abierto
+            if (hamburgerBtn && mainNav && mainNav.classList.contains("active")) {
+                mainNav.classList.remove("active");
+                body.style.overflow = '';
+                const icon = hamburgerBtn.querySelector("i");
+                if (icon) {
+                    icon.classList.remove("fa-times");
+                    icon.classList.add("fa-bars");
+                }
+            }
+            
+            // Alternar dropdown del usuario
             this.classList.toggle("active");
-            dropdownMenu.style.display = this.classList.contains("active")
-                ? "block"
-                : "none";
+            
+            if (this.classList.contains("active")) {
+                dropdownMenu.style.display = "block";
+                // Asegurar que esté visible
+                setTimeout(() => {
+                    dropdownMenu.style.opacity = "1";
+                    dropdownMenu.style.visibility = "visible";
+                    dropdownMenu.style.transform = "translateY(0)";
+                }, 10);
+            } else {
+                dropdownMenu.style.opacity = "0";
+                dropdownMenu.style.visibility = "hidden";
+                dropdownMenu.style.transform = "translateY(10px)";
+                setTimeout(() => {
+                    dropdownMenu.style.display = "none";
+                }, 300);
+            }
         });
 
-        document.addEventListener("click", function () {
-            userProfile.classList.remove("active");
-            dropdownMenu.style.display = "none";
+        // Cerrar dropdown al hacer clic fuera
+        document.addEventListener("click", function (e) {
+            if (userProfile && dropdownMenu) {
+                const isClickInsideDropdown = dropdownMenu.contains(e.target);
+                const isClickOnUserProfile = userProfile.contains(e.target);
+                
+                if (!isClickInsideDropdown && !isClickOnUserProfile && userProfile.classList.contains("active")) {
+                    userProfile.classList.remove("active");
+                    dropdownMenu.style.opacity = "0";
+                    dropdownMenu.style.visibility = "hidden";
+                    dropdownMenu.style.transform = "translateY(10px)";
+                    setTimeout(() => {
+                        dropdownMenu.style.display = "none";
+                    }, 300);
+                }
+            }
+        });
+
+        // Evitar que los clics dentro del dropdown lo cierren
+        dropdownMenu.addEventListener("click", function (e) {
+            e.stopPropagation();
         });
     }
 
+    // =======================
+    // LOGOUT
+    // =======================
     if (logoutBtn) {
         logoutBtn.addEventListener("click", function (e) {
             e.preventDefault();
@@ -31,86 +154,208 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // =======================
-    // PAGINACIÓN DE TABLA SERVICIOS
+    // MANEJO DE FORMULARIO DE SERVICIO
     // =======================
-    const rows = document.querySelectorAll("#servicesBody tr");
-    const pageInfo = document.getElementById("pageInfo");
-    const prevBtn = document.getElementById("prevBtn");
-    const nextBtn = document.getElementById("nextBtn");
+    const addServiceBtn = document.getElementById("addServiceBtn");
+    const addServiceSection = document.getElementById("addServiceSection");
+    const cancelServiceBtn = document.getElementById("cancelServiceBtn");
+    const addServiceForm = document.getElementById("addServiceForm");
 
-    if (rows.length && pageInfo && prevBtn && nextBtn) {
-        const rowsPerPage = 5;
-        let currentPage = 0;
-        const totalPages = Math.ceil(rows.length / rowsPerPage);
+    if (addServiceBtn && addServiceSection) {
+        addServiceBtn.addEventListener("click", function () {
+            addServiceSection.style.display = "block";
+            addServiceBtn.style.display = "none";
+            // Scroll suave al formulario
+            addServiceSection.scrollIntoView({ behavior: 'smooth' });
+        });
+    }
 
-        function showPage(page) {
-            rows.forEach((row, index) => {
-                row.style.display =
-                    index >= page * rowsPerPage && index < (page + 1) * rowsPerPage
-                        ? ""
-                        : "none";
+    if (cancelServiceBtn && addServiceSection && addServiceBtn) {
+        cancelServiceBtn.addEventListener("click", function () {
+            addServiceSection.style.display = "none";
+            addServiceBtn.style.display = "flex";
+            // Resetear formulario
+            if (addServiceForm) {
+                addServiceForm.reset();
+            }
+        });
+    }
+
+    if (addServiceForm) {
+        addServiceForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            
+            // Obtener valores del formulario
+            const serviceName = document.getElementById("service-name").value;
+            const serviceCategory = document.getElementById("service-category").value;
+            const serviceDuration = document.getElementById("service-duration").value;
+            const servicePrice = document.getElementById("service-price").value;
+            const serviceDescription = document.getElementById("service-description").value;
+            
+            // Validar campos
+            if (!serviceName || !serviceCategory || !serviceDuration || !servicePrice || !serviceDescription) {
+                alert("Por favor, complete todos los campos del formulario.");
+                return;
+            }
+            
+            // Mostrar mensaje de éxito
+            alert("Servicio agregado exitosamente!");
+            
+            // Ocultar formulario y mostrar botón
+            addServiceSection.style.display = "none";
+            addServiceBtn.style.display = "flex";
+            
+            // Resetear formulario
+            addServiceForm.reset();
+            
+            // Aquí normalmente enviarías los datos al servidor
+            console.log("Nuevo servicio:", {
+                name: serviceName,
+                category: serviceCategory,
+                duration: serviceDuration,
+                price: servicePrice,
+                description: serviceDescription
             });
-            pageInfo.textContent = `Página ${page + 1} de ${totalPages}`;
-            prevBtn.disabled = page === 0;
-            nextBtn.disabled = page === totalPages - 1;
-        }
-
-        prevBtn.addEventListener("click", () => {
-            if (currentPage > 0) {
-                currentPage--;
-                showPage(currentPage);
-            }
         });
-
-        nextBtn.addEventListener("click", () => {
-            if (currentPage < totalPages - 1) {
-                currentPage++;
-                showPage(currentPage);
-            }
-        });
-
-        showPage(currentPage);
     }
 
     // =======================
-    // PAGINACIÓN DE TABLA CITAS
+    // MANEJO DE BOTONES DE CARDS
     // =======================
-    const citasRows = document.querySelectorAll("#citasTableBody tr");
-    const citasPageInfo = document.getElementById("citasPageInfo");
-    const citasPrevBtn = document.getElementById("citasPrevBtn");
-    const citasNextBtn = document.getElementById("citasNextBtn");
+    // Botones de editar en servicios
+    const editServiceBtns = document.querySelectorAll('.service-card .btn-edit');
+    editServiceBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const serviceCard = this.closest('.service-card');
+            const serviceName = serviceCard.querySelector('h4').textContent;
+            alert(`Editando servicio: ${serviceName}`);
+            // Aquí normalmente abrirías un modal o formulario de edición
+        });
+    });
 
-    if (citasRows.length && citasPageInfo && citasPrevBtn && citasNextBtn) {
-        const citasRowsPerPage = 5;
-        let citasCurrentPage = 0;
-        const citasTotalPages = Math.ceil(citasRows.length / citasRowsPerPage);
-
-        function showCitasPage(page) {
-            citasRows.forEach((row, index) => {
-                row.style.display =
-                    index >= page * citasRowsPerPage && index < (page + 1) * citasRowsPerPage
-                        ? ""
-                        : "none";
-            });
-            citasPageInfo.textContent = `Página ${page + 1} de ${citasTotalPages}`;
-            citasPrevBtn.disabled = page === 0;
-            citasNextBtn.disabled = page === citasTotalPages - 1;
-        }
-
-        citasPrevBtn.addEventListener("click", () => {
-            if (citasCurrentPage > 0) {
-                citasCurrentPage--;
-                showCitasPage(citasCurrentPage);
+    // Botones de eliminar en servicios
+    const deleteServiceForms = document.querySelectorAll('.service-card .delete-form');
+    deleteServiceForms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const serviceCard = this.closest('.service-card');
+            const serviceName = serviceCard.querySelector('h4').textContent;
+            
+            if (confirm(`¿Estás seguro de eliminar el servicio "${serviceName}"?`)) {
+                serviceCard.style.opacity = '0.5';
+                serviceCard.style.transform = 'scale(0.95)';
+                
+                // Simular eliminación después de 0.5 segundos
+                setTimeout(() => {
+                    serviceCard.remove();
+                    alert('Servicio eliminado exitosamente!');
+                    
+                    // Actualizar contador si es necesario
+                    updateServicesCount();
+                }, 500);
             }
         });
+    });
 
-        citasNextBtn.addEventListener("click", () => {
-            if (citasCurrentPage < citasTotalPages - 1) {
-                citasCurrentPage++;
-                showCitasPage(citasCurrentPage);
+    // Botones de editar en citas
+    const editAppointmentBtns = document.querySelectorAll('.cita-card .btn-edit');
+    editAppointmentBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const citaCard = this.closest('.cita-card');
+            const clientName = citaCard.querySelector('.card-content p strong:first-child + span').textContent;
+            alert(`Editando cita de: ${clientName}`);
+            // Aquí normalmente abrirías un modal o formulario de edición
+        });
+    });
+
+    // Botones de eliminar en citas
+    const deleteAppointmentBtns = document.querySelectorAll('.cita-card .btn-delete');
+    deleteAppointmentBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const citaCard = this.closest('.cita-card');
+            const clientName = citaCard.querySelector('.card-content p strong:first-child + span').textContent;
+            
+            if (confirm(`¿Estás seguro de eliminar la cita de "${clientName}"?`)) {
+                citaCard.style.opacity = '0.5';
+                citaCard.style.transform = 'scale(0.95)';
+                
+                // Simular eliminación después de 0.5 segundos
+                setTimeout(() => {
+                    citaCard.remove();
+                    alert('Cita eliminada exitosamente!');
+                    
+                    // Actualizar contador si es necesario
+                    updateAppointmentsCount();
+                }, 500);
             }
         });
+    });
 
-        showCitasPage(citasCurrentPage);
+    // =======================
+    // FUNCIONES AUXILIARES
+    // =======================
+    function updateServicesCount() {
+        const servicesCount = document.querySelectorAll('.service-card').length;
+        console.log(`Total servicios: ${servicesCount}`);
+        // Aquí podrías actualizar algún contador en la UI si lo tienes
     }
+
+    function updateAppointmentsCount() {
+        const appointmentsCount = document.querySelectorAll('.cita-card').length;
+        console.log(`Total citas: ${appointmentsCount}`);
+        // Aquí podrías actualizar algún contador en la UI si lo tienes
+    }
+
+    // =======================
+    // AJUSTES RESPONSIVE PARA CARDS
+    // =======================
+    function adjustCardsLayout() {
+        const cardsContainers = document.querySelectorAll('.cards-container, .citas-container');
+        const isMobile = window.innerWidth <= 768;
+        
+        cardsContainers.forEach(container => {
+            const cards = container.querySelectorAll('.service-card, .cita-card');
+            
+            // Ajustar grid en móvil
+            if (isMobile) {
+                container.style.gridTemplateColumns = '1fr';
+                
+                // Centrar si solo hay una card
+                if (cards.length === 1) {
+                    container.style.display = 'flex';
+                    container.style.justifyContent = 'center';
+                    container.style.alignItems = 'flex-start';
+                } else {
+                    container.style.display = 'grid';
+                }
+                
+                // Ajustar padding en cards para móvil pequeño
+                if (window.innerWidth <= 400) {
+                    cards.forEach(card => {
+                        card.style.padding = '15px 12px';
+                    });
+                }
+            } else {
+                // Restaurar grid en escritorio
+                if (container.classList.contains('cards-container')) {
+                    container.style.gridTemplateColumns = 'repeat(auto-fit, minmax(300px, 1fr))';
+                } else if (container.classList.contains('citas-container')) {
+                    container.style.gridTemplateColumns = 'repeat(auto-fit, minmax(320px, 1fr))';
+                }
+                container.style.display = 'grid';
+                container.style.justifyContent = '';
+                container.style.alignItems = '';
+                
+                // Restaurar padding
+                cards.forEach(card => {
+                    card.style.padding = '';
+                });
+            }
+        });
+    }
+
+    // Ajustar layout al cargar y cambiar tamaño
+    window.addEventListener('load', adjustCardsLayout);
+    window.addEventListener('resize', adjustCardsLayout);
+    adjustCardsLayout();
 });

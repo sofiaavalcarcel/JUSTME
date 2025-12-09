@@ -15,7 +15,12 @@
                 <h1>Just Me</h1>
             </div>
             
-            <nav class="nav">
+            <!-- Botón del menú hamburguesa -->
+            <button class="hamburger-btn" id="hamburgerBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav class="nav" id="mainNav">
                 <ul>
                     <li><a href="#" class="active"><i class="fas fa-home"></i> Inicio</a></li>
                     <li><a href="#"><i class="fas fa-calendar-alt"></i> Agenda</a></li>
@@ -84,8 +89,36 @@
                     </button>
                 </div>
                 
-                <div class="services-list">
-                    <!-- Dinámico desde JS -->
+                <div class="cards-container">
+                    <!-- Servicios dinámicos desde JS -->
+                    <div class="service-card">
+                        <div class="service-content">
+                            <div class="service-info">
+                                <h4>Corte de Cabello con Tinte</h4>
+                                <p><i class="fas fa-tag"></i> <span>Categoría: Cabello</span></p>
+                                <p><i class="fas fa-clock"></i> <span>Duración: 90 minutos</span></p>
+                                <p><i class="fas fa-dollar-sign"></i> <span class="price">Precio: $80,000</span></p>
+                                <div class="descripcion-container">
+                                    <p class="descripcion">
+                                        <i class="fas fa-align-left"></i>
+                                        <span>Corte moderno con tinte profesional, incluye lavado y tratamiento.</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-action btn-edit">
+                                <i class="fas fa-edit"></i>
+                                <span>Editar</span>
+                            </button>
+                            <form class="delete-form">
+                                <button type="submit" class="btn-action btn-delete">
+                                    <i class="fas fa-trash"></i>
+                                    <span>Eliminar</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -147,8 +180,27 @@
                     <a href="#" class="view-all">Ver todas</a>
                 </div>
                 
-                <div class="appointments-list">
-                    <!-- Dinámico desde JS -->
+                <div class="citas-container">
+                    <!-- Citas dinámicas desde JS -->
+                    <div class="cita-card">
+                        <div class="card-content">
+                            <p><strong><i class="fas fa-user"></i> Cliente:</strong> <span>Ana Rodríguez</span></p>
+                            <p><strong><i class="fas fa-spa"></i> Servicio:</strong> <span>Manicure Spa</span></p>
+                            <p><strong><i class="fas fa-calendar"></i> Fecha:</strong> <span>15 Mar 2024, 14:30</span></p>
+                            <p><strong><i class="fas fa-clock"></i> Duración:</strong> <span>60 minutos</span></p>
+                            <p><strong><i class="fas fa-dollar-sign"></i> Precio:</strong> <span class="price">$45,000</span></p>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-action btn-edit">
+                                <i class="fas fa-edit"></i>
+                                <span>Editar</span>
+                            </button>
+                            <button class="btn-action btn-delete">
+                                <i class="fas fa-trash"></i>
+                                <span>Eliminar</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -212,68 +264,81 @@
                 </div>
                 
                 <div class="reviews-list">
-                    <!-- Dinámico desde JS -->
+                    <!-- Reviews dinámicas desde JS -->
+                    <div class="review-card">
+                        <div class="review-header">
+                            <span class="reviewer">Carlos López</span>
+                            <span class="review-date">Hace 2 días</span>
+                        </div>
+                        <div class="review-stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p class="review-content">Excelente servicio! María es muy profesional y el resultado superó mis expectativas. Volveré sin duda.</p>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 
-   <!-- Footer -->
+    <!-- Footer -->
     <footer class="footer">
-      <div class="container">
-        <div class="footer-content">
-          <div class="footer-section">
-            <h4>Just Me</h4>
-            <p>
-              Servicios de belleza a domicilio para hombres y mujeres en
-              cualquier lugar.
-            </p>
-            <div class="social-icons">
-              <a href="#"><i class="fab fa-facebook-f"></i></a>
-              <a href="#"><i class="fab fa-instagram"></i></a>
-              <a href="#"><i class="fab fa-tiktok"></i></a>
-              <a href="#"><i class="fab fa-whatsapp"></i></a>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Just Me</h4>
+                    <p>
+                        Servicios de belleza a domicilio para hombres y mujeres en cualquier lugar.
+                    </p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Enlaces</h4>
+                    <ul>
+                        <li><a href="#">Inicio</a></li>
+                        <li><a href="#">Servicios</a></li>
+                        <li><a href="#">Sobre Nosotros</a></li>
+                        <li><a href="#">Contacto</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Servicios</h4>
+                    <ul>
+                        <li><a href="#">Corte de Cabello</a></li>
+                        <li><a href="#">Maquillaje</a></li>
+                        <li><a href="#">Uñas</a></li>
+                        <li><a href="#">Tratamientos Faciales</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Bogotá, Colombia</li>
+                        <li><i class="fas fa-phone"></i> +57 123 456 7890</li>
+                        <li><i class="fas fa-envelope"></i> hola@justme.com</li>
+                    </ul>
+                </div>
             </div>
-          </div>
 
-          <div class="footer-section">
-            <h4>Enlaces</h4>
-            <ul>
-              <li><a href="#">Inicio</a></li>
-              <li><a href="#">Servicios</a></li>
-              <li><a href="#">Sobre Nosotros</a></li>
-              <li><a href="#">Contacto</a></li>
-            </ul>
-          </div>
-
-          <div class="footer-section">
-            <h4>Servicios</h4>
-            <ul>
-              <li><a href="#">Corte de Cabello</a></li>
-              <li><a href="#">Maquillaje</a></li>
-              <li><a href="#">Uñas</a></li>
-              <li><a href="#">Tratamientos Faciales</a></li>
-            </ul>
-          </div>
-
-          <div class="footer-section">
-            <h4>Contacto</h4>
-            <ul>
-              <li><i class="fas fa-map-marker-alt"></i> Bogotá, Colombia</li>
-              <li><i class="fas fa-phone"></i> +57 123 456 7890</li>
-              <li><i class="fas fa-envelope"></i> hola@justme.com</li>
-            </ul>
-          </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Just Me. Todos los derechos reservados.</p>
+                <div class="legal-links">
+                    <a href="#">Términos y Condiciones</a>
+                    <a href="#">Política de Privacidad</a>
+                </div>
+            </div>
         </div>
-
-        <div class="footer-bottom">
-          <p>&copy; 2023 Just Me. Todos los derechos reservados.</p>
-          <div class="legal-links">
-            <a href="#">Términos y Condiciones</a>
-            <a href="#">Política de Privacidad</a>
-          </div>
-        </div>
-      </div>
     </footer>
     
     <script src="scripts/profesional.js"></script>
