@@ -10,8 +10,8 @@
   --black: #000;
   --bg-color: #ffffff;
   --border-color: #e0e0e0;
-} /* 👈 ESTA LLAVE FALTABA */
-
+  --card-bg: #ffffff;
+}
 
 /* 🔹 Corrige posición y estilo de SweetAlert2 */
 .swal2-container {
@@ -22,21 +22,19 @@
   justify-content: center !important;
   align-items: center !important;
   z-index: 9999 !important;
-  background: rgba(0, 0, 0, 0.4) !important; /* Fondo difuminado detrás del popup */
+  background: rgba(0, 0, 0, 0.4) !important;
 }
 
-/* 🔹 Popup centrado y con fondo blanco */
 .swal2-popup {
   all: revert !important;
   margin: auto !important;
   border-radius: 14px !important;
-  background: #fff !important; /* ✅ Fondo blanco */
+  background: #fff !important;
   color: #333 !important;
   font-family: "Inter", sans-serif !important;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
 }
 
-/* 🔹 Botones en tu color morado */
 .swal2-confirm {
   background-color: #e16bff !important;
   border: none !important;
@@ -51,613 +49,1004 @@
   background-color: #9033a7 !important;
 }
 
-
-
-    
-
- * {
-   margin: 0;
-   padding: 0;
-   box-sizing: border-box;
-   font-family: 'Inter', sans-serif;
- }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
 
 body {
-      background: #f8f9fa;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
+  background: #f8f9fa;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  overflow-x: hidden;
+  width: 100%;
+}
 
-    .checkout-container {
-      display: flex;
-      max-width: 1000px;
-      width: 100%;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-      overflow: hidden;
-    }
+.checkout-container {
+  display: flex;
+  max-width: 1000px;
+  width: 100%;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  min-height: auto;
+}
 
- body::before {
-   content: '';
-   position: absolute;
-   top: 0;
-   left: 0;
-   width: 100%;
-   height: 100%;
-   background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="%23ffffff" fill-opacity="0.05" points="0,1000 1000,0 1000,1000"/></svg>');
-   z-index: -1;
- }
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="%23ffffff" fill-opacity="0.05" points="0,1000 1000,0 1000,1000"/></svg>');
+  z-index: -1;
+}
 
- .floating-shapes {
-   position: absolute;
-   width: 100%;
-   height: 100%;
-   overflow: hidden;
-   z-index: -1;
- }
+.floating-shapes {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1;
+}
 
- .shape {
-   position: absolute;
-   border-radius: 50%;
-   background: rgba(255, 255, 255, 0.1);
-   animation: float 15s infinite ease-in-out;
- }
+.shape {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  animation: float 15s infinite ease-in-out;
+}
 
- .shape:nth-child(1) {
-   width: 300px;
-   height: 300px;
-   top: -150px;
-   right: -150px;
-   animation-delay: 0s;
- }
+.shape:nth-child(1) {
+  width: 300px;
+  height: 300px;
+  top: -150px;
+  right: -150px;
+  animation-delay: 0s;
+}
 
- .shape:nth-child(2) {
-   width: 200px;
-   height: 200px;
-   bottom: -100px;
-   left: -100px;
-   animation-delay: 5s;
- }
+.shape:nth-child(2) {
+  width: 200px;
+  height: 200px;
+  bottom: -100px;
+  left: -100px;
+  animation-delay: 5s;
+}
 
- .shape:nth-child(3) {
-   width: 150px;
-   height: 150px;
-   top: 50%;
-   left: 10%;
-   animation-delay: 10s;
- }
+.shape:nth-child(3) {
+  width: 150px;
+  height: 150px;
+  top: 50%;
+  left: 10%;
+  animation-delay: 10s;
+}
 
- @keyframes float {
-   0%, 100% { transform: translateY(0) rotate(0deg); }
-   50% { transform: translateY(-20px) rotate(10deg); }
- }
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(10deg); }
+}
 
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
+/* ===========================================
+   COLUMNA IZQUIERDA - FORMULARIO DE PAGO
+   =========================================== */
+.checkout-form {
+  flex: 1.5;
+  padding: 30px;
+  border-right: 1px solid var(--border-color);
+  background: var(--card-bg);
+  min-width: 0;
+}
 
- @keyframes fadeIn {
-   from { opacity: 0; transform: translateY(20px); }
-   to { opacity: 1; transform: translateY(0); }
- }
+.checkout-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 30px;
+  color: var(--dark-color);
+}
 
- /* Columna izquierda - Formulario de pago */
- .checkout-form {
-   flex: 1.5;
-   padding: 40px;
-   border-right: 1px solid var(--border-color);
-   background: var(--card-bg);
-   backdrop-filter: blur(10px);
- }
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: var(--dark-color);
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+}
 
- .checkout-title {
-   font-size: 24px;
-   font-weight: 600;
-   margin-bottom: 30px;
-   color: var(--dark-color);
- }
+/* Vista previa de la tarjeta */
+.card-preview-container {
+  perspective: 1000px;
+  margin-bottom: 30px;
+  height: 220px;
+  width: 100%;
+  max-width: 380px;
+  margin-left: auto;
+  margin-right: auto;
+}
 
- .section-title {
-   font-size: 18px;
-   font-weight: 600;
-   margin-bottom: 10px;
-   color: var(--dark-color);
-   padding-bottom: 8px;
-   border-bottom: 1px solid var(--border-color);
-   
- }
- 
- html, body {
-   height: 100%;
-   margin: 0;
-   overflow: hidden; /* elimina scroll global */
- }
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
 
+.card-preview-container.flipped .card-inner {
+  transform: rotateY(180deg);
+}
 
- /* Vista previa de la tarjeta con efecto flip - Mismo estilo que HTML 2 */
- .card-preview-container {
-   perspective: 1000px;
-   margin-bottom: 30px;
-   height: 220px;
-   width: 100%;
- }
+.card-front, .card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 
- .card-inner {
-   position: relative;
-   width: 75%;
-   height: 100%;
-   transition: transform 0.8s;
-   transform-style: preserve-3d;
-  margin-left: 13%;
+.card-front {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+  color: white;
+}
+
+.card-back {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+  color: white;
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+}
+
+.card-magnetic-strip {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+}
+
+.card-cvc-strip {
+  position: relative;
+  margin-top: 20px;
+  background: #fff;
+  height: 40px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 15px;
+}
+
+.card-cvc-display {
+  color: #000;
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.card-chip {
+  width: 50px;
+  height: 35px;
+  background: linear-gradient(135deg, #c9a96e 0%, #d4b77d 100%);
+  border-radius: 8px;
+  margin-bottom: 25px;
+  transition: transform 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card-number {
+  font-size: 1.4rem;
+  letter-spacing: 3px;
+  margin-bottom: 25px;
+  font-family: 'Courier New', monospace;
+  transition: all 0.3s ease;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-label {
+  font-size: 0.75rem;
+  opacity: 0.7;
+  margin-bottom: 5px;
+  letter-spacing: 1px;
+}
+
+.card-expiry, .card-cvc {
+  font-size: 1rem;
+  font-family: 'Courier New', monospace;
+  transition: all 0.3s ease;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.card-logo {
+  font-weight: bold;
+  font-size: 1.4rem;
+  opacity: 0.9;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Formulario */
+.form-group {
+  margin-bottom: 20px;
+  position: relative;
+  width: 100%;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: var(--dark-color);
+  font-size: 0.95rem;
+}
+
+.card-element {
+  border: 1px solid var(--light-gray);
+  border-radius: 12px;
+  padding: 16px 18px;
+  background: var(--white);
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  width: 100%;
+}
+
+.card-element:focus-within {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(225, 107, 255, 0.2);
+  background: var(--white);
+}
+
+.StripeElement--focus {
+  background: var(--white);
+}
+
+.field-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.field-row .form-group {
+  flex: 1;
+}
+
+.cvc-field {
+  max-width: 140px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-top: 20px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.pay-button {
+  flex: 1;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+  color: var(--white);
+  border: none;
+  border-radius: 12px;
+  padding: 18px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 10px 20px rgba(139, 92, 246, 0.3);
+  position: relative;
+  overflow: hidden;
+  min-width: 150px;
+}
+
+.pay-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.7s;
+}
+
+.pay-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(139, 92, 246, 0.4);
+}
+
+.pay-button:hover::before {
+  left: 100%;
+}
+
+.pay-button:disabled {
+  background: var(--gray-color);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.pay-button:disabled::before {
+  display: none;
+}
+
+.cancel-button {
+  flex: 1;
+  text-align: center;
+  text-decoration: none;
+  background: linear-gradient(135deg, #e0e0e0 0%, #c4c4c4 100%);
+  color: #333;
+  border-radius: 12px;
+  padding: 18px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  min-width: 150px;
+}
+
+.cancel-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.7s;
+}
+
+.cancel-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.cancel-button:hover::before {
+  left: 100%;
+}
+
+.hidden {
+  display: none;
+}
+
+/* ===========================================
+   COLUMNA DERECHA - RESUMEN
+   =========================================== */
+.order-summary {
+  flex: 1;
+  padding: 30px;
+  background: #f9f9f9;
+  min-width: 0;
+}
+
+.summary-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: var(--dark-color);
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.item-details {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 150px;
+}
+
+.item-code {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--dark-color);
+  margin-bottom: 4px;
+}
+
+.item-name {
+  font-size: 14px;
+  color: var(--gray-color);
+  line-height: 1.4;
+}
+
+.item-price {
+  font-weight: 600;
+  color: var(--dark-color);
+  white-space: nowrap;
+  margin-left: 10px;
+}
+
+.coupon-section {
+  margin: 20px 0;
+  width: 100%;
+}
+
+.coupon-section label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--dark-color);
+  font-size: 0.95rem;
+}
+
+.coupon-input {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.coupon-input input {
+  flex: 1;
+  padding: 12px 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 14px;
+  min-width: 0;
+}
+
+.coupon-input input[type="datetime-local"] {
+  width: 100%;
+  font-family: 'Inter', sans-serif;
+}
+
+.apply-btn {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0 20px;
+  cursor: pointer;
+  transition: background 0.3s;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.apply-btn:hover {
+  background: var(--primary-dark);
+}
+
+.summary-total {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 2px solid var(--border-color);
+  width: 100%;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.grand-total {
+  font-weight: 600;
+  font-size: 18px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-color);
+}
+
+.secure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px;
+  background: var(--light-gray);
+  border-radius: 8px;
+  margin-top: 20px;
+  font-size: 14px;
+  text-align: center;
+  flex-wrap: wrap;
+}
+
+.secure img {
+  width: 20px;
+  height: 20px;
+}
+
+/* Animaciones para la tarjeta */
+@keyframes cardGlow {
+  0% { box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3); }
+  50% { box-shadow: 0 15px 40px rgba(139, 92, 246, 0.5); }
+  100% { box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3); }
+}
+
+.card-front.active {
+  animation: cardGlow 2s infinite;
+}
+
+/* Efectos de carga */
+.loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* ===========================================
+   RESPONSIVE DESIGN - TABLET (768px a 1024px)
+   =========================================== */
+@media (max-width: 1024px) {
+  .checkout-container {
+    max-width: 95%;
+    flex-direction: row;
+  }
   
- }
-
- .card-preview-container.flipped .card-inner {
-   transform: rotateY(180deg);
- }
-
- .card-front, .card-back {
-   position: absolute;
-   width: 100%;
-   height: 100%;
-   backface-visibility: hidden;
-   border-radius: 16px;
-   padding: 25px;
-   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-   display: flex;
-   flex-direction: column;
-   justify-content: space-between;
- }
-
- .card-front {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-   color: white;
- }
-
- .card-back {
-   background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-   color: white;
-   transform: rotateY(180deg);
-   display: flex;
-   flex-direction: column;
- }
-
- .card-magnetic-strip {
-   position: absolute;
-   top: 30px;
-   left: 0;
-   width: 100%;
-   height: 40px;
-   background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
- }
-
- .card-cvc-strip {
-   position: relative;
-   margin-top: 20px;
-   background: #fff;
-   height: 40px;
-   border-radius: 4px;
-   display: flex;
-   align-items: center;
-   justify-content: flex-end;
-   padding: 0 15px;
- }
-
- .card-cvc-display {
-   color: #000;
-   font-family: 'Courier New', monospace;
-   font-size: 1rem;
-   font-weight: bold;
-   letter-spacing: 2px;
- }
-
- .card-chip {
-   width: 50px;
-   height: 35px;
-   background: linear-gradient(135deg, #c9a96e 0%, #d4b77d 100%);
-   border-radius: 8px;
-   margin-bottom: 25px;
-   transition: transform 0.3s ease;
-   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
- }
-
- .card-number {
-   font-size: 1.4rem;
-   letter-spacing: 3px;
-   margin-bottom: 25px;
-   font-family: 'Courier New', monospace;
-   transition: all 0.3s ease;
-   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
- }
-
- .card-bottom {
-   display: flex;
-   justify-content: space-between;
-   align-items: center;
- }
-
- .card-info {
-   display: flex;
-   flex-direction: column;
- }
-
- .card-label {
-   font-size: 0.75rem;
-   opacity: 0.7;
-   margin-bottom: 5px;
-   letter-spacing: 1px;
- }
-
- .card-expiry, .card-cvc {
-   font-size: 1rem;
-   font-family: 'Courier New', monospace;
-   transition: all 0.3s ease;
-   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
- }
-
- .card-logo {
-   font-weight: bold;
-   font-size: 1.4rem;
-   opacity: 0.9;
-   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
- }
-
- /* Formulario */
- .form-group {
-   margin-bottom: 20px;
-   position: relative;
- }
-
- .form-group label {
-   display: block;
-   margin-bottom: 10px;
-   font-weight: 600;
-   color: var(--dark-color);
-   font-size: 0.95rem;
- }
-
- .card-element {
-   border: 1px solid var(--light-gray);
-   border-radius: 12px;
-   padding: 16px 18px;
-   margin-bottom: 20px;
-   background: var(--white);
-   transition: all 0.3s ease;
-   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
- }
-
- .card-element:focus-within {
-   border-color: var(--primary-color);
-   box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
-   background: var(--white);
- }
-
- .StripeElement--focus {
-   background: var(--white);
- }
-
- .field-row {
-   display: flex;
-   gap: 15px;
-   margin-bottom: 20px;
- }
-
- .field-row .form-group {
-   flex: 1;
- }
-
- .cvc-field {
-   max-width: 140px;
- }
-
- .button-container {
-   display: flex;
-   justify-content: space-between; /* uno a cada lado */
-   align-items: center;
-   gap: 20px;
-   margin-top: 20px;
- }
-
- /* Mantiene tu estilo actual */
- .pay-button {
-   flex: 1;
-   background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-   color: var(--white);
-   border: none;
-   border-radius: 12px;
-   padding: 18px;
-   font-size: 1.1rem;
-   font-weight: 600;
-   cursor: pointer;
-   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-   box-shadow: 0 10px 20px rgba(139, 92, 246, 0.3);
-   position: relative;
-   overflow: hidden;
- }
-
- .pay-button::before {
-   content: '';
-   position: absolute;
-   top: 0;
-   left: -100%;
-   width: 100%;
-   height: 100%;
-   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-   transition: left 0.7s;
- }
-
- .pay-button:hover {
-   transform: translateY(-3px);
-   box-shadow: 0 15px 30px rgba(139, 92, 246, 0.4);
- }
-
- .pay-button:hover::before {
-   left: 100%;
- }
-
- .pay-button:disabled {
-   background: var(--gray-color);
-   cursor: not-allowed;
-   transform: none;
-   box-shadow: none;
- }
-
- .pay-button:disabled::before {
-   display: none;
- }
-
- /* Estilo del botón Cancelar (enlace) */
- .cancel-button {
-   flex: 1;
-   text-align: center;
-   text-decoration: none;
-   background: linear-gradient(135deg, #e0e0e0 0%, #c4c4c4 100%);
-   color: #333;
-   border-radius: 12px;
-   padding: 18px;
-   font-size: 1.1rem;
-   font-weight: 600;
-   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-   position: relative;
-   overflow: hidden;
- }
-
- .cancel-button::before {
-   content: '';
-   position: absolute;
-   top: 0;
-   left: -100%;
-   width: 100%;
-   height: 100%;
-   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-   transition: left 0.7s;
- }
-
- .cancel-button:hover {
-   transform: translateY(-3px);
-   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
- }
-
- .cancel-button:hover::before {
-   left: 100%;
- }
-
-
- .hidden {
-   display: none;
- }
-
- .test-cards {
-   background: var(--light-color);
-   border-radius: 12px;
-   padding: 20px;
-   margin-top: 25px;
-   font-size: 0.85rem;
-   border: 1px solid var(--light-gray);
-   transition: all 0.3s ease;
- }
-
- .test-cards:hover {
-   transform: translateY(-5px);
-   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
- }
-
- .test-cards h3 {
-   margin-bottom: 12px;
-   color: var(--dark-color);
-   font-size: 0.95rem;
-   display: flex;
-   align-items: center;
-   gap: 8px;
- }
-
- .test-cards ul {
-   list-style: none;
-   color: var(--gray-color);
- }
-
- .test-cards li {
-   margin-bottom: 8px;
-   display: flex;
-   align-items: center;
-   gap: 8px;
- }
-
- .test-cards li::before {
-   content: '•';
-   color: var(--primary-color);
-   font-weight: bold;
- }
-
- /* Columna derecha - Resumen */
- .order-summary {
-   flex: 1;
-   padding: 40px;
-   background: #f9f9f9;
- }
-
- .summary-title {
-   font-size: 20px;
-   font-weight: 600;
-   margin-bottom: 20px;
-   color: var(--dark-color);
- }
-
- .summary-item {
-   display: flex;
-   justify-content: space-between;
-   margin-bottom: 15px;
-   padding-bottom: 15px;
-   border-bottom: 1px solid var(--border-color);
- }
-
- .item-details {
-   display: flex;
-   flex-direction: column;
- }
-
- .item-code {
-   font-size: 14px;
-   font-weight: 600;
-   color: var(--dark-color);
- }
-
- .item-name {
-   font-size: 14px;
-   color: var(--gray-color);
- }
-
- .item-price {
-   font-weight: 600;
-   color: var(--dark-color);
- }
-
- .coupon-section {
-   margin: 20px 0;
- }
-
- .coupon-input {
-   display: flex;
-   gap: 10px;
- }
-
- .coupon-input input {
-   flex: 1;
-   padding: 12px 15px;
-   border: 1px solid var(--border-color);
-   border-radius: 8px;
-   font-size: 14px;
- }
-
- .apply-btn {
-   background: var(--primary-color);
-   color: white;
-   border: none;
-   border-radius: 8px;
-   padding: 0 15px;
-   cursor: pointer;
-   transition: background 0.3s;
- }
-
- .apply-btn:hover {
-   background: var(--primary-dark);
- }
-
- .summary-total {
-   margin-top: 20px;
-   padding-top: 15px;
-   border-top: 2px solid var(--border-color);
- }
-
- .total-row {
-   display: flex;
-   justify-content: space-between;
-   margin-bottom: 10px;
- }
-
- .grand-total {
-   font-weight: 600;
-   font-size: 18px;
- }
-
- .secure {
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   gap: 10px;
-   padding: 15px;
-   background: var(--light-gray);
-   border-radius: 8px;
-   margin-top: 20px;
-   font-size: 14px;
- }
-
- .secure img {
-   width: 20px;
-   height: 20px;
- }
-
- /* Animaciones para la tarjeta */
- @keyframes cardGlow {
-   0% { box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3); }
-   50% { box-shadow: 0 15px 40px rgba(139, 92, 246, 0.5); }
-   100% { box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3); }
- }
-
- .card-front.active {
-   animation: cardGlow 2s infinite;
- }
-
- /* Efectos de carga */
- .loading {
-   position: relative;
-   overflow: hidden;
- }
-
- .loading::after {
-   content: '';
-   position: absolute;
-   top: 0;
-   left: -100%;
-   width: 100%;
-   height: 100%;
-   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-   animation: loading 1.5s infinite;
- }
-
- @keyframes loading {
-   0% { left: -100%; }
-   100% { left: 100%; }
- }
-
- /* Responsive */
- @media (max-width: 768px) {
-   .checkout-container {
-     flex-direction: column;
-   }
-   
-   .checkout-form {
-     border-right: none;
-     border-bottom: 1px solid var(--border-color);
-   }
-   
-   .field-row {
-     flex-direction: column;
-     gap: 0;
-   }
-   
-   .cvc-field {
-     max-width: 100%;
-   }
-   
-   .card-preview-container {
-     height: 200px;
-   }
-   
-   .card-number {
-     font-size: 1.2rem;
-   }
- }
+  .checkout-form,
+  .order-summary {
+    padding: 25px;
+  }
+  
+  .card-preview-container {
+    height: 200px;
+    max-width: 340px;
+  }
+  
+  .card-number {
+    font-size: 1.2rem;
+  }
+  
+  .button-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .pay-button,
+  .cancel-button {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+/* ===========================================
+   RESPONSIVE DESIGN - TABLET PEQUEÑA (768px o menos)
+   =========================================== */
+@media (max-width: 768px) {
+  body {
+    padding: 15px;
+    min-height: 100vh;
+    height: auto;
+    overflow-y: auto;
+  }
+  
+  .checkout-container {
+    flex-direction: column;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  
+  .checkout-form {
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    padding: 25px 20px;
+    width: 100%;
+  }
+  
+  .order-summary {
+    padding: 25px 20px;
+    width: 100%;
+  }
+  
+  .card-preview-container {
+    height: 200px;
+    max-width: 100%;
+    margin: 0 auto 25px;
+  }
+  
+  .field-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .cvc-field {
+    max-width: 100%;
+  }
+  
+  .button-container {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .pay-button,
+  .cancel-button {
+    width: 100%;
+    padding: 16px;
+  }
+  
+  .summary-item {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .item-price {
+    margin-left: 0;
+    align-self: flex-end;
+  }
+  
+  .coupon-input {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .apply-btn {
+    padding: 12px;
+    width: 100%;
+  }
+}
+
+/* ===========================================
+   RESPONSIVE DESIGN - MÓVIL GRANDE (576px o menos)
+   =========================================== */
+@media (max-width: 576px) {
+  body {
+    padding: 10px;
+    align-items: flex-start;
+    min-height: 100vh;
+    height: auto;
+  }
+  
+  .checkout-container {
+    border-radius: 10px;
+    margin: 10px auto;
+    width: 100%;
+  }
+  
+  .checkout-form,
+  .order-summary {
+    padding: 20px 15px;
+  }
+  
+  .section-title {
+    font-size: 16px;
+    margin-bottom: 15px;
+  }
+  
+  .card-preview-container {
+    height: 180px;
+    margin-bottom: 20px;
+  }
+  
+  .card-front,
+  .card-back {
+    padding: 20px;
+    border-radius: 14px;
+  }
+  
+  .card-chip {
+    width: 45px;
+    height: 30px;
+    margin-bottom: 20px;
+  }
+  
+  .card-number {
+    font-size: 1rem;
+    margin-bottom: 20px;
+  }
+  
+  .card-expiry,
+  .card-cvc {
+    font-size: 0.9rem;
+  }
+  
+  .card-logo {
+    font-size: 1.2rem;
+  }
+  
+  .form-group label {
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+  }
+  
+  .card-element {
+    padding: 14px 16px;
+    font-size: 0.9rem;
+  }
+  
+  .pay-button,
+  .cancel-button {
+    padding: 14px;
+    font-size: 1rem;
+  }
+  
+  .summary-title {
+    font-size: 18px;
+  }
+  
+  .item-code,
+  .item-name {
+    font-size: 0.85rem;
+  }
+  
+  .coupon-input input {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+  
+  .secure {
+    padding: 12px;
+    font-size: 0.85rem;
+  }
+  
+  .secure img {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* ===========================================
+   RESPONSIVE DESIGN - MÓVIL PEQUEÑO (400px o menos)
+   =========================================== */
+@media (max-width: 400px) {
+  .checkout-form,
+  .order-summary {
+    padding: 15px 12px;
+  }
+  
+  .card-preview-container {
+    height: 160px;
+  }
+  
+  .card-front,
+  .card-back {
+    padding: 15px;
+    border-radius: 12px;
+  }
+  
+  .card-chip {
+    width: 40px;
+    height: 28px;
+    margin-bottom: 15px;
+  }
+  
+  .card-number {
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+  }
+  
+  .card-expiry,
+  .card-cvc {
+    font-size: 0.8rem;
+  }
+  
+  .card-logo {
+    font-size: 1rem;
+  }
+  
+  .section-title {
+    font-size: 15px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .card-element {
+    padding: 12px 14px;
+    font-size: 0.85rem;
+  }
+  
+  .pay-button,
+  .cancel-button {
+    padding: 12px;
+    font-size: 0.95rem;
+  }
+  
+  .summary-title {
+    font-size: 16px;
+  }
+  
+  .coupon-section label {
+    font-size: 0.9rem;
+  }
+  
+  .coupon-input input {
+    padding: 8px 10px;
+    font-size: 0.85rem;
+  }
+  
+  .apply-btn {
+    padding: 10px;
+    font-size: 0.85rem;
+  }
+}
+
+/* ===========================================
+   ORIENTACIÓN LANDSCAPE EN MÓVILES
+   =========================================== */
+@media (max-height: 600px) and (orientation: landscape) {
+  body {
+    padding: 10px;
+    align-items: flex-start;
+    min-height: auto;
+    height: auto;
+  }
+  
+  .checkout-container {
+    max-height: 95vh;
+    overflow-y: auto;
+    margin: 10px auto;
+  }
+  
+  .checkout-form {
+    padding: 20px;
+  }
+  
+  .order-summary {
+    padding: 20px;
+  }
+  
+  .card-preview-container {
+    height: 160px;
+  }
+  
+  .button-container {
+    margin-top: 15px;
+  }
+}
+
+/* ===========================================
+   PANTALLAS MUY GRANDES (1400px+)
+   =========================================== */
+@media (min-width: 1400px) {
+  .checkout-container {
+    max-width: 1200px;
+  }
+  
+  .checkout-form,
+  .order-summary {
+    padding: 40px;
+  }
+  
+  .card-preview-container {
+    height: 240px;
+    max-width: 420px;
+  }
+  
+  .card-number {
+    font-size: 1.6rem;
+  }
+  
+  .card-expiry,
+  .card-cvc {
+    font-size: 1.1rem;
+  }
+  
+  .pay-button,
+  .cancel-button {
+    padding: 20px;
+    font-size: 1.2rem;
+  }
+}
+
+/* ===========================================
+   MEJORAS DE ACCESIBILIDAD
+   =========================================== */
+@media (prefers-reduced-motion: reduce) {
+  .shape,
+  .pay-button::before,
+  .cancel-button::before,
+  .loading::after,
+  .card-inner {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ===========================================
+   CORRECCIONES PARA iOS SAFARI
+   =========================================== */
+@supports (-webkit-touch-callout: none) {
+  body {
+    -webkit-font-smoothing: antialiased;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .checkout-container {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  input[type="datetime-local"] {
+    min-height: 44px; /* Tamaño mínimo táctil para iOS */
+  }
+}
+
+/* ===========================================
+   CORRECCIONES PARA INPUT DE FECHA/HORA
+   =========================================== */
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  background: transparent;
+  bottom: 0;
+  color: transparent;
+  cursor: pointer;
+  height: auto;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: auto;
+}
+
+input[type="datetime-local"] {
+  position: relative;
+  color: var(--dark-color);
+}
+
+/* ===========================================
+   MEJORAS DE SCROLL EN MÓVIL
+   =========================================== */
+@media (max-width: 768px) {
+  .checkout-container {
+    max-height: 90vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* ===========================================
+   CORRECCIÓN DE Z-INDEX PARA ELEMENTOS STRIPE
+   =========================================== */
+.StripeElement {
+  z-index: 1;
+  position: relative;
+}
+
+.StripeElement--focus {
+  z-index: 2;
+}

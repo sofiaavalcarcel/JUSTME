@@ -2,766 +2,698 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Just Me - Panel de Usuario</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Just Me - Panel de Usuario</title>
 
-	<link rel="stylesheet" th:href="@{/styles/inicio.css}" />
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-	<style>
-		:root {
-			--primary-color: #e16bff;
-			--primary-dark: #9033a7;
-			--secondary-color: #e16bff;
-			--dark-color: #333;
-			--light-color: #f8f9fa;
-			--gray-color: #6c757d;
-			--light-gray: #e9ecef;
-			--white: #fff;
-			--black: #000;
-		}
+    <link rel="stylesheet" th:href="@{/styles/inicio.css}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            --primary-color: #e16bff;
+            --primary-dark: #9033a7;
+            --secondary-color: #e16bff;
+            --dark-color: #333;
+            --light-color: #f8f9fa;
+            --gray-color: #6c757d;
+            --light-gray: #e9ecef;
+            --white: #fff;
+            --black: #000;
+        }
 
-		/* Estilos adicionales para la paginación */
-		.pagination {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			margin: 20px 0;
-			gap: 10px;
-		}
-		
-		.pagination button {
-			background-color: var(--light-color);
-			border: 1px solid var(--light-gray);
-			color: var(--gray-color);
-			padding: 8px 16px;
-			border-radius: 4px;
-			cursor: pointer;
-			transition: all 0.3s ease;
-			font-family: inherit;
-		}
-		
-		.pagination button:hover:not(:disabled) {
-			background-color: var(--light-gray);
-			color: var(--dark-color);
-			border-color: var(--primary-color);
-		}
-		
-		.pagination button.active {
-			background-color: var(--primary-color);
-			color: var(--white);
-			border-color: var(--primary-color);
-		}
-		
-		.pagination button:disabled {
-			opacity: 0.6;
-			cursor: not-allowed;
-			background-color: var(--light-gray);
-		}
-		
-		.page-info {
-			margin: 0 15px;
-			font-weight: 500;
-			color: var(--dark-color);
-		}
-		
-		.pagination-container {
-			margin-top: 20px;
-		}
+        /* Estilos adicionales para la paginación */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            gap: 10px;
+        }
+        
+        .pagination button {
+            background-color: var(--light-color);
+            border: 1px solid var(--light-gray);
+            color: var(--gray-color);
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        
+        .pagination button:hover:not(:disabled) {
+            background-color: var(--light-gray);
+            color: var(--dark-color);
+            border-color: var(--primary-color);
+        }
+        
+        .pagination button.active {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border-color: var(--primary-color);
+        }
+        
+        .pagination button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background-color: var(--light-gray);
+        }
+        
+        .page-info {
+            margin: 0 15px;
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+        
+        .pagination-container {
+            margin-top: 20px;
+        }
 
-		/* Estilos para modo oscuro */
-		body.dark-mode .pagination button {
-			background-color: var(--dark-color);
-			border-color: var(--gray-color);
-			color: var(--light-color);
-		}
+        /* Estilos para modo oscuro */
+        body.dark-mode .pagination button {
+            background-color: var(--dark-color);
+            border-color: var(--gray-color);
+            color: var(--light-color);
+        }
 
-		body.dark-mode .pagination button:hover:not(:disabled) {
-			background-color: var(--gray-color);
-			color: var(--white);
-		}
+        body.dark-mode .pagination button:hover:not(:disabled) {
+            background-color: var(--gray-color);
+            color: var(--white);
+        }
 
-		body.dark-mode .pagination button.active {
-			background-color: var(--primary-color);
-			color: var(--white);
-		}
+        body.dark-mode .pagination button.active {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
 
-		body.dark-mode .page-info {
-			color: var(--light-color);
-		}
-	</style>
+        body.dark-mode .page-info {
+            color: var(--light-color);
+        }
+        
+        /* Estilos de emergencia para asegurar funcionalidad */
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 70px);
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-overlay {
+                top: 60px;
+                height: calc(100vh - 60px);
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .mobile-overlay {
+                top: 55px;
+                height: calc(100vh - 55px);
+            }
+        }
+        
+        body.menu-open {
+            overflow: hidden;
+        }
+    </style>
 </head>
 
 <body>
-	<!-- Header -->
-	<header class="header">
-		<div class="container">
-			<div class="loader">
-				<p>Just</p>
-				<div class="words">
-					<span class="word">Me</span>
-					<span class="word">Beauty</span>
-					<span class="word">Me</span>
-					<span class="word">Stylish</span>
-					<span class="word">Me</span>
-				</div>
-			</div>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="loader">
+                <p>Just</p>
+                <div class="words">
+                    <span class="word">Me</span>
+                    <span class="word">Beauty</span>
+                    <span class="word">Me</span>
+                    <span class="word">Stylish</span>
+                    <span class="word">Me</span>
+                </div>
+            </div>
 
-			<!-- Botón Hamburguesa -->
-			<button class="hamburger-btn" id="hamburgerBtn" aria-label="Menú">
-				<span class="hamburger-line"></span>
-				<span class="hamburger-line"></span>
-				<span class="hamburger-line"></span>
-			</button>
+            <!-- Botón Hamburguesa -->
+            <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menú">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
 
-			<nav class="nav" id="mainNav">
-				<ul>
-					<li><a href="#" class="active"><i class="fas fa-home"></i> Inicio</a></li>
-					<li><a href="#servicios"><i class="fas fa-search"></i> Buscar Servicios</a></li>
-					<li><a href="#citas"><i class="fas fa-calendar-alt"></i> Mis Citas</a></li>
-				</ul>
-			</nav>
+            <nav class="nav" id="mainNav">
+                <ul>
+                    <li><a href="#" class="active"><i class="fas fa-home"></i> Inicio</a></li>
+                    <li><a href="#servicios"><i class="fas fa-search"></i> Buscar Servicios</a></li>
+                    <li><a href="#citas"><i class="fas fa-calendar-alt"></i> Mis Citas</a></li>
+                </ul>
+            </nav>
 
-			<div class="user-menu">
-				<div class="theme-toggle">
-					<button id="themeToggleBtn" class="theme-toggle-btn" type="button">
-						<i class="fas fa-moon"></i>
-					</button>
-				</div>
+            <div class="user-menu">
+                <div class="theme-toggle">
+                    <button id="themeToggleBtn" class="theme-toggle-btn" type="button">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
 
-				<div class="user-profile" id="userProfile">
-					<img th:src="${session.fotoperfil != null} ? @{/uploads/{foto}(foto=${session.fotoperfil})} : @{/img/default.jpg}"
-						alt="Foto de perfil" id="profileImageDisplay" class="profile-image">
-					<span th:text="${session.nombreUsuario}">Usuario</span>
-					<i class="fas fa-chevron-down"></i>
-				</div>
+                <div class="user-profile" id="userProfile">
+                    <img th:src="${session.fotoperfil != null} ? @{/uploads/{foto}(foto=${session.fotoperfil})} : @{/img/default.jpg}"
+                        alt="Foto de perfil" id="profileImageDisplay" class="profile-image">
+                    <span th:text="${session.nombreUsuario}">Usuario</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
 
-				<div class="dropdown-menu" id="dropdownMenu">
-					<ul>
-						<li><a th:href="@{/perfilUsuario}"><i class="fas fa-user"></i> Mi Perfil</a></li>
-						<li><a th:href="@{/cambioProfesional}"><i class="fas fa-sync-alt"></i> Cambiar a Profesional</a>
-						</li>
-						<li><a th:href="@{/cerrar}"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-	</header>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <ul>
+                        <li><a th:href="@{/perfilUsuario}"><i class="fas fa-user"></i> Mi Perfil</a></li>
+                        <li><a th:href="@{/cambioProfesional}"><i class="fas fa-sync-alt"></i> Cambiar a Profesional</a>
+                        </li>
+                        <li><a th:href="@{/cerrar}"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
 
-	<!-- Main Content -->
-	<main class="main">
-		<section class="welcome-section">
-			<div class="container">
-				<h2>¡Bienvenida de nuevo, <span th:text="${session.nombreUsuario}">Usuario</span>!</h2>
-				<p>¿Qué servicio de belleza necesitas hoy?</p>
+    <!-- Overlay para móvil -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
 
-				<div class="quick-stats">
-					<div class="stat-card">
-						<i class="fas fa-calendar-check"></i>
-						<h3>15</h3>
-						<p>Servicios tomados</p>
-					</div>
-					<div class="stat-card">
-						<i class="fas fa-star"></i>
-						<h3>4.8</h3>
-						<p>Tu puntuación</p>
-					</div>
-					<div class="stat-card">
-						<i class="fas fa-heart"></i>
-						<h3>3</h3>
-						<p>Favoritos</p>
-					</div>
-				</div>
-			</div>
-		</section>
+    <!-- Main Content -->
+    <main class="main">
+        <section class="welcome-section">
+            <div class="container">
+                <h2>¡Bienvenida de nuevo, <span th:text="${session.nombreUsuario}">Usuario</span>!</h2>
+                <p>¿Qué servicio de belleza necesitas hoy?</p>
 
-		<!-- Search Section -->
-		<section class="search-section" id="servicios">
-			<div class="container">
-				<h3>Categorías</h3>
+                <div class="quick-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-calendar-check"></i>
+                        <h3>15</h3>
+                        <p>Servicios tomados</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-star"></i>
+                        <h3>4.8</h3>
+                        <p>Tu puntuación</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-heart"></i>
+                        <h3>3</h3>
+                        <p>Favoritos</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-				<form class="search-form" action="/servicios/buscar" method="get">
-					<div class="form-group">
-						<label for="service-type"><i class="fas fa-spa"></i> Tipo de Servicio</label>
-						<select name="categoria" id="categoria" class="form-select" th:value="${categoriaSeleccionada}">
-							<option value=""
-								th:selected="${categoriaSeleccionada == null or categoriaSeleccionada == ''}">Todos los
-								servicios</option>
-							<option value="Cabello" th:selected="${categoriaSeleccionada == 'Cabello'}">Cabello</option>
-							<option value="Cejas y pestañas"
-								th:selected="${categoriaSeleccionada == 'Cejas y pestañas'}">Cejas y pestañas</option>
-							<option value="Facial" th:selected="${categoriaSeleccionada == 'Facial'}">Tratamientos
-								faciales</option>
-							<option value="Depilación" th:selected="${categoriaSeleccionada == 'Depilación'}">Depilación
-								con Cera o con Hilo</option>
-							<option value="Masajes" th:selected="${categoriaSeleccionada == 'Masajes'}">Masajes
-								Corporales y Spa</option>
-							<option value="Maquillaje" th:selected="${categoriaSeleccionada == 'Maquillaje'}">Maquillaje
-							</option>
-							<option value="Tintura" th:selected="${categoriaSeleccionada == 'Tintura'}">Coloración y
-								Mechas</option>
-							<option value="Tratamiento Capilar"
-								th:selected="${categoriaSeleccionada == 'Tratamiento Capilar'}">Tratamiento Capilar
-							</option>
-							<option value="Barberia" th:selected="${categoriaSeleccionada == 'Barberia'}">Barbería
-							</option>
-							<option value="Perfilado" th:selected="${categoriaSeleccionada == 'Perfilado'}">Perfilado de
-								Barba y Bigote
-							</option>
+        <!-- Search Section -->
+        <section class="search-section" id="servicios">
+            <div class="container">
+                <h3>Categorías</h3>
 
-						</select>
+                <form class="search-form" action="/servicios/buscar" method="get">
+                    <div class="form-group">
+                        <label for="service-type"><i class="fas fa-spa"></i> Tipo de Servicio</label>
+                        <select name="categoria" id="categoria" class="form-select" th:value="${categoriaSeleccionada}">
+                            <option value=""
+                                th:selected="${categoriaSeleccionada == null or categoriaSeleccionada == ''}">Todos los
+                                servicios</option>
+                            <option value="Cabello" th:selected="${categoriaSeleccionada == 'Cabello'}">Cabello</option>
+                            <option value="Cejas y pestañas"
+                                th:selected="${categoriaSeleccionada == 'Cejas y pestañas'}">Cejas y pestañas</option>
+                            <option value="Facial" th:selected="${categoriaSeleccionada == 'Facial'}">Tratamientos
+                                faciales</option>
+                            <option value="Depilación" th:selected="${categoriaSeleccionada == 'Depilación'}">Depilación
+                                con Cera o con Hilo</option>
+                            <option value="Masajes" th:selected="${categoriaSeleccionada == 'Masajes'}">Masajes
+                                Corporales y Spa</option>
+                            <option value="Maquillaje" th:selected="${categoriaSeleccionada == 'Maquillaje'}">Maquillaje
+                            </option>
+                            <option value="Tintura" th:selected="${categoriaSeleccionada == 'Tintura'}">Coloración y
+                                Mechas</option>
+                            <option value="Tratamiento Capilar"
+                                th:selected="${categoriaSeleccionada == 'Tratamiento Capilar'}">Tratamiento Capilar
+                            </option>
+                            <option value="Barberia" th:selected="${categoriaSeleccionada == 'Barberia'}">Barbería
+                            </option>
+                            <option value="Perfilado" th:selected="${categoriaSeleccionada == 'Perfilado'}">Perfilado de
+                                Barba y Bigote
+                            </option>
+                        </select>
+                    </div>
 
-					</div>
+                    <div class="form-group">
+                        <label for="nombre_servicios"><i class="fas fa-scissors"></i> Nombre del Servicio</label>
+                        <input type="text" id="nombre_servicios" name="nombre_servicios"
+                            placeholder="Ejemplo: Corte moderno" />
+                    </div>
 
-					<div class="form-group">
-						<label for="nombre_servicios"><i class="fas fa-scissors"></i> Nombre del Servicio</label>
-						<input type="text" id="nombre_servicios" name="nombre_servicios"
-							placeholder="Ejemplo: Corte moderno" />
-					</div>
+                    <button type="submit" class="search-btn">
+                        <i class="fas fa-search"></i> Buscar
+                    </button>
+                </form>
+            </div>
+        </section>
 
-					<button type="submit" class="search-btn">
-						<i class="fas fa-search"></i> Buscar
-					</button>
-				</form>
-			</div>
-		</section>
+        <!-- Servicios Section -->
+        <section class="servicios-section">
+            <div class="container">
+                <h2>Servicios disponibles</h2>
+                <div class="servicios-grid" id="serviciosGrid">
 
-		<!-- Servicios Section -->
-		<section class="servicios-section">
-			<div class="container">
-				<h2>Servicios disponibles</h2>
-				<div class="servicios-grid" id="serviciosGrid">
+                    <div th:if="${servicios == null or #lists.isEmpty(servicios)}">
+                        <p>No hay servicios para mostrar.</p>
+                    </div>
 
-					<div th:if="${servicios == null or #lists.isEmpty(servicios)}">
-						<p>No hay servicios para mostrar.</p>
-					</div>
+                    <div th:each="servicio : ${servicios}" class="card servicio-card">
+                        <img th:src="@{'/uploads/' + ${servicio.imagen}}" th:alt="${servicio.nombre_servicios}"
+                            class="card-img-top">
 
-					<div th:each="servicio : ${servicios}" class="card servicio-card">
-						<img th:src="@{'/uploads/' + ${servicio.imagen}}" th:alt="${servicio.nombre_servicios}"
-							class="card-img-top">
+                        <div class="card-body">
+                            <h3 th:text="${servicio.nombre_servicios}" class="card-title">Nombre Servicio</h3>
+                            <p th:text="${servicio.descripcion}" class="card-text">Descripción</p>
+                            <p><strong>Precio:</strong>
+                                <span
+                                    th:text="${#strings.concat('$', #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 0, 'POINT'))}">
+                                </span>
+                            </p>
+                            <p><strong>Categoría:</strong> <span th:text="${servicio.categoria}">Belleza</span></p>
 
-						<div class="card-body">
-							<h3 th:text="${servicio.nombre_servicios}" class="card-title">Nombre Servicio</h3>
-							<p th:text="${servicio.descripcion}" class="card-text">Descripción</p>
-							<p><strong>Precio:</strong>
-								<span
-									th:text="${#strings.concat('$', #numbers.formatDecimal(servicio.precio_base, 0, 'POINT', 0, 'POINT'))}">
-								</span>
-							</p>
-							<p><strong>Categoría:</strong> <span th:text="${servicio.categoria}">Belleza</span></p>
+                            <p class="izquierda"><strong>Profesional a cargo:</strong></p>
 
-							<p class="izquierda"><strong>Profesional a cargo:</strong></p>
+                            <div class="profesional-info">
+                                <img th:if="${servicio.usuario != null and servicio.usuario.fotoperfil != null}"
+                                    th:src="@{'/uploads/' + ${servicio.usuario.fotoperfil}}" alt="Foto del profesional"
+                                    class="profesional-foto">
 
-							<div class="profesional-info">
-								<img th:if="${servicio.usuario != null and servicio.usuario.fotoperfil != null}"
-									th:src="@{'/uploads/' + ${servicio.usuario.fotoperfil}}" alt="Foto del profesional"
-									class="profesional-foto">
+                                <img th:if="${servicio.usuario == null or servicio.usuario.fotoperfil == null}"
+                                    src="/img/default-user.jpg" alt="Usuario sin foto" class="profesional-foto">
 
-								<img th:if="${servicio.usuario == null or servicio.usuario.fotoperfil == null}"
-									src="/img/default-user.jpg" alt="Usuario sin foto" class="profesional-foto">
+                                <div class="profesional-detalles">
+                                    <span th:text="${servicio.usuario != null} ?
+                                                  ${servicio.usuario.nombre + ' ' + servicio.usuario.apellido} :
+                                                  'Sin asignar'">
+                                    </span>
 
-								<div class="profesional-detalles">
-									<span th:text="${servicio.usuario != null} ?
-									                  ${servicio.usuario.nombre + ' ' + servicio.usuario.apellido} :
-									                  'Sin asignar'">
-									</span>
+                                    <small class="profesional-email" 
+                                           th:if="${servicio.usuario != null and servicio.usuario.email != null}"
+                                           th:text="${servicio.usuario.email}">
+                                        email@ejemplo.com
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
 
-									<small class="profesional-email" th:text="${servicio.usuario.email}">
-										email@ejemplo.com
-									</small>
-								</div>
-							</div>
-						</div>
+                        <div class="card-footer">
+                            <a th:href="@{/pasareladepagos(id=${servicio.idservicios})}" class="btn-interesa">
+                                Me interesa
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Paginación para servicios -->
+                <div class="pagination-container" id="serviciosPagination">
+                    <div class="pagination" id="serviciosPaginationControls">
+                        <!-- Los controles de paginación se generarán dinámicamente con JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
 
-						<div class="card-footer">
-							<a th:href="@{/pasareladepagos(id=${servicio.idservicios})}" class="btn-interesa">
-								Me interesa
-							</a>
-						</div>
-					</div>
+        <!-- Citas Section -->
+        <section class="appointments-section" id="citas">
+            <div class="container">
+                <div class="section-header">
+                    <h3>Mis Citas</h3>
+                </div>
+                <div th:if="${citas == null or #lists.isEmpty(citas)}">
+                    <p>No tienes citas registradas.</p>
+                </div>
+                <div class="appointments-list" id="citasList" th:if="${citas != null and !#lists.isEmpty(citas)}">
+                    <div class="appointment-card cita-card" th:each="cita : ${citas}">
+                        <h4 th:text="${cita.servicio != null ? cita.servicio.nombre_servicios : 'Servicio'}">Servicio</h4>
+                        <p>
+                            <strong>Fecha y hora:</strong>
+                            <span th:text="${#dates.format(cita.fechaHora, 'dd/MM/yyyy HH:mm')}">01/01/2025 10:00</span>
+                        </p>
+                        <p>
+                            <strong>Dirección:</strong>
+                            <span th:text="${cita.direccion}">Dirección</span>
+                        </p>
+                        <p>
+                            <strong>Precio:</strong>
+                            <span th:text="${#strings.concat('$', #numbers.formatDecimal(cita.precio, 0, 'POINT', 0, 'POINT'))}">$0</span>
+                        </p>
+                        <p>
+                            <strong>Estado:</strong>
+                            <span class="status" th:classappend="${cita.estado} == 'En espera' ? ' status-pending' : (${cita.estado} == 'Confirmada' ? ' status-confirmed' : (${cita.estado} == 'En proceso' ? ' status-in-progress' : (${cita.estado} == 'Finalizada' ? ' status-finished' : ' status-default')))" th:text="${cita.estado}">En espera</span>
+                        </p>
+                        <p>
+                            <strong>Profesional:</strong>
+                            <span th:text="${cita.servicio != null and cita.servicio.usuario != null ? cita.servicio.usuario.nombre + ' ' + cita.servicio.usuario.apellido : 'Sin asignar'}">Nombre profesional</span>
+                        </p>
+                        <p>
+                            <strong>Correo profesional:</strong>
+                            <span th:text="${cita.servicio != null and cita.servicio.usuario != null ? cita.servicio.usuario.email : ''}">correo@ejemplo.com</span>
+                        </p>
+                        <p>
+                            <strong>Teléfono profesional:</strong>
+                            <span th:text="${cita.servicio != null and cita.servicio.usuario != null ? cita.servicio.usuario.numero : ''}">+57 000 000 0000</span>
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Paginación para citas -->
+                <div class="pagination-container" id="citasPagination">
+                    <div class="pagination" id="citasPaginationControls">
+                        <!-- Los controles de paginación se generarán dinámicamente con JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
 
-				</div>
-				
-				<!-- Paginación para servicios -->
-				<div class="pagination-container" id="serviciosPagination">
-					<div class="pagination" id="serviciosPaginationControls">
-						<!-- Los controles de paginación se generarán dinámicamente con JavaScript -->
-					</div>
-				</div>
-			</div>
-		</section>
+        <!-- Comentarios Section -->
+        <section class="reviews-section">
+            <div class="container">
+                <div class="section-header">
+                    <h3>Comentarios sobre ti</h3>
+                </div>
+                <div class="reviews-summary">
+                    <div class="overall-rating">
+                        <div class="rating-number">4.8</div>
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <p>12 valoraciones</p>
+                    </div>
+                    <div class="rating-bars">
+                        <div class="rating-bar"><span>5 estrellas</span>
+                            <div class="bar-container">
+                                <div class="bar5" style="width: 75%"></div>
+                            </div><span>9</span>
+                        </div>
+                        <div class="rating-bar"><span>4 estrellas</span>
+                            <div class="bar-container">
+                                <div class="bar4" style="width: 16.67%"></div>
+                            </div><span>2</span>
+                        </div>
+                        <div class="rating-bar"><span>3 estrellas</span>
+                            <div class="bar-container">
+                                <div class="bar3" style="width: 8.33%"></div>
+                            </div><span>1</span>
+                        </div>
+                        <div class="rating-bar"><span>2 estrellas</span>
+                            <div class="bar-container">
+                                <div class="bar2" style="width: 0%"></div>
+                            </div><span>0</span>
+                        </div>
+                        <div class="rating-bar"><span>1 estrella</span>
+                            <div class="bar-container">
+                                <div class="bar1" style="width: 0%"></div>
+                            </div><span>0</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="reviews-list"></div>
+            </div>
+        </section>
+    </main>
 
-		<!-- Citas Section -->
-		<section class="appointments-section" id="citas">
-			<div class="container">
-				<div class="section-header">
-					<h3>Mis Citas</h3>
-				</div>
-				<div th:if="${citas == null or #lists.isEmpty(citas)}">
-					<p>No tienes citas registradas.</p>
-				</div>
-				<div class="appointments-list" id="citasList" th:if="${citas != null and !#lists.isEmpty(citas)}">
-					<div class="appointment-card cita-card" th:each="cita : ${citas}">
-						<h4 th:text="${cita.servicio != null ? cita.servicio.nombre_servicios : 'Servicio'}">Servicio</h4>
-						<p>
-							<strong>Fecha y hora:</strong>
-							<span th:text="${#dates.format(cita.fechaHora, 'dd/MM/yyyy HH:mm')}">01/01/2025 10:00</span>
-						</p>
-						<p>
-							<strong>Dirección:</strong>
-							<span th:text="${cita.direccion}">Dirección</span>
-						</p>
-						<p>
-							<strong>Precio:</strong>
-							<span th:text="${#strings.concat('$', #numbers.formatDecimal(cita.precio, 0, 'POINT', 0, 'POINT'))}">$0</span>
-						</p>
-						<p>
-							<strong>Estado:</strong>
-							<span class="status" th:classappend="${cita.estado} == 'En espera' ? ' status-pending' : (${cita.estado} == 'Confirmada' ? ' status-confirmed' : (${cita.estado} == 'En proceso' ? ' status-in-progress' : (${cita.estado} == 'Finalizada' ? ' status-finished' : ' status-default')))" th:text="${cita.estado}">En espera</span>
-						</p>
-						<p>
-							<strong>Profesional:</strong>
-							<span th:text="${cita.servicio != null and cita.servicio.usuario != null ? cita.servicio.usuario.nombre + ' ' + cita.servicio.usuario.apellido : 'Sin asignar'}">Nombre profesional</span>
-						</p>
-						<p>
-							<strong>Correo profesional:</strong>
-							<span th:text="${cita.servicio != null and cita.servicio.usuario != null ? cita.servicio.usuario.email : ''}">correo@ejemplo.com</span>
-						</p>
-						<p>
-							<strong>Teléfono profesional:</strong>
-							<span th:text="${cita.servicio != null and cita.servicio.usuario != null ? cita.servicio.usuario.numero : ''}">+57 000 000 0000</span>
-						</p>
-					</div>
-				</div>
-				
-				<!-- Paginación para citas -->
-				<div class="pagination-container" id="citasPagination">
-					<div class="pagination" id="citasPaginationControls">
-						<!-- Los controles de paginación se generarán dinámicamente con JavaScript -->
-					</div>
-				</div>
-			</div>
-		</section>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Just Me</h4>
+                    <p>Servicios de belleza a domicilio para hombres y mujeres en cualquier lugar.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
 
-		<!-- Comentarios Section -->
-		<section class="reviews-section">
-			<div class="container">
-				<div class="section-header">
-					<h3>Comentarios sobre ti</h3>
-				</div>
-				<div class="reviews-summary">
-					<div class="overall-rating">
-						<div class="rating-number">4.8</div>
-						<div class="stars">
-							<i class="fas fa-star"></i>
-							<i class="fas fa-star"></i>
-							<i class="fas fa-star"></i>
-							<i class="fas fa-star"></i>
-							<i class="fas fa-star-half-alt"></i>
-						</div>
-						<p>12 valoraciones</p>
-					</div>
-					<div class="rating-bars">
-						<div class="rating-bar"><span>5 estrellas</span>
-							<div class="bar-container">
-								<div class="bar5" style="width: 75%"></div>
-							</div><span>9</span>
-						</div>
-						<div class="rating-bar"><span>4 estrellas</span>
-							<div class="bar-container">
-								<div class="bar4" style="width: 16.67%"></div>
-							</div><span>2</span>
-						</div>
-						<div class="rating-bar"><span>3 estrellas</span>
-							<div class="bar-container">
-								<div class="bar3" style="width: 8.33%"></div>
-							</div><span>1</span>
-						</div>
-						<div class="rating-bar"><span>2 estrellas</span>
-							<div class="bar-container">
-								<div class="bar2" style="width: 0%"></div>
-							</div><span>0</span>
-						</div>
-						<div class="rating-bar"><span>1 estrella</span>
-							<div class="bar-container">
-								<div class="bar1" style="width: 0%"></div>
-							</div><span>0</span>
-						</div>
-					</div>
-				</div>
-				<div class="reviews-list"></div>
-			</div>
-		</section>
-	</main>
+                <div class="footer-section">
+                    <h4>Enlaces</h4>
+                    <ul>
+                        <li><a href="#">Inicio</a></li>
+                        <li><a href="#">Servicios</a></li>
+                        <li><a href="#">Sobre Nosotros</a></li>
+                        <li><a href="#">Contacto</a></li>
+                    </ul>
+                </div>
 
-	<!-- Footer -->
-	<footer class="footer">
-		<div class="container">
-			<div class="footer-content">
-				<div class="footer-section">
-					<h4>Just Me</h4>
-					<p>Servicios de belleza a domicilio para hombres y mujeres en cualquier lugar.</p>
-					<div class="social-icons">
-						<a href="#"><i class="fab fa-facebook-f"></i></a>
-						<a href="#"><i class="fab fa-instagram"></i></a>
-						<a href="#"><i class="fab fa-tiktok"></i></a>
-						<a href="#"><i class="fab fa-whatsapp"></i></a>
-					</div>
-				</div>
+                <div class="footer-section">
+                    <h4>Servicios</h4>
+                    <ul>
+                        <li><a href="#">Corte de Cabello</a></li>
+                        <li><a href="#">Maquillaje</a></li>
+                        <li><a href="#">Uñas</a></li>
+                        <li><a href="#">Tratamientos Faciales</a></li>
+                    </ul>
+                </div>
 
-				<div class="footer-section">
-					<h4>Enlaces</h4>
-					<ul>
-						<li><a href="#">Inicio</a></li>
-						<li><a href="#">Servicios</a></li>
-						<li><a href="#">Sobre Nosotros</a></li>
-						<li><a href="#">Contacto</a></li>
-					</ul>
-				</div>
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Bogotá, Colombia</li>
+                        <li><i class="fas fa-phone"></i> +57 123 456 7890</li>
+                        <li><i class="fas fa-envelope"></i> hola@justme.com</li>
+                    </ul>
+                </div>
+            </div>
 
-				<div class="footer-section">
-					<h4>Servicios</h4>
-					<ul>
-						<li><a href="#">Corte de Cabello</a></li>
-						<li><a href="#">Maquillaje</a></li>
-						<li><a href="#">Uñas</a></li>
-						<li><a href="#">Tratamientos Faciales</a></li>
-					</ul>
-				</div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Just Me. Todos los derechos reservados.</p>
+                <div class="legal-links">
+                    <a href="#">Términos y Condiciones</a>
+                    <a href="#">Política de Privacidad</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-				<div class="footer-section">
-					<h4>Contacto</h4>
-					<ul>
-						<li><i class="fas fa-map-marker-alt"></i> Bogotá, Colombia</li>
-						<li><i class="fas fa-phone"></i> +57 123 456 7890</li>
-						<li><i class="fas fa-envelope"></i> hola@justme.com</li>
-					</ul>
-				</div>
-			</div>
-
-			<div class="footer-bottom">
-				<p>&copy; 2025 Just Me. Todos los derechos reservados.</p>
-				<div class="legal-links">
-					<a href="#">Términos y Condiciones</a>
-					<a href="#">Política de Privacidad</a>
-				</div>
-			</div>
-		</div>
-	</footer>
-
-	<!-- SCRIPT ÚNICO Y CORREGIDO -->
-	<script>
-	// SCRIPT DEFINITIVO - AMBAS FUNCIONALIDADES FUNCIONAN
-	document.addEventListener('DOMContentLoaded', function() {
-		console.log('=== INICIANDO SCRIPT ===');
-		
-		// ===========================================
-		// 1. DROPDOWN DEL PERFIL - CORREGIDO
-		// ===========================================
-		const userProfile = document.querySelector('.user-profile');
-		const dropdownMenu = document.querySelector('.dropdown-menu');
-		
-		if (userProfile && dropdownMenu) {
-			console.log('✅ Dropdown del perfil encontrado');
-			
-			// Función para abrir/cerrar dropdown
-			function toggleDropdown(e) {
-				if (e) {
-					e.stopPropagation();
-					e.preventDefault();
-				}
-				
-				console.log('👤 Alternando dropdown del perfil');
-				
-				// Cerrar menú hamburguesa si está abierto
-				const nav = document.querySelector('.nav');
-				const overlay = document.querySelector('.mobile-overlay');
-				const hamburger = document.querySelector('.hamburger-btn');
-				
-				if (nav && nav.classList.contains('active')) {
-					nav.classList.remove('active');
-					if (overlay) overlay.classList.remove('active');
-					if (hamburger) hamburger.classList.remove('active');
-					document.body.classList.remove('menu-open');
-				}
-				
-				// Alternar dropdown
-				dropdownMenu.classList.toggle('active');
-			}
-			
-			// Evento para abrir dropdown
-			userProfile.addEventListener('click', toggleDropdown);
-			
-			// Cerrar dropdown al hacer clic fuera
-			document.addEventListener('click', function(e) {
-				if (!userProfile.contains(e.target) && !dropdownMenu.contains(e.target)) {
-					dropdownMenu.classList.remove('active');
-				}
-			});
-			
-			// Cerrar dropdown al hacer clic en enlaces
-			dropdownMenu.querySelectorAll('a').forEach(link => {
-				link.addEventListener('click', function() {
-					dropdownMenu.classList.remove('active');
-				});
-			});
-			
-			// Cerrar dropdown con tecla ESC
-			document.addEventListener('keydown', function(e) {
-				if (e.key === 'Escape' && dropdownMenu.classList.contains('active')) {
-					dropdownMenu.classList.remove('active');
-				}
-			});
-		} else {
-			console.log('❌ Dropdown del perfil NO encontrado');
-		}
-		
-		// ===========================================
-		// 2. MENÚ HAMBURGUESA - CORREGIDO
-		// ===========================================
-		const hamburgerBtn = document.querySelector('.hamburger-btn');
-		const mainNav = document.querySelector('.nav');
-		
-		if (hamburgerBtn && mainNav) {
-			console.log('✅ Menú hamburguesa encontrado');
-			
-			// Crear overlay si no existe
-			let overlay = document.querySelector('.mobile-overlay');
-			if (!overlay) {
-				overlay = document.createElement('div');
-				overlay.className = 'mobile-overlay';
-				document.body.appendChild(overlay);
-				console.log('➕ Overlay creado');
-			}
-			
-			// Función para abrir/cerrar menú
-			function toggleMenu(e) {
-				if (e) {
-					e.stopPropagation();
-					e.preventDefault();
-				}
-				
-				console.log('🍔 Alternando menú hamburguesa');
-				
-				// Cerrar dropdown si está abierto
-				if (dropdownMenu && dropdownMenu.classList.contains('active')) {
-					dropdownMenu.classList.remove('active');
-				}
-				
-				// Alternar menú
-				hamburgerBtn.classList.toggle('active');
-				mainNav.classList.toggle('active');
-				overlay.classList.toggle('active');
-				document.body.classList.toggle('menu-open');
-			}
-			
-			// Función para cerrar menú
-			function closeMenu() {
-				hamburgerBtn.classList.remove('active');
-				mainNav.classList.remove('active');
-				overlay.classList.remove('active');
-				document.body.classList.remove('menu-open');
-			}
-			
-			// Eventos
-			hamburgerBtn.addEventListener('click', toggleMenu);
-			overlay.addEventListener('click', closeMenu);
-			
-			// Cerrar menú al hacer clic en enlaces (solo en móvil)
-			mainNav.querySelectorAll('a').forEach(link => {
-				link.addEventListener('click', function() {
-					if (window.innerWidth <= 768) {
-						closeMenu();
-					}
-				});
-			});
-			
-			// Cerrar menú con tecla ESC
-			document.addEventListener('keydown', function(e) {
-				if (e.key === 'Escape' && mainNav.classList.contains('active')) {
-					closeMenu();
-				}
-			});
-			
-			// Cerrar menú al redimensionar a desktop
-			window.addEventListener('resize', function() {
-				if (window.innerWidth > 768) {
-					closeMenu();
-				}
-			});
-		} else {
-			console.log('❌ Menú hamburguesa NO encontrado');
-		}
-		
-		// ===========================================
-		// 3. MODO OSCURO
-		// ===========================================
-		const themeBtn = document.getElementById('themeToggleBtn');
-		if (themeBtn) {
-			console.log('✅ Botón de tema encontrado');
-			
-			// Cargar preferencia
-			const savedTheme = localStorage.getItem('theme');
-			if (savedTheme === 'dark') {
-				document.body.classList.add('dark-mode');
-				themeBtn.innerHTML = '<i class="fas fa-sun"></i>';
-				console.log('🌙 Modo oscuro cargado');
-			}
-			
-			// Alternar tema
-			themeBtn.addEventListener('click', function() {
-				document.body.classList.toggle('dark-mode');
-				const isDark = document.body.classList.contains('dark-mode');
-				localStorage.setItem('theme', isDark ? 'dark' : 'light');
-				themeBtn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-				console.log('🎨 Tema cambiado: ' + (isDark ? 'oscuro' : 'claro'));
-			});
-		}
-		
-		// ===========================================
-		// 4. PAGINACIÓN (si existe)
-		// ===========================================
-		function initPagination() {
-			const serviciosGrid = document.getElementById('serviciosGrid');
-			if (serviciosGrid && serviciosGrid.querySelectorAll('.servicio-card').length > 6) {
-				console.log('📄 Configurando paginación para servicios');
-				// Tu código de paginación aquí
-			}
-		}
-		
-		// ===========================================
-		// 5. SWEET ALERTS
-		// ===========================================
-		const urlParams = new URLSearchParams(window.location.search);
-		const success = urlParams.get('success');
-		const error = urlParams.get('error');
-		
-		if (success && typeof Swal !== 'undefined') {
-			Swal.fire({
-				title: '¡Éxito!',
-				text: 'Operación completada',
-				icon: 'success',
-				confirmButtonColor: '#e16bff'
-			});
-		}
-		
-		if (error && typeof Swal !== 'undefined') {
-			Swal.fire({
-				title: 'Error',
-				text: 'Ha ocurrido un error',
-				icon: 'error',
-				confirmButtonColor: '#e16bff'
-			});
-		}
-		
-		// ===========================================
-		// 6. AJUSTES FINALES
-		// ===========================================
-		console.log('=== SCRIPT INICIALIZADO CORRECTAMENTE ===');
-		
-		// Ajustar padding del body
-		function adjustBodyPadding() {
-			const header = document.querySelector('.header');
-			if (header) {
-				document.body.style.paddingTop = header.offsetHeight + 'px';
-			}
-		}
-		
-		adjustBodyPadding();
-		window.addEventListener('resize', adjustBodyPadding);
-		
-		// Smooth scroll
-		document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-			anchor.addEventListener('click', function(e) {
-				const href = this.getAttribute('href');
-				if (href === '#' || href === '#!') return;
-				
-				const target = document.querySelector(href);
-				if (target) {
-					e.preventDefault();
-					window.scrollTo({
-						top: target.offsetTop - 100,
-						behavior: 'smooth'
-					});
-				}
-			});
-		});
-		
-		// Iniciar paginación después de un breve retraso
-		setTimeout(initPagination, 500);
-	});
-	
-	// CSS DE EMERGENCIA PARA ASEGURAR FUNCIONALIDAD
-	window.addEventListener('load', function() {
-		// Inyectar CSS crítico si hay problemas de visualización
-		const style = document.createElement('style');
-		style.textContent = `
-			/* Asegurar que el dropdown sea visible cuando está activo */
-			.dropdown-menu.active {
-				opacity: 1 !important;
-				visibility: visible !important;
-				transform: translateY(0) !important;
-				display: block !important;
-			}
-			
-			/* Asegurar que el menú hamburguesa funcione en móvil */
-			@media (max-width: 768px) {
-				.hamburger-btn {
-					display: flex !important;
-				}
-				
-				.nav {
-					position: fixed !important;
-					top: 70px !important;
-					left: -280px !important;
-					width: 280px !important;
-					height: calc(100vh - 70px) !important;
-					background: var(--white) !important;
-					transition: left 0.3s ease !important;
-					z-index: 1001 !important;
-				}
-				
-				.nav.active {
-					left: 0 !important;
-				}
-				
-				.mobile-overlay {
-					display: block !important;
-					position: fixed;
-					top: 70px;
-					left: 0;
-					width: 100%;
-					height: calc(100vh - 70px);
-					background: rgba(0,0,0,0.5);
-					z-index: 1000;
-					opacity: 0;
-					visibility: hidden;
-					transition: all 0.3s ease;
-				}
-				
-				.mobile-overlay.active {
-					opacity: 1;
-					visibility: visible;
-				}
-				
-				/* Asegurar que el dropdown esté por encima del menú */
-				.dropdown-menu {
-					z-index: 1002 !important;
-				}
-			}
-			
-			/* Prevenir scroll cuando el menú está abierto */
-			body.menu-open {
-				overflow: hidden !important;
-			}
-		`;
-		style.id = 'emergency-css';
-		document.head.appendChild(style);
-		
-		console.log('🚀 CSS de emergencia inyectado');
-	});
-	</script>
+    <!-- SCRIPT ÚNICO Y FUNCIONAL -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('=== SCRIPT JUST ME INICIADO ===');
+        
+        // 1. DROPDOWN DEL PERFIL
+        const userProfile = document.querySelector('.user-profile');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        
+        if (userProfile && dropdownMenu) {
+            console.log('✅ Dropdown encontrado');
+            
+            userProfile.addEventListener('click', function(e) {
+                e.stopPropagation();
+                dropdownMenu.classList.toggle('active');
+            });
+            
+            document.addEventListener('click', function(e) {
+                if (!userProfile.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                    dropdownMenu.classList.remove('active');
+                }
+            });
+            
+            // Cerrar al hacer clic en enlaces
+            dropdownMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', function() {
+                    dropdownMenu.classList.remove('active');
+                });
+            });
+        }
+        
+        // 2. MENÚ HAMBURGUESA
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const mainNav = document.querySelector('.nav');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        
+        if (hamburgerBtn && mainNav && mobileOverlay) {
+            console.log('✅ Menú hamburguesa encontrado');
+            
+            hamburgerBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                hamburgerBtn.classList.toggle('active');
+                mainNav.classList.toggle('active');
+                mobileOverlay.classList.toggle('active');
+                document.body.classList.toggle('menu-open');
+                
+                // Cerrar dropdown si está abierto
+                if (dropdownMenu && dropdownMenu.classList.contains('active')) {
+                    dropdownMenu.classList.remove('active');
+                }
+            });
+            
+            mobileOverlay.addEventListener('click', function() {
+                hamburgerBtn.classList.remove('active');
+                mainNav.classList.remove('active');
+                mobileOverlay.classList.remove('active');
+                document.body.classList.remove('menu-open');
+            });
+            
+            // Cerrar menú al hacer clic en enlaces (solo móvil)
+            mainNav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) {
+                        hamburgerBtn.classList.remove('active');
+                        mainNav.classList.remove('active');
+                        mobileOverlay.classList.remove('active');
+                        document.body.classList.remove('menu-open');
+                    }
+                });
+            });
+            
+            // Cerrar menú con ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && mainNav.classList.contains('active')) {
+                    hamburgerBtn.classList.remove('active');
+                    mainNav.classList.remove('active');
+                    mobileOverlay.classList.remove('active');
+                    document.body.classList.remove('menu-open');
+                }
+            });
+        }
+        
+        // 3. MODO OSCURO
+        const themeBtn = document.getElementById('themeToggleBtn');
+        if (themeBtn) {
+            console.log('✅ Botón tema encontrado');
+            
+            // Cargar preferencia guardada
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeBtn.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+            
+            themeBtn.addEventListener('click', function() {
+                document.body.classList.toggle('dark-mode');
+                const isDark = document.body.classList.contains('dark-mode');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                themeBtn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            });
+        }
+        
+        // 4. AJUSTAR PADDING DEL BODY PARA HEADER FIXED
+        function adjustBodyPadding() {
+            const header = document.querySelector('.header');
+            if (header) {
+                document.body.style.paddingTop = header.offsetHeight + 'px';
+            }
+        }
+        
+        adjustBodyPadding();
+        window.addEventListener('resize', adjustBodyPadding);
+        
+        // 5. SMOOTH SCROLL
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href === '#' || href === '#!') return;
+                
+                const target = document.querySelector(href);
+                if (target) {
+                    e.preventDefault();
+                    window.scrollTo({
+                        top: target.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // 6. SWEET ALERTS
+        const urlParams = new URLSearchParams(window.location.search);
+        const success = urlParams.get('success');
+        const error = urlParams.get('error');
+        
+        if (success && typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: '¡Éxito!',
+                text: 'Operación completada',
+                icon: 'success',
+                confirmButtonColor: '#e16bff'
+            });
+        }
+        
+        if (error && typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: 'Error',
+                text: 'Ha ocurrido un error',
+                icon: 'error',
+                confirmButtonColor: '#e16bff'
+            });
+        }
+        
+        console.log('=== SCRIPT INICIALIZADO CORRECTAMENTE ===');
+    });
+    
+    // INYECTAR CSS DE EMERGENCIA SI ES NECESARIO
+    window.addEventListener('load', function() {
+        const style = document.createElement('style');
+        style.textContent = `
+            /* Forzar visibilidad del overlay cuando está activo */
+            .mobile-overlay.active {
+                display: block !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+            }
+            
+            /* Asegurar que el menú hamburguesa funcione en móvil */
+            @media (max-width: 768px) {
+                .hamburger-btn {
+                    display: flex !important;
+                }
+                
+                .nav {
+                    position: fixed !important;
+                    top: 70px !important;
+                    left: -280px !important;
+                    width: 280px !important;
+                    height: calc(100vh - 70px) !important;
+                    background: white !important;
+                    transition: left 0.3s ease !important;
+                    z-index: 1001 !important;
+                }
+                
+                .nav.active {
+                    left: 0 !important;
+                }
+            }
+            
+            /* Prevenir scroll cuando el menú está abierto */
+            body.menu-open {
+                overflow: hidden !important;
+            }
+            
+            /* Asegurar que el dropdown sea visible cuando está activo */
+            .dropdown-menu.active {
+                opacity: 1 !important;
+                visibility: visible !important;
+                transform: translateY(0) !important;
+                display: block !important;
+            }
+        `;
+        document.head.appendChild(style);
+    });
+    </script>
 
 </body>
 </html>
